@@ -1,6 +1,6 @@
 // GA
-import ReactGA from "react-ga4";
-
+/* import ReactGA from "react-ga4";
+ */
 // utils
 import { lazy, Suspense } from "react";
 
@@ -78,9 +78,9 @@ const App = () => {
   const { width } = useWindowSize();
   const isAuthRoute = useAuthRoute();
 
-  // Google Analytics init
+  /*   // Google Analytics init
   const gaKey = process.env.REACT_APP_PUBLIC_GA;
-  gaKey && ReactGA.initialize(gaKey);
+  gaKey && ReactGA.initialize(gaKey); */
 
   // auto RTL support for Material-UI components and styled-components
 

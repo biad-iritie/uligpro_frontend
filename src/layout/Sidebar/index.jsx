@@ -86,7 +86,7 @@ const Sidebar = () => {
           </NavLink>
         </SingleLink>
       </nav>
-      {/* <nav className="d-flex flex-column g-8 flex-1">
+      <nav className="d-flex flex-column g-8 flex-1">
         {LINKS.map((link, index) => (
           <StyledAccordion
             key={link.title}
@@ -110,7 +110,7 @@ const Sidebar = () => {
             </StyledAccordionDetails>
           </StyledAccordion>
         ))}
-      </nav> */}
+      </nav>
 
       {/* <SingleLink
         className={pathname === "/settings" ? "pinned active" : "pinned"}

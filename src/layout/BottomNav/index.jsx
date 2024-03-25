@@ -10,19 +10,24 @@ import SettingsPopup from "./SettingsPopup";
 import { useState } from "react";
 import useStoreRoute from "@hooks/useStoreRoute";
 import { useShopProvider } from "@contexts/shopContext";
+import useAuthentication from "@hooks/useAuthentication";
 
 const BottomNav = () => {
   const [searchPopupOpen, setSearchPopupOpen] = useState(false);
   const [settingsPopupOpen, setSettingsPopupOpen] = useState(false);
   const isStoreRoute = useStoreRoute();
   const { setCartOpen } = useShopProvider();
-
+  const isLogged = useAuthentication();
   return (
     <div
       className={styles.container}
       style={{ paddingLeft: "50px", paddingRight: "50px" }}
     >
-      <NavLink className={styles.button} to="/myprofile" aria-label="Account">
+      <NavLink
+        className={styles.button}
+        to={isLogged ? "/myprofile" : "/login"}
+        aria-label="Account"
+      >
         <i className="icon-user" />
       </NavLink>
       <NavLink className={styles.button} to="/" aria-label="Home">

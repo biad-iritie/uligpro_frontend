@@ -25,7 +25,7 @@ If you need to have multiple versions of Node.js installed, you can use [nvm](ht
 
 ### List of available scripts:
 
-Liga Dashboard Template is based on [Create-React-App](https://create-react-app.dev) template.
+<!-- Liga Dashboard Template is based on [Create-React-App](https://create-react-app.dev) template. -->
 
 ### `start`
 

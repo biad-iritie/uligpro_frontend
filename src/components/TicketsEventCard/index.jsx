@@ -4,6 +4,7 @@ import styles from "./styles.module.scss";
 // components
 import Spring from "@components/Spring";
 import { NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import TicketsEventDetailCard from "@components/TicketEventDetailCard";
 
@@ -15,11 +16,23 @@ import { useWindowSize } from "react-use";
 import PropTypes from "prop-types";
 import { getClubInfo } from "@utils/helpers";
 
-const TicketsEventCard = ({ match, index, variant = "basic" }) => {
+const TicketsEventCard = ({
+  userId,
+  event,
+  match,
+  index,
+  variant = "basic",
+}) => {
   const { width } = useWindowSize();
   const { theme } = useThemeProvider();
   const team1 = getClubInfo(match.team1.id);
   const team2 = getClubInfo(match.team2.id);
+
+  const askTologin = () => {
+    if (!userId) {
+      toast.warning("Connectez vous ou creer un compte afin de pousuivre");
+    }
+  };
 
   return (
     <Spring
@@ -41,8 +54,15 @@ const TicketsEventCard = ({ match, index, variant = "basic" }) => {
           <TicketsEventDetailCard />
           <TicketsEventDetailCard />
 
-          <NavLink className="text-button" to="/payment">
-            <button className="btn w-100">Proceder au paiement</button>
+          <NavLink className="text-button" to={userId ? "/payemnt" : ""}>
+            <button
+              onClick={() => {
+                askTologin();
+              }}
+              className="btn w-100"
+            >
+              Proceder au paiement
+            </button>
           </NavLink>
         </div>
       </div>

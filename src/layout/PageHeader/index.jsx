@@ -8,6 +8,7 @@ import SidebarTrigger from "@ui/SidebarTrigger";
 import User from "./User";
 import Search from "./Search";
 import TruncatedText from "@components/TruncatedText";
+import { NavLink } from "react-router-dom";
 
 // hooks
 import { useWindowSize } from "react-use";
@@ -15,6 +16,7 @@ import { useThemeProvider } from "@contexts/themeContext";
 import { useShopProvider } from "@contexts/shopContext";
 import useMeasure from "react-use-measure";
 import useStoreRoute from "@hooks/useStoreRoute";
+import useAuthentication from "@hooks/useAuthentication";
 
 // utils
 import PropTypes from "prop-types";
@@ -58,7 +60,8 @@ const DesktopHeader = ({ title }) => {
   const { setCartOpen } = useShopProvider();
   const [ref, { width: titleWidth }] = useMeasure();
   const isStoreRoute = useStoreRoute();
-
+  const isLogged = useAuthentication();
+  console.log(isLogged);
   return (
     <div
       className={`${styles.desktop} d-flex justify-content-between align-items-center g-20`}
@@ -75,6 +78,14 @@ const DesktopHeader = ({ title }) => {
         </div>
       </div>
       <div className="d-flex align-items-center">
+        {!isLogged && (
+          <NavLink className="text-button" to={"/login"}>
+            <button className="btn btn--sm" style={{ margin: "0 50px" }}>
+              Connexion
+            </button>
+          </NavLink>
+        )}
+
         {/* <Search/>
                 <div className="d-flex g-30" style={{margin: '0 50px'}}>
                     <button className={`${styles.control} h5`} onClick={toggleTheme}>
@@ -117,7 +128,7 @@ const PageHeader = ({ title }) => {
   return (
     <>
       <Helmet>
-        <title>{title} | Liga Soccer React Dashboard Template</title>
+        <title>{title} | Ligue professionnelle des universités</title>
       </Helmet>
       {width < 1280 ? (
         width < 768 ? (
