@@ -1,35 +1,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { gql, useMutation } from "@apollo/client";
-
-const LOGIN = gql`
-  mutation Login($email: String!, $password: String!) {
-    login(userInput: { email: $email, password: $password }) {
-      user {
-        name
-        email
-        tel
-      }
-      accessToken
-      refreshToken
-      error {
-        code
-        message
-      }
-    }
-  }
-`;
-
 const initialState = {
   status: "idle",
   error: null,
   user: {},
   accessToken: "",
   refreshToken: "",
+  activationToken: "",
 };
 
 export const addLoggedUser = createAsyncThunk(
-  "authentication/login",
+  "auth/login",
   async (credentials) => {
     const response = await credentials.loginFunc({
       variables: {
@@ -41,16 +22,48 @@ export const addLoggedUser = createAsyncThunk(
   }
 );
 
+export const getActivationToken = createAsyncThunk(
+  "auth/getActivationToken",
+  async (credentials) => {
+    const response = await credentials.getActivationTokenFunc({
+      variables: {
+        email: credentials.email,
+        password: credentials.password,
+        name: credentials.name,
+        tel: credentials.tel,
+      },
+    });
+    //console.log(response.data);
+    return response.data.registerRegularUser;
+  }
+);
+
+export const activateUser = createAsyncThunk(
+  "auth/activateUser",
+  async (credentials) => {
+    const response = await credentials.activateUserFunc({
+      variables: {
+        activationCode: credentials.activationCode,
+        activationToken: credentials.activationToken,
+      },
+    });
+    return response.data.login;
+  }
+);
+
 const User = createSlice({
-  name: "authentication",
+  name: "auth",
   initialState,
   reducers: {
-    login: (state, action) => {
+    getToken: (state, action) => {
       //it's ok to do this because the immer makes it immutable
       //under the hood
       //state.user = action.payload.user;
       //state.accessToken = action.payload.accessToken;
       //state.refreshToken = action.payload.refreshToken;
+    },
+    getActivationCode: (state) => {
+      state.activationToken = localStorage.getItem("activationToken");
     },
   },
   extraReducers(builder) {
@@ -59,7 +72,6 @@ const User = createSlice({
         state.status = "loading";
       })
       .addCase(addLoggedUser.fulfilled, (state, action) => {
-        state.status = "succeeded";
         //console.log(action);
         // Add any fetched posts to the array
         if (action.payload.user) {
@@ -68,14 +80,15 @@ const User = createSlice({
           state.refreshToken = action.payload.refreshToken;
 
           // Saving data to session storage
-          sessionStorage.setItem(
+          localStorage.setItem(
             "accessToken",
             JSON.stringify(action.payload.accessToken)
           );
-          sessionStorage.setItem(
+          localStorage.setItem(
             "refreshToken",
             JSON.stringify(action.payload.refreshToken)
           );
+          state.status = "succeeded";
         } else {
           state.status = "failed";
           state.error = action.payload.error.message;
@@ -85,7 +98,35 @@ const User = createSlice({
         console.log(action.error.message);
         state.status = "failed";
         state.error = action.error.message;
+      })
+
+      // GET ACTIVATION TOKEN
+      .addCase(getActivationToken.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(getActivationToken.fulfilled, (state, action) => {
+        //console.log(action);
+        // Add any fetched posts to the array
+        if (action.payload.activationToken) {
+          state.activationToken = action.payload.activationToken;
+          // Saving data to session storage
+          /* localStorage.setItem(
+            "activationToken",
+            JSON.stringify(action.payload.activationToken)
+          ); */
+          state.status = "succeeded";
+        } else {
+          state.status = "failed";
+          state.error = action.payload.error.message;
+        }
+      })
+      .addCase(getActivationToken.rejected, (state, action) => {
+        console.log(action.error.message);
+        state.status = "failed";
+        state.error = action.error.message;
       });
+
+    //ACTIVATE USER
   },
 });
 

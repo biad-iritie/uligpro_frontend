@@ -58,7 +58,7 @@ const LoginForm = () => {
   const error = useSelector((state) => state.auth.error);
 
   const onSubmit = async (credentials, e) => {
-    console.log(credentials);
+    //console.log(credentials);
     e.preventDefault();
     try {
       await dispatch(
