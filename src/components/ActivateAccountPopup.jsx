@@ -1,15 +1,18 @@
 // components
 import Popup from "@components/Popup";
-import { toast } from "react-toastify";
-
+//import { toast } from "react-toastify";
+import { CircularProgress } from "@mui/material";
 // hooks
 import { useForm } from "react-hook-form";
 
 // utils
 import classNames from "classnames";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 
 const ActivateAccountPopup = ({ open, onClose, onActivate }) => {
+  const reqStatus = useSelector((state) => state.auth.status);
+
   const {
     register,
     handleSubmit,
@@ -46,9 +49,14 @@ const ActivateAccountPopup = ({ open, onClose, onActivate }) => {
               placeholder="Entrer le code"
               {...register("code", { required: true, minLength: 3 })}
             />
-            <button className="btn" type="submit">
-              Activer
-            </button>
+
+            {reqStatus === "loading" ? (
+              <CircularProgress color="success" style={{ margin: "auto" }} />
+            ) : (
+              <button className="btn" type="submit">
+                Activer
+              </button>
+            )}
           </form>
           <p className="text-12">
             If you don't receive an email within a few minutes, please check

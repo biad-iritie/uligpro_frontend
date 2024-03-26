@@ -11,13 +11,17 @@ import { CircularProgress } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { PatternFormat } from "react-number-format";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 // utils
 import classNames from "classnames";
 import { gql, useMutation } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
 
-import { getActivationToken } from "./../features/user/userSlice";
+import {
+  getActivationToken,
+  activateUserAccount,
+} from "./../features/user/userSlice";
 
 const ACTIVATION_TOKEN = gql`
   mutation RegisterRegularUser(
@@ -62,10 +66,10 @@ const ACTIVATE_USER = gql`
 `;
 
 const SignUpForm = ({ standalone = true }) => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [registerRegularUser] = useMutation(ACTIVATION_TOKEN);
   const [activateUser] = useMutation(ACTIVATE_USER);
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const activationToken = useSelector((state) => state.auth.activationToken);
   const error = useSelector((state) => state.auth.error);
@@ -106,7 +110,7 @@ const SignUpForm = ({ standalone = true }) => {
     } catch (error) {
       console.log(error);
     }
-    console.log(data);
+    //console.log(data);
     //
     /* toast.success(
       `Account created! Please check your email ${data.email} to confirm your account.`
@@ -114,15 +118,19 @@ const SignUpForm = ({ standalone = true }) => {
   };
 
   const handleActivateUser = async (data, e) => {
-    console.log("activation en cours");
-    console.log(data);
-    console.log(activationToken);
-
-    /* try {
-      
+    try {
+      await dispatch(
+        activateUserAccount({
+          activateUserFunc: activateUser,
+          activationCode: data.code,
+          activationToken: activationToken,
+        })
+      ).unwrap();
+      setOpen(false);
+      navigate("/");
     } catch (error) {
-      
-    } */
+      console.log(error);
+    }
   };
 
   useEffect(() => {

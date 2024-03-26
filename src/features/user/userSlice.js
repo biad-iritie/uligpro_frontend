@@ -38,7 +38,7 @@ export const getActivationToken = createAsyncThunk(
   }
 );
 
-export const activateUser = createAsyncThunk(
+export const activateUserAccount = createAsyncThunk(
   "auth/activateUser",
   async (credentials) => {
     const response = await credentials.activateUserFunc({
@@ -47,7 +47,7 @@ export const activateUser = createAsyncThunk(
         activationToken: credentials.activationToken,
       },
     });
-    return response.data.login;
+    return response.data.activateUser;
   }
 );
 
@@ -124,9 +124,40 @@ const User = createSlice({
         console.log(action.error.message);
         state.status = "failed";
         state.error = action.error.message;
-      });
+      })
 
-    //ACTIVATE USER
+      //ACTIVATE USER
+      .addCase(activateUserAccount.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(activateUserAccount.fulfilled, (state, action) => {
+        //console.log(action);
+        // Add any fetched posts to the array
+        if (action.payload.user) {
+          state.user = action.payload.user;
+          state.accessToken = action.payload.accessToken;
+          state.refreshToken = action.payload.refreshToken;
+
+          // Saving data to session storage
+          localStorage.setItem(
+            "accessToken",
+            JSON.stringify(action.payload.accessToken)
+          );
+          localStorage.setItem(
+            "refreshToken",
+            JSON.stringify(action.payload.refreshToken)
+          );
+          state.status = "succeeded";
+        } else {
+          state.status = "failed";
+          state.error = action.payload.error.message;
+        }
+      })
+      .addCase(activateUserAccount.rejected, (state, action) => {
+        console.log(action.error.message);
+        state.status = "failed";
+        state.error = action.error.message;
+      });
   },
 });
 
