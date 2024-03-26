@@ -61,7 +61,6 @@ const DesktopHeader = ({ title }) => {
   const [ref, { width: titleWidth }] = useMeasure();
   const isStoreRoute = useStoreRoute();
   const isLogged = useAuthentication();
-  console.log(isLogged);
   return (
     <div
       className={`${styles.desktop} d-flex justify-content-between align-items-center g-20`}

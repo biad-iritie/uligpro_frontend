@@ -77,7 +77,7 @@ const App = () => {
   const { theme, direction } = useThemeProvider();
   const { width } = useWindowSize();
   const isAuthRoute = useAuthRoute();
-
+  //console.log(process.env.REACT_APP_SERVER);
   /*   // Google Analytics init
   const gaKey = process.env.REACT_APP_PUBLIC_GA;
   gaKey && ReactGA.initialize(gaKey); */

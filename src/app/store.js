@@ -5,6 +5,6 @@ import userReducer from "../features/user/userSlice";
 export default configureStore({
   reducer: {
     todos: TodosReducer,
-    user: userReducer,
+    auth: userReducer,
   },
 });

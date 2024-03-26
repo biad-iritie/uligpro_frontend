@@ -7,15 +7,10 @@ import { ShopProvider } from "@contexts/shopContext";
 import { Provider } from "react-redux";
 import store from "./app/store";
 
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  gql,
-} from "@apollo/client";
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
 const client = new ApolloClient({
-  uri: process.env.SERVER,
+  uri: process.env.REACT_APP_SERVER,
   cache: new InMemoryCache(),
 });
 
