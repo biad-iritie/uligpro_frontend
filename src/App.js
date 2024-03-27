@@ -49,6 +49,9 @@ import Navbar from "@layout/Navbar";
 import ShoppingCart from "@widgets/ShoppingCart";
 import ScrollToTop from "@components/ScrollToTop";
 
+import { getUserCredentials } from "./features/user/userSlice";
+import { gql, useQuery } from "@apollo/client";
+
 // pages
 const ClubSummary = lazy(() => import("@pages/ClubSummary"));
 const GameSummary = lazy(() => import("@pages/GameSummary"));

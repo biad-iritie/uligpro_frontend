@@ -20,6 +20,8 @@ import useAuthentication from "@hooks/useAuthentication";
 
 // utils
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 const TabletHeader = ({ title }) => {
   const [ref, { width }] = useMeasure();
@@ -60,7 +62,16 @@ const DesktopHeader = ({ title }) => {
   const { setCartOpen } = useShopProvider();
   const [ref, { width: titleWidth }] = useMeasure();
   const isStoreRoute = useStoreRoute();
-  const isLogged = useAuthentication();
+  const [isLogged, setIsLogged] = useState(false);
+  const user = useSelector((state) => state.auth.user);
+
+  useEffect(() => {
+    if (user.name !== undefined) {
+      setIsLogged(true);
+    } else {
+      setIsLogged(false);
+    }
+  }, [user]);
   return (
     <div
       className={`${styles.desktop} d-flex justify-content-between align-items-center g-20`}

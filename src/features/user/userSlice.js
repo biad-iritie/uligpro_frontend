@@ -22,6 +22,14 @@ export const addLoggedUser = createAsyncThunk(
   }
 );
 
+export const getLoggedUser = createAsyncThunk(
+  "auth/loggedUser",
+  async (credentials) => {
+    const response = await credentials.loggedUserFunc();
+    return response.data.getLoggedInUser;
+  }
+);
+
 export const getActivationToken = createAsyncThunk(
   "auth/getActivationToken",
   async (credentials) => {
@@ -55,7 +63,7 @@ const User = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    getToken: (state, action) => {
+    getUserCredentials: (state, action) => {
       //it's ok to do this because the immer makes it immutable
       //under the hood
       //state.user = action.payload.user;
@@ -98,6 +106,32 @@ const User = createSlice({
         console.log(action.error.message);
         state.status = "failed";
         state.error = action.error.message;
+      })
+
+      // GET CREDENTIAL DATA
+
+      .addCase(getLoggedUser.fulfilled, (state, action) => {
+        //console.log(action);
+        // Add any fetched posts to the array
+        if (action.payload.user) {
+          state.user = action.payload.user;
+          //state.accessToken = action.payload.accessToken;
+          /* state.refreshToken = action.payload.refreshToken; */
+
+          // Saving data to session storage
+          localStorage.setItem(
+            "accessToken",
+            JSON.stringify(action.payload.accessToken)
+          );
+          localStorage.setItem(
+            "refreshToken",
+            JSON.stringify(action.payload.refreshToken)
+          );
+          state.status = "succeeded";
+        } else {
+          state.status = "failed";
+          state.error = action.payload.error.message;
+        }
       })
 
       // GET ACTIVATION TOKEN
@@ -161,5 +195,5 @@ const User = createSlice({
   },
 });
 
-export const { login } = User.actions;
+export const { getUserCredentials } = User.actions;
 export default User.reducer;

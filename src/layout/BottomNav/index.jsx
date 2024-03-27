@@ -7,17 +7,27 @@ import SearchPopup from "./SearchPopup";
 import SettingsPopup from "./SettingsPopup";
 
 // hooks
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useStoreRoute from "@hooks/useStoreRoute";
 import { useShopProvider } from "@contexts/shopContext";
-import useAuthentication from "@hooks/useAuthentication";
+import { useSelector } from "react-redux";
 
 const BottomNav = () => {
   const [searchPopupOpen, setSearchPopupOpen] = useState(false);
   const [settingsPopupOpen, setSettingsPopupOpen] = useState(false);
   const isStoreRoute = useStoreRoute();
   const { setCartOpen } = useShopProvider();
-  const isLogged = useAuthentication();
+  const [isLogged, setIsLogged] = useState(false);
+  const user = useSelector((state) => state.auth.user);
+
+  useEffect(() => {
+    //console.log(user.name);
+    if (user.name !== undefined) {
+      setIsLogged(true);
+    } else {
+      setIsLogged(false);
+    }
+  }, [user]);
   return (
     <div
       className={styles.container}
