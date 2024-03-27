@@ -15,6 +15,7 @@ import { useWindowSize } from "react-use";
 // utils
 import PropTypes from "prop-types";
 import { getClubInfo } from "@utils/helpers";
+import { useSelector } from "react-redux";
 
 const TicketsEventCard = ({
   userId,
@@ -27,6 +28,7 @@ const TicketsEventCard = ({
   const { theme } = useThemeProvider();
   const team1 = getClubInfo(match.team1.id);
   const team2 = getClubInfo(match.team2.id);
+  const user = useSelector((state) => state.auth.user);
 
   const askTologin = () => {
     if (!userId) {
@@ -54,10 +56,10 @@ const TicketsEventCard = ({
           <TicketsEventDetailCard />
           <TicketsEventDetailCard />
 
-          <NavLink className="text-button" to={userId ? "/payemnt" : ""}>
+          <NavLink className="text-button" to={user.name ? "/payment" : ""}>
             <button
               onClick={() => {
-                askTologin();
+                !user.name && askTologin();
               }}
               className="btn w-100"
             >

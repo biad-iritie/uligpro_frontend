@@ -1,6 +1,6 @@
 // components
 import PasswordInput from "@components/PasswordInput";
-import BasicCheckbox from "@ui/BasicCheckbox";
+//import BasicCheckbox from "@ui/BasicCheckbox";
 import ResetPasswordPopup from "@components/ResetPasswordPopup";
 import { NavLink } from "react-router-dom";
 import { CircularProgress } from "@mui/material";

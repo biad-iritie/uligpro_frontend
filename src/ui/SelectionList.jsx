@@ -1,33 +1,35 @@
 // styling
-import styled from 'styled-components/macro';
-import {css} from 'styled-components';
-import theme from 'styled-theming';
+import styled from "styled-components/macro";
+import { css } from "styled-components";
+import theme from "styled-theming";
 
 // components
-import SelectionButton from '@ui/SelectionButton';
-import {Swiper, SwiperSlide} from 'swiper/react';
+import SelectionButton from "@ui/SelectionButton";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 // hooks
-import {useEffect, useState} from 'react';
-import {useThemeProvider} from '@contexts/themeContext';
+import { useEffect, useState } from "react";
+import { useThemeProvider } from "@contexts/themeContext";
 
 // utils
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 const prevButton = css`
   padding-left: 10px;
-  background: ${theme('theme', {
-    light: 'linear-gradient(90deg, #FFFFFF 28.49%, rgba(255, 255, 255, 0.0001) 100%);',
-    dark: 'linear-gradient(-90deg, rgba(17, 19, 18, 0.0001) 0%, #111312 77.09%);'
+  background: ${theme("theme", {
+    light:
+      "linear-gradient(90deg, #FFFFFF 28.49%, rgba(255, 255, 255, 0.0001) 100%);",
+    dark: "linear-gradient(-90deg, rgba(17, 19, 18, 0.0001) 0%, #111312 77.09%);",
   })};
   border-radius: 4px 0 0 0;
 `;
 
 const nextButton = css`
   padding-right: 10px;
-  background: ${theme('theme', {
-    light: 'linear-gradient(-90deg, #FFFFFF 28.49%, rgba(255, 255, 255, 0.0001) 100%);',
-    dark: 'linear-gradient(90deg, rgba(17, 19, 18, 0.0001) 0%, #111312 77.09%);'
+  background: ${theme("theme", {
+    light:
+      "linear-gradient(-90deg, #FFFFFF 28.49%, rgba(255, 255, 255, 0.0001) 100%);",
+    dark: "linear-gradient(90deg, rgba(17, 19, 18, 0.0001) 0%, #111312 77.09%);",
   })};
   border-radius: 0 4px 0 0;
 `;
@@ -36,12 +38,12 @@ const StyledSelectionList = styled.div`
   display: flex;
   gap: 20px;
   box-shadow: 0 1px 8px rgba(110, 110, 110, 0.1);
-  background: ${theme('theme', {
-    light: 'var(--widget)',
-    dark: '#1B1F23'
+  background: ${theme("theme", {
+    light: "var(--widget)",
+    dark: "#1B1F23",
   })};
   position: relative;
-  
+
   .swiper {
     padding: 20px 0;
   }
@@ -66,7 +68,7 @@ const StyledSelectionList = styled.div`
       height: 100%;
       display: flex;
       align-items: center;
-      color: #8EA2AB;
+      color: #8ea2ab;
     }
 
     &.ltr button {
@@ -95,63 +97,68 @@ const StyledSelectionList = styled.div`
   }
 `;
 
-const SelectionList = ({active, setActive, options, innerRef}) => {
-    const [swiper, setSwiper] = useState(null);
-    const {direction} = useThemeProvider();
+const SelectionList = ({ active, setActive, options, innerRef }) => {
+  console.log(active);
+  console.log(options);
+  const [swiper, setSwiper] = useState(null);
+  const { direction } = useThemeProvider();
 
-    const handlePrev = () => {
-        swiper.slidePrev();
-        setActive(options[swiper.realIndex].value || options[swiper.realIndex]);
+  const handlePrev = () => {
+    swiper.slidePrev();
+    setActive(options[swiper.realIndex].value || options[swiper.realIndex]);
+  };
+
+  const handleNext = () => {
+    swiper.slideNext();
+    setActive(options[swiper.realIndex].value || options[swiper.realIndex]);
+  };
+
+  useEffect(() => {
+    if (swiper) {
+      swiper.changeLanguageDirection(direction);
+      swiper.update();
     }
+  }, [swiper, direction]);
 
-    const handleNext = () => {
-        swiper.slideNext();
-        setActive(options[swiper.realIndex].value || options[swiper.realIndex]);
-    }
-
-    useEffect(() => {
-        if (swiper) {
-            swiper.changeLanguageDirection(direction);
-            swiper.update();
-        }
-    }, [swiper, direction]);
-
-    return (
-        <StyledSelectionList ref={innerRef}>
-            <div className={`nav ${direction}`}>
-                <button aria-label="Previous" onClick={handlePrev}>
-                    <i className="icon icon-chevron-left"/>
-                </button>
-                <button aria-label="Next" onClick={handleNext}>
-                    <i className="icon icon-chevron-right"/>
-                </button>
-            </div>
-            <Swiper className="selection-list w-100 h-100"
-                    onSwiper={setSwiper}
-                    slidesPerView="auto"
-                    spaceBetween={12}
-                    loop={true}
-                    centeredSlides={true}>
-                {
-                    options.map(option => (
-                        <SwiperSlide key={option.label || option}>
-                            <SelectionButton text={option.label || option}
-                                             active={active === option.value || active === option}
-                                             onClick={() => setActive(option.value || option)}/>
-                        </SwiperSlide>
-                    ))
-                }
-            </Swiper>
-        </StyledSelectionList>
-    )
-}
+  return (
+    <StyledSelectionList ref={innerRef}>
+      <div className={`nav ${direction}`}>
+        <button aria-label="Previous" onClick={handlePrev}>
+          <i className="icon icon-chevron-left" />
+        </button>
+        <button aria-label="Next" onClick={handleNext}>
+          <i className="icon icon-chevron-right" />
+        </button>
+      </div>
+      {active !== undefined && options.length > 0 && (
+        <Swiper
+          className="selection-list w-100 h-100"
+          onSwiper={setSwiper}
+          slidesPerView="auto"
+          spaceBetween={12}
+          loop={true}
+          centeredSlides={true}
+        >
+          {options.map((option) => (
+            <SwiperSlide key={option.label || option}>
+              <SelectionButton
+                text={option.label || option}
+                //active={active === option.value || active === option}
+                //onClick={() => setActive(option.value || option)}
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      )}
+    </StyledSelectionList>
+  );
+};
 
 SelectionList.propTypes = {
-    active: PropTypes.string,
-    setActive: PropTypes.func,
-    options: PropTypes.array,
-    innerRef: PropTypes.any
-}
+  active: PropTypes.string,
+  setActive: PropTypes.func,
+  options: PropTypes.array,
+  innerRef: PropTypes.any,
+};
 
-export default SelectionList
-
+export default SelectionList;

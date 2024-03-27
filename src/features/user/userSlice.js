@@ -5,8 +5,6 @@ const initialState = {
   error: null,
   user: {},
   accessToken: "",
-  refreshToken: "",
-  activationToken: "",
 };
 
 export const addLoggedUser = createAsyncThunk(
@@ -84,8 +82,8 @@ const User = createSlice({
         // Add any fetched posts to the array
         if (action.payload.user) {
           state.user = action.payload.user;
-          state.accessToken = action.payload.accessToken;
-          state.refreshToken = action.payload.refreshToken;
+          /* state.accessToken = action.payload.accessToken;
+          state.refreshToken = action.payload.refreshToken; */
 
           // Saving data to session storage
           localStorage.setItem(

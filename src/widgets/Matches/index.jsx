@@ -3,16 +3,18 @@ import styles from "./styles.module.scss";
 
 // components
 import Spring from "@components/Spring";
+import { LinearProgress } from "@mui/material";
+import SelectionList from "@ui/SelectionList";
 //import { NavLink } from "react-router-dom";
 import MyMatchCard from "@components/MyMatchCard";
 import TicketsEventCard from "@components/TicketsEventCard";
 import { Swiper, SwiperSlide } from "swiper/react";
 import ScrollContainer from "@components/ScrollContainer";
+import { toast } from "react-toastify";
 
 // hooks
 import { useThemeProvider } from "@contexts/themeContext";
 import { useState, useEffect } from "react";
-
 // utils
 import dayjs from "dayjs";
 import { getMonthDays } from "@utils/helpers";
@@ -20,7 +22,51 @@ import classNames from "classnames";
 
 // data placeholder
 import matches from "@db/matches";
+import { gql, useLazyQuery, useQuery } from "@apollo/client";
+import { useDispatch, useSelector } from "react-redux";
+import { getEvents } from "./../../features/event/eventSlide";
 
+// constants
+import { FINALS_OPTIONS } from "@constants/selection_options";
+import { selectAllEvents } from "./../../features/event/eventSlide";
+
+const GET_EVENT = gql`
+  query GetEvent {
+    getComingEvents {
+      events {
+        id
+        date
+        name
+        venue {
+          name
+        }
+        ticket_categoryOnEvent {
+          ticket_category {
+            name
+          }
+          price
+          capacity
+          ticket_sold
+        }
+        match {
+          time
+          team1 {
+            name
+            university
+            logo
+          }
+          team2 {
+            name
+            university
+            logo
+          }
+          goal1
+          goal2
+        }
+      }
+    }
+  }
+`;
 const Navigator = ({ active, setActive }) => {
   const { theme, direction } = useThemeProvider();
   const [swiper, setSwiper] = useState(null);
@@ -79,41 +125,91 @@ const Matches = () => {
   const [selectedDay, setSelectedDay] = useState(
     parseInt(dayjs().format("DD"))
   );
+  const error = useSelector((state) => state.events.error);
+  const eventStatus = useSelector((state) => state.events.status);
+  const events = useSelector(selectAllEvents);
+  const [getEventsQuery] = useLazyQuery(GET_EVENT);
+  //const [selected, setSelected] = useState(FINALS_OPTIONS[0].value);
+  const [selected, setSelected] = useState();
+  const [eventNames, setEventNames] = useState([]);
+
+  const dispatch = useDispatch();
+
+  const fetchEvents = async () => {
+    try {
+      await dispatch(
+        getEvents({
+          getEventsFunc: getEventsQuery,
+        })
+      );
+    } catch (error) {
+      toast.error("Desolé error au niveau du serveur");
+    }
+  };
+
+  useEffect(() => {
+    if (eventStatus === "idle") {
+      fetchEvents();
+    }
+    if (eventStatus === "succeeded") {
+      let EVENTS_NAMES = [];
+      console.log(events);
+      events.map((event, index) => {
+        EVENTS_NAMES.push({ label: event.name, value: event.id });
+      });
+      setEventNames(EVENTS_NAMES);
+      setSelected(EVENTS_NAMES[0].value);
+      //console.log(EVENTS_NAMES);
+    }
+  }, [eventStatus, dispatch]);
 
   return (
     <Spring className="card d-flex flex-column">
-      <div
-        className="card_header d-flex flex-column g-10"
-        style={{ paddingBottom: 20 }}
-      >
-        <div className="d-flex justify-content-between align-items-center">
-          {/*<h3>{dayjs().format("MMMM")} Matches à venir</h3>
+      {eventStatus === "loading" ? (
+        <>
+          <LinearProgress color="success" />
+        </>
+      ) : (
+        <>
+          <div
+            className="card_header d-flex flex-column g-10"
+            style={{ paddingBottom: 20 }}
+          >
+            <div className="d-flex justify-content-between align-items-center">
+              {/*<h3>{dayjs().format("MMMM")} Matches à venir</h3>
            <NavLink className="text-button" to="/schedule">
             Scheduler
           </NavLink> */}
-          <h3>Matchs à venir</h3>
-        </div>
-        <Navigator active={selectedDay} setActive={setSelectedDay} />
-        <div className="d-flex justify-content-between align-items-center">
-          <h3>Journée 1</h3>
-        </div>
-      </div>
-      <div className={styles.grid}>
-        <div className={styles.scroll}>
-          <ScrollContainer height={0}>
-            <div
-              className={`${styles.scroll_track} ${styles[direction]} track d-flex flex-column g-20`}
-            >
-              {matches.map((match, index) => (
-                <MyMatchCard match={match} index={index} key={index} />
-              ))}
+              <h3>Matchs à venir</h3>
             </div>
-          </ScrollContainer>
-        </div>
-        <div className={`${styles.card} ${styles[direction]}`}>
-          <TicketsEventCard match={matches[1]} variant="extended" />
-        </div>
-      </div>
+            <SelectionList
+              options={eventNames}
+              active={selected}
+              setActive={setSelected}
+            />
+            {/* <Navigator active={selectedDay} setActive={setSelectedDay} /> */}
+            {/* <div className="d-flex justify-content-between align-items-center">
+              <h3>Journée 1</h3>
+            </div> */}
+          </div>
+          <div className={styles.grid}>
+            <div className={styles.scroll}>
+              <ScrollContainer height={0}>
+                <div
+                  className={`${styles.scroll_track} ${styles[direction]} track d-flex flex-column g-20`}
+                >
+                  {matches.map((match, index) => (
+                    <MyMatchCard match={match} index={index} key={index} />
+                  ))}
+                </div>
+              </ScrollContainer>
+            </div>
+            <div className={`${styles.card} ${styles[direction]}`}>
+              <TicketsEventCard match={matches[1]} variant="extended" />
+            </div>
+          </div>
+        </>
+      )}
     </Spring>
   );
 };
