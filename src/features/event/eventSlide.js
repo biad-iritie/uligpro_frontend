@@ -6,6 +6,7 @@ const initialState = {
   events: [],
   eventSelected: {},
   listEventsName: [],
+  ticketsDesired: {},
 };
 
 export const getEvents = createAsyncThunk("events/getAll", async (data) => {
@@ -35,6 +36,10 @@ const Event = createSlice({
       state.listEventsName = result;
     }, */
     getEventsName: (state) => state.listEventsName,
+    setTicketsDesired: (state, action) => {
+      state.ticketsDesired = action.payload;
+    },
+    getTicketsDesired: (state) => state.ticketsDesired,
   },
   extraReducers(builder) {
     builder
@@ -72,7 +77,12 @@ const Event = createSlice({
   },
 });
 
-export const { selectEventById, getEventsName } = Event.actions;
+export const {
+  selectEventById,
+  getEventsName,
+  setTicketsDesired,
+  getTicketsDesired,
+} = Event.actions;
 export default Event.reducer;
 
 export const selectAllEvents = (state) => state.events.events;

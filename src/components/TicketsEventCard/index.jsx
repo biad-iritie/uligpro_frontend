@@ -3,7 +3,7 @@ import styles from "./styles.module.scss";
 
 // components
 import Spring from "@components/Spring";
-import { NavLink } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import TicketsEventDetailCard from "@components/TicketEventDetailCard";
@@ -14,26 +14,77 @@ import { useWindowSize } from "react-use";
 
 // utils
 import PropTypes from "prop-types";
-import { getClubInfo } from "@utils/helpers";
-import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+//import { getClubInfo } from "@utils/helpers";
+//import { useSelector } from "react-redux";
+import { useState } from "react";
+
+import { setTicketsDesired } from "./../../features/event/eventSlide";
+import { useDispatch } from "react-redux";
 
 const TicketsEventCard = ({ userName, tickets, index, variant = "basic" }) => {
   const { width } = useWindowSize();
   const { theme } = useThemeProvider();
   //const user = useSelector((state) => state.auth.user);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   let makeTicketWilling = {};
   tickets.map((ticket) => {
-    makeTicketWilling[ticket.ticket_category.id] = 0;
+    makeTicketWilling[ticket.ticket_category.id] = {
+      name: ticket.ticket_category.name,
+      price: ticket.price,
+      quantity: 0,
+    };
   });
-  const [ticketWilling, setTicketWilling] = useState(makeTicketWilling);
+
+  const [ticketsWilling, setTicketWilling] = useState(makeTicketWilling);
   const askTologin = () => {
     if (!userName) {
       toast.warning("Connectez vous ou creer un compte afin de pousuivre");
     }
   };
 
-  //useEffect(() => {}, [tickets]);
+  const modifyQuantity = (how, category) => {
+    /* const old = ticketsWilling[category];
+    console.log(old); */
+    let newValue = {};
+    newValue[category] = ticketsWilling[category];
+
+    if (how === "plus") {
+      newValue[category].quantity = ticketsWilling[category].quantity + 1;
+    } else {
+      newValue[category].quantity =
+        ticketsWilling[category].quantity > 0
+          ? ticketsWilling[category].quantity - 1
+          : 0;
+    }
+
+    setTicketWilling({
+      ...ticketsWilling,
+      newValue,
+    });
+
+    //console.log(newValue);
+  };
+
+  const goPaymentPage = () => {
+    let ableToMove = false;
+    tickets.map((ticket) => {
+      if (ticketsWilling[ticket.ticket_category.id].quantity > 0) {
+        ableToMove = true;
+        return;
+      }
+    });
+    if (ableToMove) {
+      delete ticketsWilling.newValue;
+      dispatch(setTicketsDesired(ticketsWilling));
+      navigate("/payment");
+    } else {
+      toast.warning("Selectionnez vos tickets !");
+    }
+  };
+  /* useEffect(() => {
+    console.log();
+  }, [ticketWilling]); */
   //console.log(makeTicketWilling);
   return (
     <Spring
@@ -53,18 +104,22 @@ const TicketsEventCard = ({ userName, tickets, index, variant = "basic" }) => {
           </div>
 
           {tickets.map((ticket, index) => (
-            <TicketsEventDetailCard ticket={ticket} />
+            <TicketsEventDetailCard
+              ticket={ticket}
+              willingQuantity={ticketsWilling}
+              operation={modifyQuantity}
+              key={index}
+            />
           ))}
-          <NavLink className="text-button" to={userName ? "/payment" : ""}>
-            <button
-              onClick={() => {
-                !userName && askTologin();
-              }}
-              className="btn w-100"
-            >
-              Proceder au paiement
-            </button>
-          </NavLink>
+
+          <button
+            className="btn w-100"
+            onClick={() => {
+              !userName ? askTologin() : goPaymentPage();
+            }}
+          >
+            Proceder au paiement
+          </button>
         </div>
       </div>
     </Spring>
