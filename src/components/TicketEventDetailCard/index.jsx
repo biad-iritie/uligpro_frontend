@@ -2,8 +2,9 @@
 import styles from "./styles.module.scss";
 import Price from "@ui/Price";
 import IconButton from "@ui/IconButton";
+import PropTypes from "prop-types";
 
-const TicketsEventDetailCard = ({}) => {
+const TicketsEventDetailCard = ({ ticket }) => {
   const iconStyles = {
     width: "32px",
     height: "32px",
@@ -22,14 +23,16 @@ const TicketsEventDetailCard = ({}) => {
     >
       <div className={`${styles.footer_details} d-flex flex-column g-8`}>
         <p className="heading-font">
-          <span className="text-600">Category:</span> VVIP
+          <span className="text-600">Category:</span>{" "}
+          {ticket.ticket_category.name}
         </p>
         <p className="heading-font">
-          <span className="text-600">Disponible:</span> 10
+          <span className="text-600">Disponible:</span>{" "}
+          {ticket.capacity - ticket.ticket_sold}
         </p>
       </div>
 
-      <Price price={90.99} />
+      <Price price={ticket.price} />
       <span className="square h4" style={iconStyles} onClick={() => {}}>
         -
       </span>
@@ -43,4 +46,7 @@ const TicketsEventDetailCard = ({}) => {
   );
 };
 
+TicketsEventDetailCard.propTypes = {
+  ticket: PropTypes.object.isRequired,
+};
 export default TicketsEventDetailCard;

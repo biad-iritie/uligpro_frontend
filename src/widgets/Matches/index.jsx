@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 
 // hooks
 import { useThemeProvider } from "@contexts/themeContext";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 // utils
 import dayjs from "dayjs";
 import { getMonthDays } from "@utils/helpers";
@@ -24,12 +24,11 @@ import classNames from "classnames";
 import matches from "@db/matches";
 import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
-import { getEvents } from "./../../features/event/eventSlide";
+import { getEvents, setEventsName } from "./../../features/event/eventSlide";
 
 // constants
 import { FINALS_OPTIONS } from "@constants/selection_options";
 import { selectAllEvents } from "./../../features/event/eventSlide";
-
 const GET_EVENT = gql`
   query GetEvent {
     getComingEvents {
@@ -42,13 +41,14 @@ const GET_EVENT = gql`
         }
         ticket_categoryOnEvent {
           ticket_category {
+            id
             name
           }
           price
           capacity
           ticket_sold
         }
-        match {
+        matches {
           time
           team1 {
             name
@@ -127,12 +127,27 @@ const Matches = () => {
   );
   const error = useSelector((state) => state.events.error);
   const eventStatus = useSelector((state) => state.events.status);
-  const events = useSelector(selectAllEvents);
+  const events = useSelector((state) => state.events.events);
+  const eventSelected = useSelector((state) => state.events.eventSelected);
+  const listEventsName = useSelector((state) => state.events.listEventsName);
+  const userName = useSelector((state) => state.auth.user.name);
   const [getEventsQuery] = useLazyQuery(GET_EVENT);
-  //const [selected, setSelected] = useState(FINALS_OPTIONS[0].value);
-  const [selected, setSelected] = useState();
-  const [eventNames, setEventNames] = useState([]);
+  const [selected, setSelected] = useState(FINALS_OPTIONS[0].value);
+  //const [events, setEvents] = useState([]);
 
+  //const [selected, setSelected] = useState();
+  const [eventNames, setEventNames] = useState([]);
+  //let eventNames = [];
+
+  //let DisplayEvents;
+  /*   let EVENTS_NAMES = [];
+  let result = useQuery(GET_EVENT);
+  console.log(result);
+  const EVENTS = result.EVENTS.map((event, index) => {
+    EVENTS_NAMES.push({ label: event.name, value: event.id });
+  }); */
+
+  //console.log(EVENTS_NAMES);
   const dispatch = useDispatch();
 
   const fetchEvents = async () => {
@@ -143,15 +158,20 @@ const Matches = () => {
         })
       );
     } catch (error) {
+      console.log(error);
       toast.error("Desolé error au niveau du serveur");
     }
   };
 
   useEffect(() => {
+    console.log(events);
     if (eventStatus === "idle") {
       fetchEvents();
     }
-    if (eventStatus === "succeeded") {
+
+    /*  if (eventStatus === "succeeded") {
+      console.log(eventSelected);
+      console.log(selected);
       let EVENTS_NAMES = [];
       console.log(events);
       events.map((event, index) => {
@@ -159,9 +179,30 @@ const Matches = () => {
       });
       setEventNames(EVENTS_NAMES);
       setSelected(EVENTS_NAMES[0].value);
-      //console.log(EVENTS_NAMES);
-    }
+    } */
+    /* if (events.length > 0) {
+      let EVENTS_NAMES = [];
+      console.log(events);
+      events.map((event, index) => {
+        EVENTS_NAMES.push({ label: event.name, value: event.id });
+      });
+      setEventNames(EVENTS_NAMES);
+      setSelected(EVENTS_NAMES[0].value);
+      /* events.map((event, index) => {
+        eventNames.push({ label: event.name, value: event.id });
+      }); 
+    }*/
+
+    console.log(eventStatus);
+    /* if (eventSelected !== "") {
+      console.log(eventSelected);
+      setDetailsSelectedEvent(
+        useSelector((state) => state.events.eventSelected)
+      );
+    } */
   }, [eventStatus, dispatch]);
+
+  let content;
 
   return (
     <Spring className="card d-flex flex-column">
@@ -170,46 +211,71 @@ const Matches = () => {
           <LinearProgress color="success" />
         </>
       ) : (
-        <>
-          <div
-            className="card_header d-flex flex-column g-10"
-            style={{ paddingBottom: 20 }}
-          >
-            <div className="d-flex justify-content-between align-items-center">
-              {/*<h3>{dayjs().format("MMMM")} Matches à venir</h3>
+        <></>
+      )}
+
+      <div
+        className="card_header d-flex flex-column g-10"
+        style={{ paddingBottom: 20 }}
+      >
+        <div className="d-flex justify-content-between align-items-center">
+          {/*<h3>{dayjs().format("MMMM")} Matches à venir</h3>
            <NavLink className="text-button" to="/schedule">
             Scheduler
           </NavLink> */}
-              <h3>Matchs à venir</h3>
-            </div>
+          <h3>Matchs à venir</h3>
+        </div>
+
+        {/* <Navigator active={selectedDay} setActive={setSelectedDay} />  */}
+        {/* <SelectionList
+          options={FINALS_OPTIONS}
+          active={selected}
+          setActive={setSelected}
+        /> */}
+        {eventStatus === "succeeded" && listEventsName.length > 0 ? (
+          <>
             <SelectionList
-              options={eventNames}
-              active={selected}
+              options={listEventsName}
+              active={eventSelected.id}
               setActive={setSelected}
             />
-            {/* <Navigator active={selectedDay} setActive={setSelectedDay} /> */}
-            {/* <div className="d-flex justify-content-between align-items-center">
-              <h3>Journée 1</h3>
-            </div> */}
-          </div>
-          <div className={styles.grid}>
-            <div className={styles.scroll}>
-              <ScrollContainer height={0}>
-                <div
-                  className={`${styles.scroll_track} ${styles[direction]} track d-flex flex-column g-20`}
-                >
-                  {matches.map((match, index) => (
-                    <MyMatchCard match={match} index={index} key={index} />
-                  ))}
-                </div>
-              </ScrollContainer>
+
+            {/* <SelectionList
+              options={eventNames}
+              active={eventSelected.id}
+              //setActive={setSelected}
+            /> */}
+            {/* <h3>{eventNames[0].label}</h3> */}
+            <div className="d-flex justify-content-between align-items-center">
+              <h3>{`Lieu:  ${eventSelected.venue.name} Date: ${new Date(
+                eventSelected.date
+              )}`}</h3>
             </div>
-            <div className={`${styles.card} ${styles[direction]}`}>
-              <TicketsEventCard match={matches[1]} variant="extended" />
+            <div className={styles.grid}>
+              <div className={styles.scroll}>
+                <ScrollContainer height={0}>
+                  <div
+                    className={`${styles.scroll_track} ${styles[direction]} track d-flex flex-column g-20`}
+                  >
+                    {eventSelected.matches.map((match, index) => (
+                      <MyMatchCard match={match} index={index} key={index} />
+                    ))}
+                  </div>
+                </ScrollContainer>
+              </div>
+              <div className={`${styles.card} ${styles[direction]}`}>
+                <TicketsEventCard
+                  userName={userName}
+                  tickets={eventSelected.ticket_categoryOnEvent}
+                  variant="extended"
+                />
+              </div>
             </div>
-          </div>
-        </>
-      )}
+          </>
+        ) : (
+          <></>
+        )}
+      </div>
     </Spring>
   );
 };

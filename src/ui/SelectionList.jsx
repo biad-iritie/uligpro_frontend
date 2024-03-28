@@ -98,8 +98,6 @@ const StyledSelectionList = styled.div`
 `;
 
 const SelectionList = ({ active, setActive, options, innerRef }) => {
-  console.log(active);
-  console.log(options);
   const [swiper, setSwiper] = useState(null);
   const { direction } = useThemeProvider();
 
@@ -130,26 +128,24 @@ const SelectionList = ({ active, setActive, options, innerRef }) => {
           <i className="icon icon-chevron-right" />
         </button>
       </div>
-      {active !== undefined && options.length > 0 && (
-        <Swiper
-          className="selection-list w-100 h-100"
-          onSwiper={setSwiper}
-          slidesPerView="auto"
-          spaceBetween={12}
-          loop={true}
-          centeredSlides={true}
-        >
-          {options.map((option) => (
-            <SwiperSlide key={option.label || option}>
-              <SelectionButton
-                text={option.label || option}
-                //active={active === option.value || active === option}
-                //onClick={() => setActive(option.value || option)}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      )}
+      <Swiper
+        className="selection-list w-100 h-100"
+        onSwiper={setSwiper}
+        slidesPerView="auto"
+        spaceBetween={12}
+        loop={true}
+        centeredSlides={true}
+      >
+        {options.map((option) => (
+          <SwiperSlide key={option.label || option}>
+            <SelectionButton
+              text={option.label || option}
+              active={active === option.value || active === option}
+              onClick={() => setActive(option.value || option)}
+            />
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </StyledSelectionList>
   );
 };

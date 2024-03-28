@@ -14,9 +14,10 @@ const Price = ({ price, isRange = false }) => {
   return (
     <div className="d-flex align-items-center g-10">
       <h4 className="text-700">
-        {isRange
+        {/* {isRange
           ? `${price[0].toFixed(2)} - ${price[1].toFixed(2)}`
-          : price.toFixed(2)}
+          : price.toFixed(2)} */}
+        {price}
       </h4>
       <span className="square h4" style={iconStyles}>
         FCFA

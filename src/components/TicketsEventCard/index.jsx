@@ -16,26 +16,25 @@ import { useWindowSize } from "react-use";
 import PropTypes from "prop-types";
 import { getClubInfo } from "@utils/helpers";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
-const TicketsEventCard = ({
-  userId,
-  event,
-  match,
-  index,
-  variant = "basic",
-}) => {
+const TicketsEventCard = ({ userName, tickets, index, variant = "basic" }) => {
   const { width } = useWindowSize();
   const { theme } = useThemeProvider();
-  const team1 = getClubInfo(match.team1.id);
-  const team2 = getClubInfo(match.team2.id);
-  const user = useSelector((state) => state.auth.user);
-
+  //const user = useSelector((state) => state.auth.user);
+  let makeTicketWilling = {};
+  tickets.map((ticket) => {
+    makeTicketWilling[ticket.ticket_category.id] = 0;
+  });
+  const [ticketWilling, setTicketWilling] = useState(makeTicketWilling);
   const askTologin = () => {
-    if (!userId) {
+    if (!userName) {
       toast.warning("Connectez vous ou creer un compte afin de pousuivre");
     }
   };
 
+  //useEffect(() => {}, [tickets]);
+  //console.log(makeTicketWilling);
   return (
     <Spring
       className={`${styles.container} ${styles[theme]} h-100`}
@@ -53,13 +52,13 @@ const TicketsEventCard = ({
             </div>
           </div>
 
-          <TicketsEventDetailCard />
-          <TicketsEventDetailCard />
-
-          <NavLink className="text-button" to={user.name ? "/payment" : ""}>
+          {tickets.map((ticket, index) => (
+            <TicketsEventDetailCard ticket={ticket} />
+          ))}
+          <NavLink className="text-button" to={userName ? "/payment" : ""}>
             <button
               onClick={() => {
-                !user.name && askTologin();
+                !userName && askTologin();
               }}
               className="btn w-100"
             >
@@ -73,7 +72,7 @@ const TicketsEventCard = ({
 };
 
 TicketsEventCard.propTypes = {
-  match: PropTypes.object.isRequired,
+  tickets: PropTypes.array.isRequired,
   index: PropTypes.number,
   variant: PropTypes.oneOf(["basic", "extended"]),
 };
