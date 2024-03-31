@@ -1,3 +1,4 @@
+import QRCode from "react-qr-code";
 // styling
 import styles from "./styles.module.scss";
 
@@ -7,16 +8,16 @@ import Spring from "@components/Spring";
 import Submenu from "@ui/Submenu";
 import SelectionListTickets from "@ui/SelectionListTickets";
 import { LinearProgress } from "@mui/material";
-import QRCode from "react-qr-code";
 // hooks
 import { useThemeProvider } from "@contexts/themeContext";
 import useSubmenu from "@hooks/useSubmenu";
 import {
   Page,
-  Text,
-  View,
   Document,
   StyleSheet,
+  View,
+  Text,
+  Image,
   PDFDownloadLink,
 } from "@react-pdf/renderer";
 
@@ -67,31 +68,55 @@ const MyTicket = () => {
   const reduxGetUserTicket = useSelector((state) => state.events.tickets);
   const dispatch = useDispatch();
 
-  // Create Document Component
-  const MyDocument = () => (
-    <Document>
-      <Page size="A4" style={styles.page}>
-        <View style={styles.section}>
-          <Text>Section #1</Text>
-        </View>
-        <View style={styles.section}>
-          <Text>Section #2</Text>
-        </View>
-      </Page>
-    </Document>
-  );
-
-  const download = () => {
-    let page = document.getElementById("ticket");
-    /* html2PDF(page, {
-      jsPDF: {
-        format: "a4",
+  const Ticket = () => {
+    console.log(selected);
+    const styles = StyleSheet.create({
+      page: {
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "white",
+        padding: 50,
       },
-      imageType: "image/jpeg",
-      output: "./generate.pdf",
-    }); */
-
-    console.log("download");
+      title: {
+        fontSize: 24,
+        fontWeight: "bold",
+        marginBottom: 20,
+      },
+      info: {
+        fontSize: 15,
+        marginBottom: 10,
+      },
+      qrCode: {
+        alignSelf: "flex-end",
+      },
+    });
+    return (
+      <Document>
+        <Page size="A4" style={styles.page}>
+          <Text style={styles.title}>E-Ticket ULIGPRO</Text>
+          <Text style={styles.info}> {selected.event.name}</Text>
+          <Text style={styles.info}>
+            Categorie : {selected.ticket_category.name}
+          </Text>
+          {/* <Text style={styles.info}>Venue: {selected.event.venue.name}</Text> */}
+          <Text style={styles.info}>
+            Date: {messagesByDate(selected.event.date)}
+          </Text>
+          {/* <Image
+            src="soccer_ball.png"
+            style={{ width: 50, height: 50, marginBottom: 20 }}
+          /> */}
+          <View style={styles.qrCode}>
+            <Image
+              src={`https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
+                selected.code
+              )}&size=25x50`}
+            />
+          </View>
+        </Page>
+      </Document>
+    );
   };
   const submenuActions = [
     /*  {
@@ -101,7 +126,7 @@ const MyTicket = () => {
     {
       label: "Telecharger",
       icon: "pdf",
-      onClick: download,
+      //onClick: download,
     },
     /*  {
       label: "Sent to E-mail",
@@ -132,11 +157,6 @@ const MyTicket = () => {
 
   return (
     <Spring className="card">
-      <PDFDownloadLink document={<MyDocument />} fileName="somename.pdf">
-        {({ blob, url, loading, error }) =>
-          loading ? "Loading document..." : "Download now!"
-        }
-      </PDFDownloadLink>
       {status === "loading" && (
         <>
           <LinearProgress color="success" />
@@ -147,61 +167,61 @@ const MyTicket = () => {
       reduxGetUserTicket.length > 0 &&
       selected !== undefined ? (
         <>
+          {/* <PDFViewer style={{ width: "100%", height: "100vh" }}>
+            <Ticket />
+          </PDFViewer> */}
           <SelectionListTickets
             options={reduxGetUserTicket}
             active={selected}
             setActive={setSelected}
           />
-          <div id="ticket">
-            <div className={styles.header}>
-              <h3>E-ticket</h3>
-              <button aria-label="Ticket actions" onClick={handleClick}>
-                <i className="icon icon-ticket-light" />
-              </button>
-              <Submenu
-                open={open}
-                onClose={handleClose}
-                anchorEl={anchorEl}
-                actions={submenuActions}
-              />
-            </div>
-            {/*<LazyImage className={styles.cover} src={cover} alt="cover" />
-       <div className={styles.teams}>
-        <div className={styles.teams_item}>
-          <LazyImage className={styles.logo} src={bayern} alt="Bayern Munich" />
-          <h3>Bayern</h3>
-          <span className="text-12">Munich, Germany</span>
-        </div>
-        <div className={styles.teams_item}>
-          <LazyImage className={styles.logo} src={newcastle} alt="Newcastle" />
-          <h3>Newcastle</h3>
-          <span className="text-12">London, UK</span>
-        </div>
-      </div> */}
-            <div>
-              <div className={styles.details} id="ticket">
-                <div className={styles.details_item}>
-                  <span className="h6 label">Categorie</span>
-                  <span className="h3">{selected.ticket_category.name}</span>
-                </div>
-                <div className={styles.details_item}>
-                  <span className="h6 label">Match(s)</span>
-                  <span className="h3">{selected.event.name}</span>
-                </div>
-                <div className={styles.details_item}>
-                  <span className="h6 label">Date</span>
-                  <span className="h3">
-                    {messagesByDate(selected.event.date)}
-                  </span>
-                </div>
+
+          <div className={styles.header}>
+            <h3>E-ticket</h3>
+            {/* <button aria-label="Ticket actions" onClick={handleClick}>
+              <i className="icon icon-ticket-light" />
+            </button>
+            <Submenu
+              open={open}
+              onClose={handleClose}
+              anchorEl={anchorEl}
+              actions={submenuActions}
+            /> */}
+          </div>
+
+          <div>
+            <div className={styles.details} id="ticket">
+              <div className={styles.details_item}>
+                <span className="h6 label">Categorie</span>
+                <span className="h3">{selected.ticket_category.name}</span>
               </div>
-              <div className="d-flex flex-column g-12 card-padded">
-                {/* <span className="h6 label">{selected.code}</span> */}
-                <div>
-                  <QRCode value={selected.code} />
-                </div>
+              <div className={styles.details_item}>
+                <span className="h6 label">Match(s)</span>
+                <span className="h3">{selected.event.name}</span>
+              </div>
+              <div className={styles.details_item}>
+                <span className="h6 label">Date</span>
+                <span className="h3">
+                  {messagesByDate(selected.event.date)}
+                </span>
               </div>
             </div>
+            <div className="d-flex flex-column g-12 card-padded">
+              {/* <span className="h6 label">{selected.code}</span> */}
+              <div style={{ margin: "0 auto" }}>
+                <QRCode value={selected.code} />
+              </div>
+            </div>
+            <button className="btn w-100">
+              <PDFDownloadLink
+                document={<Ticket />}
+                fileName={`${selected.code}.pdf`}
+              >
+                {({ blob, url, loading, error }) =>
+                  loading ? "Loading document..." : "Telecharger"
+                }
+              </PDFDownloadLink>
+            </button>
           </div>
         </>
       ) : (

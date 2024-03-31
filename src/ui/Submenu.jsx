@@ -7,7 +7,14 @@ import MenuItem from "@mui/material/MenuItem";
 
 // hooks
 import { useThemeProvider } from "@contexts/themeContext";
-
+import {
+  Page,
+  Text,
+  View,
+  Document,
+  StyleSheet,
+  PDFDownloadLink,
+} from "@react-pdf/renderer";
 // utils
 import PropTypes from "prop-types";
 
@@ -34,7 +41,7 @@ const StyledMenuItem = styled(MenuItem)`
   }
 `;
 
-const Submenu = ({ open, onClose, anchorEl, actions }) => {
+const Submenu = ({ open, onClose, anchorEl, actions, MyDocument }) => {
   const { direction } = useThemeProvider();
 
   return (
@@ -82,7 +89,11 @@ const Submenu = ({ open, onClose, anchorEl, actions }) => {
           }}
         >
           <i className={`icon icon-${action.icon}`} />
-          {action.label}
+          <PDFDownloadLink document={MyDocument} fileName="somename.pdf">
+            {({ blob, url, loading, error }) =>
+              loading ? "Loading document..." : action.label
+            }
+          </PDFDownloadLink>
         </StyledMenuItem>
       ))}
     </Menu>
