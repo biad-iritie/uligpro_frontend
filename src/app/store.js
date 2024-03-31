@@ -13,7 +13,10 @@ export default configureStore({
     getDefaultMiddleware({
       serializableCheck: {
         // Ignore these action types
-        ignoredActions: ["events/getAll/fulfilled"],
+        ignoredActions: [
+          "events/getAll/fulfilled",
+          "events/getUserTickets/fulfilled",
+        ],
       },
     }),
 });

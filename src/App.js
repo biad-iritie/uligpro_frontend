@@ -49,9 +49,10 @@ import Navbar from "@layout/Navbar";
 import ShoppingCart from "@widgets/ShoppingCart";
 import ScrollToTop from "@components/ScrollToTop";
 
-import { getUserCredentials } from "./features/user/userSlice";
-import { gql, useQuery } from "@apollo/client";
-
+//import { getUserCredentials } from "./features/user/userSlice";
+import { getLoggedUser } from "./features/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { gql, useLazyQuery } from "@apollo/client";
 // pages
 const ClubSummary = lazy(() => import("@pages/ClubSummary"));
 const GameSummary = lazy(() => import("@pages/GameSummary"));
@@ -75,11 +76,50 @@ const Home1 = lazy(() => import("@pages/Home1"));
 const MyBuyingTickets = lazy(() => import("@pages/MyBuyingTickets"));
 const MyProfile = lazy(() => import("@pages/MyProfile"));
 
+const LOGGED_USER = gql`
+  query GetLoggedInUser {
+    getLoggedInUser {
+      user {
+        name
+        email
+        tel
+      }
+      accessToken
+      refreshToken
+      error {
+        code
+        message
+      }
+    }
+  }
+`;
+
 const App = () => {
   const appRef = useRef(null);
   const { theme, direction } = useThemeProvider();
   const { width } = useWindowSize();
   const isAuthRoute = useAuthRoute();
+
+  const dispatch = useDispatch();
+  const accessToken = useSelector((state) => state.auth.accessToken);
+  const [loggedUser] = useLazyQuery(LOGGED_USER);
+
+  const getCredentials = async () => {
+    try {
+      await dispatch(
+        getLoggedUser({
+          loggedUserFunc: loggedUser,
+        })
+      ).unwrap();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    if (accessToken === "") {
+      getCredentials();
+    }
+  }, [accessToken, dispatch]);
   //console.log(process.env.REACT_APP_SERVER);
   /*   // Google Analytics init
   const gaKey = process.env.REACT_APP_PUBLIC_GA;

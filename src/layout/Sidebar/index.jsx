@@ -19,6 +19,7 @@ import { useEffect, useState } from "react";
 
 // constants
 import LINKS from "@constants/links";
+import { useSelector } from "react-redux";
 
 const Sidebar = () => {
   const { open, setOpen } = useSidebar();
@@ -26,6 +27,9 @@ const Sidebar = () => {
   const [expanded, setExpanded] = useState(undefined);
   const { pathname } = useLocation();
   const { width } = useWindowSize();
+
+  const [isLogged, setIsLogged] = useState(false);
+  const user = useSelector((state) => state.auth.user);
 
   // manually handle accordion expansion
   const handleChange = (panel) => (event, isExpanded) => {
@@ -36,7 +40,12 @@ const Sidebar = () => {
   useEffect(() => {
     width < 1280 && setExpanded(undefined);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+    if (user.name !== undefined) {
+      setIsLogged(true);
+    } else {
+      setIsLogged(false);
+    }
+  }, [pathname, user]);
 
   return (
     <StyledDrawer
@@ -77,15 +86,18 @@ const Sidebar = () => {
           </NavLink>
         </SingleLink>
       </nav>
-      <nav className="d-flex flex-column g-8 flex-1">
-        <SingleLink as="div">
-          <NavLink to="/">
-            <Link className={`h4`}>
-              <i className="icon icon-exit" /> Deconnexion
-            </Link>
-          </NavLink>
-        </SingleLink>
-      </nav>
+      {isLogged && (
+        <nav className="d-flex flex-column g-8 flex-1">
+          <SingleLink as="div">
+            <NavLink to="/">
+              <Link className={`h4`}>
+                <i className="icon icon-exit" /> Deconnexion
+              </Link>
+            </NavLink>
+          </SingleLink>
+        </nav>
+      )}
+
       <nav className="d-flex flex-column g-8 flex-1">
         {LINKS.map((link, index) => (
           <StyledAccordion

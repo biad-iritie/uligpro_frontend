@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 
 // hooks
 import { useThemeProvider } from "@contexts/themeContext";
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 // utils
 import dayjs from "dayjs";
 import { getMonthDays } from "@utils/helpers";
@@ -22,13 +22,13 @@ import classNames from "classnames";
 
 // data placeholder
 import matches from "@db/matches";
-import { gql, useLazyQuery, useQuery } from "@apollo/client";
+import { gql, useLazyQuery } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
-import { getEvents, setEventsName } from "./../../features/event/eventSlide";
+import { getEvents } from "./../../features/event/eventSlide";
 
 // constants
 import { FINALS_OPTIONS } from "@constants/selection_options";
-import { selectAllEvents } from "./../../features/event/eventSlide";
+//import { selectAllEvents } from "./../../features/event/eventSlide";
 const GET_EVENT = gql`
   query GetEvent {
     getComingEvents {
@@ -165,7 +165,10 @@ const Matches = () => {
 
   useEffect(() => {
     console.log(events);
-    if (eventStatus === "idle") {
+    if (
+      eventStatus === "idle" ||
+      (events.length === 0 && eventStatus === "succeeded")
+    ) {
       fetchEvents();
     }
 
@@ -193,7 +196,7 @@ const Matches = () => {
       }); 
     }*/
 
-    console.log(eventStatus);
+    //console.log(eventStatus);
     /* if (eventSelected !== "") {
       console.log(eventSelected);
       setDetailsSelectedEvent(

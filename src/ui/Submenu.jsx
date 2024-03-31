@@ -1,15 +1,15 @@
 // styling
-import styled from 'styled-components/macro';
+import styled from "styled-components/macro";
 
 // components
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 // hooks
-import {useThemeProvider} from '@contexts/themeContext';
+import { useThemeProvider } from "@contexts/themeContext";
 
 // utils
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 const StyledMenuItem = styled(MenuItem)`
   display: flex;
@@ -20,7 +20,7 @@ const StyledMenuItem = styled(MenuItem)`
   height: 40px;
   padding: 0 16px;
   width: 100%;
-  
+
   &:hover .icon {
     color: var(--highlight);
   }
@@ -34,67 +34,66 @@ const StyledMenuItem = styled(MenuItem)`
   }
 `;
 
-const Submenu = ({open, onClose, anchorEl, actions}) => {
-    const {direction} = useThemeProvider();
+const Submenu = ({ open, onClose, anchorEl, actions }) => {
+  const { direction } = useThemeProvider();
 
-    return (
-        <Menu
-            open={open}
-            onClose={onClose}
-            anchorEl={anchorEl}
-            elevation={0}
-            anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: direction === 'ltr' ? 'left' : 'right',
-            }}
-            transformOrigin={{
-                vertical: 'top',
-                horizontal: direction === 'ltr' ? 'left' : 'right',
-            }}
-            sx={{
-                '& .MuiPaper-root': {
-                    backgroundColor: 'var(--tooltip-bg)',
-                    borderRadius: '4px',
-                    boxShadow: 'var(--widget-shadow)',
-                    marginTop: '6px',
-                },
-                '& .MuiMenu-list': {
-                    padding: 0,
-                },
-                '& .MuiButtonBase-root': {
-                    padding: '0 16px',
-                    width: '100%',
-                    '&:not(:last-child)': {
-                        borderBottom: '1px solid var(--divider)'
-                    },
-                    '&:hover': {
-                        backgroundColor: 'transparent'
-                    }
-                }
-            }}
+  return (
+    <Menu
+      open={open}
+      onClose={onClose}
+      anchorEl={anchorEl}
+      elevation={0}
+      anchorOrigin={{
+        vertical: "bottom",
+        horizontal: direction === "ltr" ? "left" : "right",
+      }}
+      transformOrigin={{
+        vertical: "top",
+        horizontal: direction === "ltr" ? "left" : "right",
+      }}
+      sx={{
+        "& .MuiPaper-root": {
+          backgroundColor: "var(--tooltip-bg)",
+          borderRadius: "4px",
+          boxShadow: "var(--widget-shadow)",
+          marginTop: "6px",
+        },
+        "& .MuiMenu-list": {
+          padding: 0,
+        },
+        "& .MuiButtonBase-root": {
+          padding: "0 16px",
+          width: "100%",
+          "&:not(:last-child)": {
+            borderBottom: "1px solid var(--divider)",
+          },
+          "&:hover": {
+            backgroundColor: "transparent",
+          },
+        },
+      }}
+    >
+      {actions.map((action, index) => (
+        <StyledMenuItem
+          key={index}
+          onClick={() => {
+            action.onClick && action.onClick();
+            onClose();
+          }}
         >
-            {
-                actions.map((action, index) => (
-                    <StyledMenuItem
-                        key={index}
-                        onClick={() => {
-                            action.onClick && action.onClick();
-                            onClose();
-                        }}>
-                        <i className={`icon icon-${action.icon}`}/>
-                        {action.label}
-                    </StyledMenuItem>
-                ))
-            }
-        </Menu>
-    )
-}
+          <i className={`icon icon-${action.icon}`} />
+          {action.label}
+        </StyledMenuItem>
+      ))}
+    </Menu>
+  );
+};
 
 Submenu.propTypes = {
-    open: PropTypes.bool.isRequired,
-    onClose: PropTypes.func.isRequired,
-    anchorEl: PropTypes.any,
-    actions: PropTypes.array.isRequired
-}
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  anchorEl: PropTypes.any,
+  actions: PropTypes.array.isRequired,
+};
 
-export default Submenu
+export default Submenu;

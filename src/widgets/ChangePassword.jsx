@@ -1,40 +1,40 @@
 // components
-import Spring from '@components/Spring';
-import PasswordInput from '@components/PasswordInput';
-import ResetPasswordPopup from '@components/ResetPasswordPopup';
-import {Controller, useForm} from 'react-hook-form';
-import {toast} from 'react-toastify';
+import Spring from "@components/Spring";
+import PasswordInput from "@components/PasswordInput";
+import ResetPasswordPopup from "@components/ResetPasswordPopup";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 // hooks
-import {useState} from 'react';
-import classNames from 'classnames';
+import { useState } from "react";
+import classNames from "classnames";
 
 const ChangePassword = () => {
-    const [open, setOpen] = useState(false);
-    const {handleSubmit, watch, reset, control} = useForm({
-        defaultValues: {
-            passwordOld: '',
-            passwordNew: '',
-            passwordConfirm: ''
-        }
-    });
+  const [open, setOpen] = useState(false);
+  const { handleSubmit, watch, reset, control } = useForm({
+    defaultValues: {
+      passwordOld: "",
+      passwordNew: "",
+      passwordConfirm: "",
+    },
+  });
 
-    const onSubmit = data => {
-        toast.success('Password changed successfully');
-    }
+  const onSubmit = (data) => {
+    toast.success("Password changed successfully");
+  };
 
-    const handleResetPassword = e => {
-        e.preventDefault();
-        setOpen(true);
-    }
+  const handleResetPassword = (e) => {
+    e.preventDefault();
+    setOpen(true);
+  };
 
-    return (
-        <Spring className="card d-flex flex-column justify-content-between g-24 card-padded">
-            <div className="d-flex flex-column g-8">
-                <h3>Change password</h3>
-                <p className="text-overflow">Change or reset your account password</p>
-            </div>
-            <form className="d-flex flex-column g-40">
+  return (
+    <Spring className="card d-flex flex-column justify-content-between g-24 card-padded">
+      <div className="d-flex flex-column g-8">
+        <h3>Modifie ton mot de passe (En Cours ...)</h3>
+        {/* <p className="text-overflow">Change or reset your account password</p> */}
+      </div>
+      {/* <form className="d-flex flex-column g-40">
                 <div className="d-flex flex-column g-20">
                     <Controller control={control}
                                 name="passwordOld"
@@ -90,9 +90,9 @@ const ChangePassword = () => {
                     </button>
                 </div>
             </form>
-            <ResetPasswordPopup open={open} onClose={() => setOpen(false)}/>
-        </Spring>
-    )
-}
+            <ResetPasswordPopup open={open} onClose={() => setOpen(false)}/> */}
+    </Spring>
+  );
+};
 
-export default ChangePassword
+export default ChangePassword;

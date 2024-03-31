@@ -1,27 +1,27 @@
 // styling
-import styles from './styles.module.scss';
+import styles from "./styles.module.scss";
 
 // components
-import Spring from '@components/Spring';
-import {TabsList} from '@mui/base/TabsList';
-import {TabPanel} from '@mui/base/TabPanel';
-import {Tabs} from '@mui/base/Tabs';
-import TabButton from '@ui/TabButton';
-import Profile from '@widgets/AccountSettings/Profile';
-import Fade from '@mui/material/Fade';
+import Spring from "@components/Spring";
+import { TabsList } from "@mui/base/TabsList";
+import { TabPanel } from "@mui/base/TabPanel";
+import { Tabs } from "@mui/base/Tabs";
+import TabButton from "@ui/TabButton";
+import Profile from "@widgets/AccountSettings/Profile";
+import Fade from "@mui/material/Fade";
 
 // hooks
-import {useState} from 'react';
-import {useWindowSize} from 'react-use';
+import { useState } from "react";
+import { useWindowSize } from "react-use";
 
 const AccountSettings = () => {
-    const [activeTab, setActiveTab] = useState('profile');
-    const {width} = useWindowSize();
+  const [activeTab, setActiveTab] = useState("profile");
+  const { width } = useWindowSize();
 
-    return (
-        <Spring className="card d-flex flex-column card-padded">
-            <h3>Account Settings</h3>
-            <div className="d-flex flex-column justify-content-between flex-1">
+  return (
+    <Spring className="card d-flex flex-column card-padded">
+      <h3>Paramètre du compte (En cours ...)</h3>
+      {/* <div className="d-flex flex-column justify-content-between flex-1">
                 <Tabs value={activeTab}>
                     <TabsList className={`${styles.tabs_list} tab-nav col-2`}>
                         <TabButton title={width >= 375 ? 'Edit Profile' : 'Profile'}
@@ -46,9 +46,9 @@ const AccountSettings = () => {
                         </Fade>
                     </TabPanel>
                 </Tabs>
-            </div>
-        </Spring>
-    )
-}
+            </div> */}
+    </Spring>
+  );
+};
 
-export default AccountSettings
+export default AccountSettings;

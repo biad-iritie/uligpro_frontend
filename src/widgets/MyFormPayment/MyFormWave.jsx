@@ -5,98 +5,121 @@ import styles from "./styles.module.scss";
 import CustomSelect from "@ui/CustomSelect";
 import { PatternFormat } from "react-number-format";
 import { toast } from "react-toastify";
+import { CircularProgress } from "@mui/material";
+
 // hooks
 import { useForm, Controller } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // utils
 import classNames from "classnames";
-import countryList from "react-select-country-list";
-import { City } from "country-state-city";
 
-const MyFormWave = () => {
+import { useDispatch, useSelector } from "react-redux";
+import { gql, useMutation } from "@apollo/client";
+import { buyTickets } from "./../../features/event/eventSlide";
+import { useNavigate } from "react-router-dom";
+
+const MyFormWave = ({ reqBuyTicket }) => {
   // eslint-disable-next-line no-unused-vars
-  const [selectedCountry, setSelectedCountry] = useState();
   // eslint-disable-next-line no-unused-vars
-  const [selectedCity, setSelectedCity] = useState();
-  const [cities, setCities] = useState([]);
+  const navigate = useNavigate();
+  const ticketsDesired = useSelector((state) => state.events.ticketsDesired);
+  const eventSelected = useSelector((state) => state.events.eventSelected);
+  const reqError = useSelector((state) => state.events.error);
+  const message = useSelector((state) => state.events.message);
+  const reqStatus = useSelector((state) => state.events.status);
+  const [req_buyTickets, { data, loading }] = useMutation(reqBuyTicket);
+  const dispatch = useDispatch();
+  const [validate, setValidate] = useState(false);
+
   const {
-    register,
     handleSubmit,
     formState: { errors },
     reset,
     control,
   } = useForm({
     defaultValues: {
-      name: "Lottie Poole",
-      phone: "",
-      email: "",
-      birth: "",
-      country: null,
-      city: null,
-      address: "",
-      zip: "",
+      tel: "",
     },
   });
 
-  const getCountriesOptions = () => {
-    let countries = countryList().getData();
-    for (let i = 0; i < countries.length; i++) {
-      if (countries[i].value === "RU") {
-        countries[i].label = "Russia [terrorist state]";
-      }
-    }
-    return countries;
-  };
-
-  const handleCountryChange = (country) => {
-    setSelectedCountry(country);
-    setSelectedCity(null);
-    let options = [];
-    const rawData = City.getCitiesOfCountry(country.value);
-    rawData.map((item) => options.push({ value: item.name, label: item.name }));
-    setCities(options);
-  };
-
   // do something with the form data
-  const onSubmit = (data) => {
-    toast.success("Your changes have been successfully saved!");
+  const onSubmit = async (data, e) => {
+    e.preventDefault();
+    let fixedTickets = [];
+    Object.entries(ticketsDesired).forEach(([key, value]) => {
+      fixedTickets.push({
+        eventId: eventSelected.id,
+        ticket_categoryId: key,
+        quantity: value.quantity,
+      });
+    });
+    console.log(fixedTickets);
+    console.log(data.tel);
+    try {
+      await dispatch(
+        buyTickets({
+          buyTicketsFunc: req_buyTickets,
+          tickets: fixedTickets,
+          transaction: { debitNumber: data.tel, way: "WAVE" },
+        })
+      ).unwrap();
+
+      //toast.success(message);
+      toast.success("Allez dans votre profil pour telecharger vos tickets");
+
+      navigate("/", { replace: true });
+    } catch (error) {
+      console.log(" Error", error);
+    }
   };
+
+  useEffect(() => {
+    if (reqStatus === "failed") {
+      toast.error(reqError);
+    }
+    if (Object.keys(ticketsDesired).length === 0) {
+      navigate("/");
+    }
+    console.log(Object.keys(ticketsDesired).length);
+  }, [dispatch, reqStatus]);
 
   return (
     <form className="d-flex flex-column g-20" onSubmit={handleSubmit(onSubmit)}>
       <div>
-        {/* <input
-          className={classNames("field", { "field--error": errors.name })}
-          type="text"
-          defaultValue="Lottie Poole"
-          placeholder="Name"
-          {...register("name", { required: true })}
-        /> */}
         <Controller
-          name="phone"
+          name="tel"
           control={control}
-          render={({ field }) => (
+          render={({ field: { ref, value, onChange } }) => (
             <PatternFormat
               required
-              className={classNames("field", { "field--error": errors.phone })}
+              className={classNames("field", { "field--error": errors.tel })}
               placeholder="Entrer votre numero wave SVP"
-              format="+225 ## ## ## ## ##"
+              format="+225 ##########"
               mask="_"
-              getInputRef={field.ref}
+              onChange={(e) => onChange(e.target.value)}
+              value={value}
+              getInputRef={ref}
             />
           )}
         />
       </div>
 
       <div className={styles.footer}>
-        <button className="btn" type="submit">
-          Payer
-        </button>
-
-        <button className="btn btn--outlined" type="reset" onClick={reset}>
-          Annuler
-        </button>
+        {reqStatus === "loading" ? (
+          <div className="d-flex justify-content-between align-items-center">
+            <CircularProgress color="success" style={{ margin: "auto" }} />
+          </div>
+        ) : (
+          <>
+            <button className="btn" type="submit">
+              Payer
+            </button>
+            <button className="btn btn--outlined" type="reset" onClick={reset}>
+              Annuler
+            </button>
+          </>
+        )}
       </div>
     </form>
   );

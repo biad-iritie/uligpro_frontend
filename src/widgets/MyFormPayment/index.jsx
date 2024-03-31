@@ -10,16 +10,32 @@ import TabButton from "@ui/TabButton";
 import MyFormMobileMoney from "@widgets/MyFormPayment/MyFormMobileMoney";
 import MyFormWave from "@widgets/MyFormPayment/MyFormWave";
 import MyFormVisa from "@widgets/MyFormPayment/MyFormVisa";
+/* import ConfirmationPopup from "@components/ConfirmationPopup"; */
 
 import Fade from "@mui/material/Fade";
 
 // hooks
 import { useState } from "react";
 import { useWindowSize } from "react-use";
+import { gql } from "@apollo/client";
+
+const BUY_TICKET = gql`
+  mutation BuyTickets(
+    $tickets: [buyTicketsEventInput!]!
+    $transaction: TransactionInput!
+  ) {
+    buyTickets(tickets: $tickets, transaction: $transaction) {
+      message
+    }
+  }
+`;
 
 const MyFormPayment = () => {
-  const [activeTab, setActiveTab] = useState("profile");
+  const [activeTab, setActiveTab] = useState("wave");
   const { width } = useWindowSize();
+  //  const [open, setOpen] = useState(true);
+
+  //const handleConfirmation = () => {};
 
   return (
     <Spring className="card d-flex flex-column card-padded">
@@ -53,7 +69,7 @@ const MyFormPayment = () => {
           <TabPanel value="wave">
             <Fade in={activeTab === "wave"} timeout={400}>
               <div>
-                <MyFormWave />
+                <MyFormWave reqBuyTicket={BUY_TICKET} />
               </div>
             </Fade>
           </TabPanel>
@@ -66,6 +82,11 @@ const MyFormPayment = () => {
           </TabPanel>
         </Tabs>
       </div>
+      {/* <ConfirmationPopup
+        open={open}
+        onClose={() => setOpen(false)}
+        onActivate={handleConfirmation}
+      /> */}
     </Spring>
   );
 };
