@@ -75,6 +75,7 @@ const Settings = lazy(() => import("@pages/Settings"));
 const Home1 = lazy(() => import("@pages/Home1"));
 const MyBuyingTickets = lazy(() => import("@pages/MyBuyingTickets"));
 const MyProfile = lazy(() => import("@pages/MyProfile"));
+const ScanTicket = lazy(() => import("@pages/ScanTicket"));
 
 const LOGGED_USER = gql`
   query GetLoggedInUser {
@@ -83,6 +84,9 @@ const LOGGED_USER = gql`
         name
         email
         tel
+        role {
+          name
+        }
       }
       accessToken
       refreshToken
@@ -174,6 +178,7 @@ const App = () => {
                         <Route path="/" element={<Home1 />} />
                         <Route path="/payment" element={<MyBuyingTickets />} />
                         <Route path="/myprofile" element={<MyProfile />} />
+                        <Route path="/scanticket" element={<ScanTicket />} />
 
                         <Route path="/club-summary" element={<ClubSummary />} />
                         <Route path="/game-summary" element={<GameSummary />} />

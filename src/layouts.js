@@ -80,6 +80,29 @@ const layouts = {
       { i: "password", x: 1, y: 6, w: 1, h: 2 },
     ],
   },
+  scanticket: {
+    xl: [
+      /* { i: "avatar", x: 0, y: 0, w: 1, h: 1 }, 
+      { i: "info", x: 0, y: 1, w: 1, h: 1 },*/
+      { i: "ticket", x: 3, y: 0, w: 1, h: 3.5 },
+      /* { i: "settings", x: 1, y: 0, w: 2, h: 2 },
+      { i: "password", x: 2, y: 2, w: 1, h: 2 }, */
+    ],
+    lg: [
+      /* { i: "avatar", x: 0, y: 0, w: 1, h: 1 }, 
+      { i: "info", x: 0, y: 1, w: 1, h: 1 },*/
+      { i: "ticket", x: 1, y: 2, w: 1, h: 3.5 },
+      /* { i: "settings", x: 1, y: 0, w: 2, h: 2 },
+      { i: "password", x: 1, y: 4, w: 1, h: 2 }, */
+    ],
+    md: [
+      /* { i: "avatar", x: 0, y: 0, w: 1, h: 1 }, 
+      { i: "info", x: 0, y: 1, w: 1, h: 1 },*/
+      { i: "ticket", x: 1, y: 0, w: 1, h: 3.5 },
+      /* { i: "settings", x: 0, y: 2, w: 2, h: 2 },
+      { i: "password", x: 1, y: 6, w: 1, h: 2 }, */
+    ],
+  },
   club_summary: {
     xl: [
       { i: "team_stats", x: 0, y: 0, w: 1, h: 1 },

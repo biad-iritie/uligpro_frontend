@@ -3,9 +3,7 @@ import QRCode from "react-qr-code";
 import styles from "./styles.module.scss";
 
 // components
-import LazyImage from "@components/LazyImage";
 import Spring from "@components/Spring";
-import Submenu from "@ui/Submenu";
 import SelectionListTickets from "@ui/SelectionListTickets";
 import { LinearProgress } from "@mui/material";
 // hooks
@@ -23,16 +21,11 @@ import {
 
 // hooks
 import React, { useState, useEffect } from "react";
-import html2PDF from "jspdf-html2canvas";
 
 // utils
-import classNames from "classnames";
 import { messagesByDate } from "./../../utils/helpers";
-// assets
-import barcode from "@assets/tickets/barcode.svg";
 // constants
-import { FINALS_OPTIONS } from "@constants/selection_options";
-import { gql, useLazyQuery, useQuery } from "@apollo/client";
+import { gql, useLazyQuery } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserTickets } from "./../../features/event/eventSlide";
 

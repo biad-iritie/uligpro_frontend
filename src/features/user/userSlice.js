@@ -5,6 +5,7 @@ const initialState = {
   error: null,
   user: {},
   accessToken: "",
+  activationToken: "",
 };
 
 export const addLoggedUser = createAsyncThunk(
@@ -24,6 +25,7 @@ export const getLoggedUser = createAsyncThunk(
   "auth/loggedUser",
   async (credentials) => {
     const response = await credentials.loggedUserFunc();
+    console.log(credentials);
     return response.data.getLoggedInUser;
   }
 );

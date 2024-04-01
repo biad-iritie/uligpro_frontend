@@ -85,6 +85,19 @@ const Sidebar = () => {
             </Link>
           </NavLink>
         </SingleLink>
+
+        <SingleLink
+          className={pathname === "/scanticket" ? "pinned active" : "pinned"}
+          as="div"
+        >
+          <NavLink to="/scanticket">
+            <Link
+              className={`${pathname === "/scanticket" ? "active" : ""} h4`}
+            >
+              <i className="icon icon-user" /> Scan
+            </Link>
+          </NavLink>
+        </SingleLink>
       </nav>
       {isLogged && (
         <nav className="d-flex flex-column g-8 flex-1">

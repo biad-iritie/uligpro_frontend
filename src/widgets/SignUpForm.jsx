@@ -135,6 +135,7 @@ const SignUpForm = ({ standalone = true }) => {
   };
 
   useEffect(() => {
+    console.log(activationToken);
     if (reqStatus === "failed") {
       toast.error(error);
     }
@@ -146,7 +147,7 @@ const SignUpForm = ({ standalone = true }) => {
   return (
     <Wrapper {...wrapperProps}>
       <div className="d-flex flex-column g-4">
-        <h3>Crestion de compte</h3>
+        <h3>Creer votre compte</h3>
         <p className="text-12">
           Remplir le formulaire en dessous pour créer un compte
         </p>
