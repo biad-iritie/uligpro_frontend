@@ -56,6 +56,7 @@ const LoginForm = () => {
   const dispatch = useDispatch();
   const loginStatus = useSelector((state) => state.auth.status);
   const error = useSelector((state) => state.auth.error);
+  const ticketsDesired = useSelector((state) => state.events.ticketsDesired);
 
   const onSubmit = async (credentials, e) => {
     //console.log(credentials);
@@ -68,8 +69,9 @@ const LoginForm = () => {
           password: credentials.password,
         })
       ).unwrap();
-
-      navigate("/");
+      Object.keys(ticketsDesired).length > 1
+        ? navigate("/payment")
+        : navigate("/");
     } catch (error) {
       console.log(" Error", error);
     }

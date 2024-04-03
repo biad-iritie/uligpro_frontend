@@ -68,6 +68,16 @@ const Event = createSlice({
     setStatusToIdle: (state) => {
       state.status = "idle";
     },
+    cleanState: (state) => {
+      state.status = "idle";
+      state.error = null;
+      state.events = [];
+      state.eventSelected = {};
+      state.listEventsName = [];
+      state.ticketsDesired = {};
+      state.message = "";
+      state.tickets = [];
+    },
   },
   extraReducers(builder) {
     builder
@@ -77,6 +87,7 @@ const Event = createSlice({
       .addCase(getEvents.fulfilled, (state, action) => {
         //console.log(action.payload.data.getComingEvents.events);
         // Add any fetched posts to the array
+
         if (action.payload.data.getComingEvents.events[0].id) {
           state.events = state.events.concat(
             action.payload.data.getComingEvents.events
@@ -142,6 +153,7 @@ export const {
   setTicketsDesired,
   getTicketsDesired,
   setStatusToIdle,
+  cleanState,
 } = Event.actions;
 export default Event.reducer;
 

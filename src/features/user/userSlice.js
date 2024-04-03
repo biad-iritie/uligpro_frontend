@@ -25,7 +25,7 @@ export const getLoggedUser = createAsyncThunk(
   "auth/loggedUser",
   async (credentials) => {
     const response = await credentials.loggedUserFunc();
-    console.log(credentials);
+    //console.log(response);
     return response.data.getLoggedInUser;
   }
 );
@@ -72,6 +72,14 @@ const User = createSlice({
     },
     getActivationCode: (state) => {
       state.activationToken = localStorage.getItem("activationToken");
+    },
+    logout: (state) => {
+      //state.status = "idle";
+      state.user = {};
+      state.status = "idle";
+      state.error = null;
+      /* localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken"); */
     },
   },
   extraReducers(builder) {
@@ -188,12 +196,12 @@ const User = createSlice({
         }
       })
       .addCase(activateUserAccount.rejected, (state, action) => {
-        console.log(action.error.message);
+        //console.log(action.error.message);
         state.status = "failed";
         state.error = action.error.message;
       });
   },
 });
 
-export const { getUserCredentials } = User.actions;
+export const { getUserCredentials, logout } = User.actions;
 export default User.reducer;

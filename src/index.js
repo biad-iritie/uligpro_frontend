@@ -16,25 +16,27 @@ import {
 import { setContext } from "@apollo/client/link/context";
 
 const httpLink = createHttpLink({
-  uri: process.env.REACT_APP_SERVER,
+  uri: process.env.REACT_APP_SERVER_LOCAL,
 });
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
-
+  //console.log(localStorage.getItem("accessToken") === null);
   let accessToken = localStorage.getItem("accessToken");
-  accessToken = accessToken.replace(/"/g, "");
+  accessToken = accessToken ? accessToken.replace(/"/g, "") : "";
   let refreshToken = localStorage.getItem("refreshToken");
-  refreshToken = refreshToken.replace(/"/g, "");
-  //console.log(accessToken.toString());
+  refreshToken = refreshToken ? refreshToken.replace(/"/g, "") : "";
+  console.log(refreshToken);
   // return the headers to the context so httpLink can read them
-  return {
-    headers: {
-      ...headers,
-      accesstoken: accessToken ? accessToken : "",
-      refreshtoken: refreshToken ? refreshToken : "",
-    },
-  };
+  if (accessToken !== "" && refreshToken !== "") {
+    return {
+      headers: {
+        ...headers,
+        accesstoken: accessToken,
+        refreshtoken: refreshToken,
+      },
+    };
+  }
 });
 const client = new ApolloClient({
   link: authLink.concat(httpLink),

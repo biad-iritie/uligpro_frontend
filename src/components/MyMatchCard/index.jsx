@@ -20,10 +20,10 @@ const MyMatchCard = ({ match, index, variant = "basic" }) => {
   const { theme } = useThemeProvider();
   /* const team1 = getClubInfo(match.team1.id);
   const team2 = getClubInfo(match.team2.id); */
-  console.log(match);
+  //console.log(match);
   return (
     <Spring
-      className={`${styles.container} ${styles[theme]} h-100`}
+      className={`${styles.container} ${styles[theme]} h-50`}
       type="slideUp"
       index={index}
     >
@@ -43,7 +43,8 @@ const MyMatchCard = ({ match, index, variant = "basic" }) => {
             src={match.team1.logo}
             alt={match.team1.name}
           />
-          <Score team1={match.goal1} team2={match.goal2} variant="alt" />
+          <span className="styles_vs__dnnaD h3">vs</span>
+          {/* <Score team1={match.goal1} team2={match.goal2} variant="alt" /> */}
           <img
             className="club-logo"
             src={match.team2.logo}

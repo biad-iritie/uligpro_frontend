@@ -40,6 +40,7 @@ const TicketsEventCard = ({ userName, tickets, index, variant = "basic" }) => {
   const askTologin = () => {
     if (!userName) {
       toast.warning("Connectez vous ou creer un compte afin de pousuivre");
+      navigate("/login");
     }
   };
 
@@ -68,6 +69,8 @@ const TicketsEventCard = ({ userName, tickets, index, variant = "basic" }) => {
 
   const goPaymentPage = () => {
     let ableToMove = false;
+    console.log(!userName);
+
     tickets.map((ticket) => {
       if (ticketsWilling[ticket.ticket_category.id].quantity > 0) {
         ableToMove = true;
@@ -77,7 +80,11 @@ const TicketsEventCard = ({ userName, tickets, index, variant = "basic" }) => {
     if (ableToMove) {
       delete ticketsWilling.newValue;
       dispatch(setTicketsDesired(ticketsWilling));
-      navigate("/payment");
+      if (!userName) {
+        askTologin();
+      } else {
+        navigate("/payment");
+      }
     } else {
       toast.warning("Selectionnez vos tickets !");
     }
@@ -103,6 +110,10 @@ const TicketsEventCard = ({ userName, tickets, index, variant = "basic" }) => {
             </div>
           </div>
 
+          <p className="heading-font">
+            <span className="text-600">Categories</span>
+          </p>
+
           {tickets.map((ticket, index) => (
             <TicketsEventDetailCard
               ticket={ticket}
@@ -115,7 +126,7 @@ const TicketsEventCard = ({ userName, tickets, index, variant = "basic" }) => {
           <button
             className="btn w-100"
             onClick={() => {
-              !userName ? askTologin() : goPaymentPage();
+              goPaymentPage();
             }}
           >
             Proceder au paiement

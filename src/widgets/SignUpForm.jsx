@@ -75,6 +75,7 @@ const SignUpForm = ({ standalone = true }) => {
   const activationToken = useSelector((state) => state.auth.activationToken);
   const error = useSelector((state) => state.auth.error);
   const reqStatus = useSelector((state) => state.auth.status);
+  const ticketsDesired = useSelector((state) => state.events.ticketsDesired);
 
   const {
     register,
@@ -128,7 +129,9 @@ const SignUpForm = ({ standalone = true }) => {
         })
       ).unwrap();
       setOpen(false);
-      navigate("/");
+      Object.keys(ticketsDesired).length > 1
+        ? navigate("/payment")
+        : navigate("/");
     } catch (error) {
       console.log(error);
     }

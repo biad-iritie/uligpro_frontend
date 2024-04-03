@@ -19,7 +19,10 @@ import { useEffect, useState } from "react";
 
 // constants
 import LINKS from "@constants/links";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+
+import { logout } from "./../../features/user/userSlice";
+import { cleanState } from "./../../features/event/eventSlide";
 
 const Sidebar = () => {
   const { open, setOpen } = useSidebar();
@@ -30,10 +33,18 @@ const Sidebar = () => {
 
   const [isLogged, setIsLogged] = useState(false);
   const user = useSelector((state) => state.auth.user);
-
+  const dispatch = useDispatch();
   // manually handle accordion expansion
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
+  };
+
+  const deconnexion = async () => {
+    await dispatch(cleanState());
+    await dispatch(logout());
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    //console.log("Deconnexion");
   };
 
   // collapse opened accordion on route change when the drawer is temporary
@@ -75,34 +86,41 @@ const Sidebar = () => {
             </Link>
           </NavLink>
         </SingleLink>
-        <SingleLink
-          className={pathname === "/myprofile" ? "pinned active" : "pinned"}
-          as="div"
-        >
-          <NavLink to="/myprofile">
-            <Link className={`${pathname === "/myprofile" ? "active" : ""} h4`}>
-              <i className="icon icon-user" /> Profil
-            </Link>
-          </NavLink>
-        </SingleLink>
-
-        <SingleLink
-          className={pathname === "/scanticket" ? "pinned active" : "pinned"}
-          as="div"
-        >
-          <NavLink to="/scanticket">
-            <Link
-              className={`${pathname === "/scanticket" ? "active" : ""} h4`}
-            >
-              <i className="icon icon-user" /> Scan
-            </Link>
-          </NavLink>
-        </SingleLink>
       </nav>
       {isLogged && (
         <nav className="d-flex flex-column g-8 flex-1">
+          <SingleLink
+            className={pathname === "/myprofile" ? "pinned active" : "pinned"}
+            as="div"
+          >
+            <NavLink to="/myprofile">
+              <Link
+                className={`${pathname === "/myprofile" ? "active" : ""} h4`}
+              >
+                <i className="icon icon-user" /> Profil
+              </Link>
+            </NavLink>
+          </SingleLink>
+
+          <SingleLink
+            className={pathname === "/scanticket" ? "pinned active" : "pinned"}
+            as="div"
+          >
+            <NavLink to="/scanticket">
+              <Link
+                className={`${pathname === "/scanticket" ? "active" : ""} h4`}
+              >
+                <i className="icon icon-user" /> Scan
+              </Link>
+            </NavLink>
+          </SingleLink>
           <SingleLink as="div">
-            <NavLink to="/">
+            <NavLink
+              to="/"
+              onClick={() => {
+                deconnexion();
+              }}
+            >
               <Link className={`h4`}>
                 <i className="icon icon-exit" /> Deconnexion
               </Link>

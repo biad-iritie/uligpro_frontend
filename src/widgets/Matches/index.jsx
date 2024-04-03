@@ -22,7 +22,7 @@ import classNames from "classnames";
 
 // data placeholder
 import matches from "@db/matches";
-import { gql, useLazyQuery } from "@apollo/client";
+import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
 import { getEvents } from "./../../features/event/eventSlide";
 
@@ -134,9 +134,9 @@ const Matches = () => {
   const [getEventsQuery] = useLazyQuery(GET_EVENT);
   const [selected, setSelected] = useState(FINALS_OPTIONS[0].value);
   //const [events, setEvents] = useState([]);
-
+  const matches = useQuery(GET_EVENT);
   //const [selected, setSelected] = useState();
-  const [eventNames, setEventNames] = useState([]);
+  //const [eventNames, setEventNames] = useState([]);
   //let eventNames = [];
 
   //let DisplayEvents;
@@ -250,9 +250,14 @@ const Matches = () => {
             /> */}
             {/* <h3>{eventNames[0].label}</h3> */}
             <div className="d-flex justify-content-between align-items-center">
-              <h3>{`Lieu:  ${eventSelected.venue.name} Date: ${new Date(
+              <h3>Journée 1</h3>
+            </div>
+            <div className="d-flex justify-content-between align-items-center">
+              <h3>{`Terrain:  ${eventSelected.venue.name} 
+              `}</h3>
+              {/* Date: ${new Date(
                 eventSelected.date
-              )}`}</h3>
+              )} */}
             </div>
             <div className={styles.grid}>
               <div className={styles.scroll}>
@@ -276,7 +281,9 @@ const Matches = () => {
             </div>
           </>
         ) : (
-          <></>
+          <div>
+            <h3>Pas de matchs</h3>
+          </div>
         )}
       </div>
     </Spring>

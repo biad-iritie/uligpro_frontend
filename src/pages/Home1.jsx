@@ -3,7 +3,7 @@ import AppGrid from "@layout/AppGrid";
 import PageHeader from "@layout/PageHeader";
 import Matches from "@widgets/Matches";
 
-import { useEffect } from "react";
+//import { useEffect } from "react";
 
 const widgets = {
   matches: <Matches />,

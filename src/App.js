@@ -105,11 +105,12 @@ const App = () => {
   const isAuthRoute = useAuthRoute();
 
   const dispatch = useDispatch();
-  const accessToken = useSelector((state) => state.auth.accessToken);
+  const user = useSelector((state) => state.auth.user);
   const [loggedUser] = useLazyQuery(LOGGED_USER);
 
   const getCredentials = async () => {
     try {
+      console.log(loggedUser);
       await dispatch(
         getLoggedUser({
           loggedUserFunc: loggedUser,
@@ -120,10 +121,11 @@ const App = () => {
     }
   };
   useEffect(() => {
-    if (accessToken === "") {
+    if (Object.keys(user).length === 0) {
       getCredentials();
     }
-  }, [accessToken, dispatch]);
+    //getCredentials();
+  }, [user, dispatch]);
   //console.log(process.env.REACT_APP_SERVER);
   /*   // Google Analytics init
   const gaKey = process.env.REACT_APP_PUBLIC_GA;

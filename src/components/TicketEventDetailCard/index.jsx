@@ -22,14 +22,16 @@ const TicketsEventDetailCard = ({ ticket, willingQuantity, operation }) => {
       className={`${styles.footer} d-flex align-items-center justify-content-between border-top`}
     >
       <div className={`${styles.footer_details} d-flex flex-column g-8`}>
-        <p className="heading-font">
-          <span className="text-600">Category:</span>
-          {ticket.ticket_category.name}
-        </p>
-        <p className="heading-font">
-          <span className="text-600">Disponible: </span>
-          {ticket.capacity - ticket.ticket_sold}
-        </p>
+        <div className="d-flex flex-row">
+          <p className="heading-font">
+            {/* <span className="text-600">Category:</span> */}
+            {ticket.ticket_category.name}
+          </p>
+          <p className="heading-font">
+            {/* <span className="text-600">Disponible: </span>
+          {ticket.capacity - ticket.ticket_sold} */}
+          </p>
+        </div>
       </div>
       <Price price={ticket.price} />
 
