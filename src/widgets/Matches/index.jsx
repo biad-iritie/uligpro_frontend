@@ -250,7 +250,7 @@ const Matches = () => {
             /> */}
             {/* <h3>{eventNames[0].label}</h3> */}
             <div className="d-flex justify-content-between align-items-center">
-              <h3>Journée 1</h3>
+              <h3>{eventSelected.name}</h3>
             </div>
             <div className="d-flex justify-content-between align-items-center">
               <h3>{`Terrain:  ${eventSelected.venue.name} 

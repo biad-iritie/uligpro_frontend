@@ -7,6 +7,49 @@ import dayjs from "dayjs";
 // constants
 import CLUBS from "@constants/clubs";
 
+var updateLocale = require("dayjs/plugin/updateLocale");
+dayjs.extend(updateLocale);
+
+dayjs.updateLocale("en", {
+  months: [
+    "Janvier",
+    "Fevrier",
+    "Mars",
+    "Avril",
+    "Mai",
+    "Juin",
+    "Juillet",
+    "Aout",
+    "Septembre",
+    "Octobre",
+    "Novembre",
+    "Decembre",
+  ],
+  monthsShort: [
+    "Jan",
+    "Fev",
+    "Mar",
+    "Avr",
+    "Mai",
+    "Juin",
+    "Juil",
+    "Aou",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ],
+  weekdays: [
+    "Dimanche",
+    "Lundi",
+    "Mardi",
+    "Mercredi",
+    "Jeudi",
+    "Vendredi",
+    "Samedi",
+  ],
+  weekdaysShort: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
+});
 // represent large numbers in a shortened format
 export const numFormatter = (num, decimals = 0) => {
   if (num > 999 && num < 1000000) {
@@ -80,8 +123,12 @@ export const getMonthDays = (
   }
   return days;
 };
-export const messagesByDate = (date) => {
+export const messagesByDateHour = (date) => {
   return dayjs(date).format("DD-MM-YYYY H:mm");
+};
+
+export const displayMonthDay = (date) => {
+  return dayjs(date).format("ddd D MMM");
 };
 /**
  * render polar angle axis

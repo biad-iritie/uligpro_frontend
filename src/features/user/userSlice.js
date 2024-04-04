@@ -75,11 +75,11 @@ const User = createSlice({
     },
     logout: (state) => {
       //state.status = "idle";
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
       state.user = {};
-      state.status = "idle";
+      //state.status = "idle";
       state.error = null;
-      /* localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken"); */
     },
   },
   extraReducers(builder) {

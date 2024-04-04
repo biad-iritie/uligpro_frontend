@@ -23,7 +23,7 @@ import {
 import React, { useState, useEffect } from "react";
 
 // utils
-import { messagesByDate } from "./../../utils/helpers";
+import { messagesByDateHour } from "./../../utils/helpers";
 // constants
 import { gql, useLazyQuery } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
@@ -62,7 +62,7 @@ const MyTicket = () => {
   const dispatch = useDispatch();
 
   const Ticket = () => {
-    console.log(selected);
+    //console.log(selected);
     const styles = StyleSheet.create({
       page: {
         flexDirection: "column",
@@ -94,7 +94,7 @@ const MyTicket = () => {
           </Text>
           {/* <Text style={styles.info}>Venue: {selected.event.venue.name}</Text> */}
           <Text style={styles.info}>
-            Date: {messagesByDate(selected.event.date)}
+            Date: {messagesByDateHour(selected.event.date)}
           </Text>
           {/* <Image
             src="soccer_ball.png"
@@ -195,7 +195,7 @@ const MyTicket = () => {
               <div className={styles.details_item}>
                 <span className="h6 label">Date</span>
                 <span className="h3">
-                  {messagesByDate(selected.event.date)}
+                  {messagesByDateHour(selected.event.date)}
                 </span>
               </div>
             </div>

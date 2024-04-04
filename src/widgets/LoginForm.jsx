@@ -26,7 +26,11 @@ const LOGIN = gql`
         name
         email
         tel
+        role {
+          name
+        }
       }
+
       accessToken
       refreshToken
       error {

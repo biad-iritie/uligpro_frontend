@@ -16,7 +16,7 @@ import {
 import { setContext } from "@apollo/client/link/context";
 
 const httpLink = createHttpLink({
-  uri: process.env.REACT_APP_SERVER_LOCAL,
+  uri: process.env.REACT_APP_SERVER,
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -34,6 +34,7 @@ const authLink = setContext((_, { headers }) => {
         ...headers,
         accesstoken: accessToken,
         refreshtoken: refreshToken,
+        bypass_tunnel_reminder: null,
       },
     };
   }

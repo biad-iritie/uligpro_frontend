@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
+import { displayMonthDay } from "./../../utils/helpers";
 const initialState = {
   status: "idle",
   error: null,
@@ -96,7 +96,11 @@ const Event = createSlice({
           //Get name of event
           let result = [];
           state.events.map((event, index) => {
-            result.push({ label: event.name, value: event.id });
+            //console.log(displayMonthDay(event.date));
+            result.push({
+              label: displayMonthDay(event.date),
+              value: event.id,
+            });
           });
           state.listEventsName = result;
 

@@ -10,7 +10,7 @@ import {
 
 // components
 import Logo from "@components/Logo";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 // hooks
 import { useSidebar } from "@contexts/sidebarContext";
@@ -34,6 +34,7 @@ const Sidebar = () => {
   const [isLogged, setIsLogged] = useState(false);
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   // manually handle accordion expansion
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -42,8 +43,7 @@ const Sidebar = () => {
   const deconnexion = async () => {
     await dispatch(cleanState());
     await dispatch(logout());
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
+    navigate("/");
     //console.log("Deconnexion");
   };
 
