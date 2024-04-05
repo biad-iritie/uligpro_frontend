@@ -40,6 +40,19 @@ export const buyTickets = createAsyncThunk(
     return response;
   }
 );
+export const scanTicket = createAsyncThunk(
+  "events/scanTickets",
+  async (data) => {
+    //console.log(data);
+    const response = await data.scanTicketsFunc({
+      variables: {
+        code: data.code,
+      },
+    });
+    //console.log(response);
+    return response;
+  }
+);
 
 const Event = createSlice({
   name: "event",
@@ -144,6 +157,26 @@ const Event = createSlice({
         state.status = "succeeded";
       })
       .addCase(getUserTickets.rejected, (state, action) => {
+        //console.log(action.error.message);
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+
+      //SCAN TICKETS
+      .addCase(scanTicket.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(scanTicket.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        if (action.payload.data.getTicketScanned.status) {
+          state.message = "Ticket scanné";
+          state.error = null;
+        } else {
+          state.error = action.payload.data.getTicketScanned.error.message;
+          state.message = "";
+        }
+      })
+      .addCase(scanTicket.rejected, (state, action) => {
         //console.log(action.error.message);
         state.status = "failed";
         state.error = action.error.message;

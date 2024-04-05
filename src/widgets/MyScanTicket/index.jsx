@@ -28,22 +28,38 @@ import { gql, useMutation } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
 import QrFrame from "./QrFrame.svg";
 import { toast } from "react-toastify";
+import { scanTicket } from "./../../features/event/eventSlide";
 
+const SCAN_TICKET = gql`
+  mutation GetTicketScanned($code: String!) {
+    getTicketScanned(code: $code) {
+      status
+      error {
+        code
+        message
+      }
+    }
+  }
+`;
 const MyScanTicket = () => {
   const { theme } = useThemeProvider();
+  const [reqScanTicket, { data, loading }] = useMutation(SCAN_TICKET);
+
   const videoEl = useRef(HTMLVideoElement);
   const qrBoxEl = useRef(HTMLDivElement);
 
   let scanner = useRef(QrScanner);
   const [qrOn, setQrOn] = useState(true);
-
   // Result
   const [scannedResult, setScannedResult] = useState("");
   //const [selected, setSelected] = useState(FINALS_OPTIONS[0].value);
 
   //const queryTicket = useQuery(GET_TICKETS)
   const status = useSelector((state) => state.events.status);
-  const [data, setData] = useState("No result");
+  const error = useSelector((state) => state.events.error);
+  const message = useSelector((state) => state.events.message);
+
+  const [code, setCode] = useState("No result");
 
   const dispatch = useDispatch();
 
@@ -58,11 +74,22 @@ const MyScanTicket = () => {
       });
   };
   // Success
-  const onScanSuccess = (result) => {
+  const onScanSuccess = async (result) => {
     // 🖨 Print the "result" to browser console.
     console.log(result);
-    toast.success("Ticket scanné");
     scanner?.current?.stop();
+    try {
+      await dispatch(
+        scanTicket({
+          scanTicketsFunc: reqScanTicket,
+          code: result.data,
+        })
+      ).unwarp();
+      //toast.success("Ticket scanné");
+    } catch (error) {
+      console.log(error);
+    }
+
     // ✅ Handle success.
     // 😎 You can do whatever you want with the scanned result.
     setScannedResult(result?.data);
@@ -90,6 +117,8 @@ const MyScanTicket = () => {
         overlay: qrBoxEl?.current || undefined,
       });
     }
+
+    //startScanning();
     // 🧹 Clean up on unmount.
     // 🚨 This removes the QR Scanner from rendering and using camera when it is closed or removed from the UI.
     return () => {
@@ -104,16 +133,16 @@ const MyScanTicket = () => {
       alert(
         "Camera is blocked or not accessible. Please allow camera in your browser permissions and Reload."
       );
-  }, [qrOn]);
+    if (status === "failled") {
+      toast.error(error);
+    }
+    if (status === "succeeded") {
+      message !== "" ? toast.success(message) : toast.error(error);
+    }
+  }, [qrOn, status]);
 
   return (
     <Spring className="card">
-      {/* {status === "loading" && (
-        <>
-          <LinearProgress color="success" />
-        </>
-      )} */}
-
       <div className="qr-reader">
         <div ref={qrBoxEl} className="qr-box">
           <img
@@ -136,11 +165,15 @@ const MyScanTicket = () => {
           zIndex: 99999,
         }}
       >
-        <CircularProgress color="success" />
+        {status === "loading" && (
+          <>
+            <CircularProgress color="success" />
+          </>
+        )}
       </div>
 
       {/* Show Data Result if scan is success */}
-      {scannedResult && (
+      {/* {scannedResult && (
         <p
           style={{
             position: "absolute",
@@ -152,7 +185,7 @@ const MyScanTicket = () => {
         >
           Scanned Result: {scannedResult}
         </p>
-      )}
+      )} */}
       <div>
         <div className="d-flex flex-column g-12 card-padded"></div>
         <button
