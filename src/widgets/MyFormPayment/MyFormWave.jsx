@@ -27,7 +27,7 @@ const MyFormWave = ({ reqBuyTicket }) => {
   const eventSelected = useSelector((state) => state.events.eventSelected);
   const reqError = useSelector((state) => state.events.error);
   const message = useSelector((state) => state.events.message);
-  const reqStatus = useSelector((state) => state.events.status);
+  const reqStatus = useSelector((state) => state.events.status.buyTicket);
   const [req_buyTickets, { data, loading }] = useMutation(reqBuyTicket);
   const dispatch = useDispatch();
   const [validate, setValidate] = useState(false);
@@ -54,8 +54,8 @@ const MyFormWave = ({ reqBuyTicket }) => {
         quantity: value.quantity,
       });
     });
-    console.log(fixedTickets);
-    console.log(data.tel);
+    //console.log(fixedTickets);
+    //console.log(data.tel);
     try {
       await dispatch(
         buyTickets({
@@ -71,6 +71,7 @@ const MyFormWave = ({ reqBuyTicket }) => {
       navigate("/", { replace: true });
     } catch (error) {
       console.log(" Error", error);
+      toast.error(error.message);
     }
   };
 

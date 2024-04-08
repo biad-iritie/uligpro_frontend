@@ -100,7 +100,7 @@ const StyledSelectionList = styled.div`
 const SelectionListTickets = ({ active, setActive, options, innerRef }) => {
   const [swiper, setSwiper] = useState(null);
   const { direction } = useThemeProvider();
-  console.log(active);
+  //console.log(active);
   const handlePrev = () => {
     swiper.slidePrev();
     setActive(options[swiper.realIndex] || options[swiper.realIndex]);

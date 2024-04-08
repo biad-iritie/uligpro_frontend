@@ -26,7 +26,7 @@ import React, { useEffect, useState, useRef } from "react";
 
 import { gql, useMutation } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
-import QrFrame from "./QrFrame.svg";
+import QrFrame from "./qr-frame.svg";
 import { toast } from "react-toastify";
 import { scanTicket } from "./../../features/event/eventSlide";
 
@@ -51,11 +51,11 @@ const MyScanTicket = () => {
   let scanner = useRef(QrScanner);
   const [qrOn, setQrOn] = useState(true);
   // Result
-  const [scannedResult, setScannedResult] = useState("");
+  const [scanned, setScanned] = useState(false);
   //const [selected, setSelected] = useState(FINALS_OPTIONS[0].value);
 
   //const queryTicket = useQuery(GET_TICKETS)
-  const status = useSelector((state) => state.events.status);
+  const status = useSelector((state) => state.events.status.ticket);
   const error = useSelector((state) => state.events.error);
   const message = useSelector((state) => state.events.message);
 
@@ -78,6 +78,7 @@ const MyScanTicket = () => {
     // 🖨 Print the "result" to browser console.
     console.log(result);
     scanner?.current?.stop();
+    setScanned(true);
     try {
       await dispatch(
         scanTicket({
@@ -92,7 +93,7 @@ const MyScanTicket = () => {
 
     // ✅ Handle success.
     // 😎 You can do whatever you want with the scanned result.
-    setScannedResult(result?.data);
+    //setScannedResult(result?.data);
   };
 
   // Fail
@@ -102,13 +103,13 @@ const MyScanTicket = () => {
   };
 
   useEffect(() => {
-    console.log(!scanner.current);
+    //console.log(!scanner.current);
     if (videoEl?.current) {
       // 👉 Instantiate the QR Scanner
       scanner.current = new QrScanner(videoEl?.current, onScanSuccess, {
         onDecodeError: onScanFail,
         // 📷 This is the camera facing mode. In mobile devices, "environment" means back camera and "user" means front camera.
-        preferredCamera: "user",
+        preferredCamera: "environment",
         // 🖼 This will help us position our "QrFrame.svg" so that user can only scan when qr code is put in between our QrFrame.svg.
         highlightScanRegion: true,
         // 🔥 This will produce a yellow (default color) outline around the qr code that we scan, showing a proof that our qr-scanner is scanning that qr code.
@@ -136,8 +137,9 @@ const MyScanTicket = () => {
     if (status === "failled") {
       toast.error(error);
     }
-    if (status === "succeeded") {
+    if (status === "succeeded" && scanned) {
       message !== "" ? toast.success(message) : toast.error(error);
+      setScanned(false);
     }
   }, [qrOn, status]);
 
@@ -149,7 +151,7 @@ const MyScanTicket = () => {
             src={QrFrame}
             alt="Qr Frame"
             width={256}
-            height={150}
+            height={256}
             className="qr-frame"
           />
         </div>

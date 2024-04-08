@@ -13,6 +13,10 @@ import { useThemeProvider } from "@contexts/themeContext";
 
 // utils
 import PropTypes from "prop-types";
+import { displayMonthDay } from "./../utils/helpers";
+
+import { setSelectedEvent } from "./../features/event/eventSlide";
+import { useDispatch } from "react-redux";
 
 const prevButton = css`
   padding-left: 10px;
@@ -100,15 +104,19 @@ const StyledSelectionList = styled.div`
 const SelectionList = ({ active, setActive, options, innerRef }) => {
   const [swiper, setSwiper] = useState(null);
   const { direction } = useThemeProvider();
-
+  const dispatch = useDispatch();
+  //console.log(options);
+  //console.log(active);
   const handlePrev = () => {
     swiper.slidePrev();
-    setActive(options[swiper.realIndex].value || options[swiper.realIndex]);
+    setActive(options[swiper.realIndex]);
+    dispatch(setSelectedEvent(options[swiper.realIndex]));
   };
 
   const handleNext = () => {
     swiper.slideNext();
-    setActive(options[swiper.realIndex].value || options[swiper.realIndex]);
+    setActive(options[swiper.realIndex]);
+    dispatch(setSelectedEvent(options[swiper.realIndex]));
   };
 
   useEffect(() => {
@@ -137,11 +145,11 @@ const SelectionList = ({ active, setActive, options, innerRef }) => {
         centeredSlides={true}
       >
         {options.map((option) => (
-          <SwiperSlide key={option.label || option}>
+          <SwiperSlide key={option.id || option}>
             <SelectionButton
-              text={option.label || option}
-              active={active === option.value || active === option}
-              onClick={() => setActive(option.value || option)}
+              text={displayMonthDay(option.date) || option}
+              active={active === option.id || active === option}
+              onClick={() => setActive(option)}
             />
           </SwiperSlide>
         ))}

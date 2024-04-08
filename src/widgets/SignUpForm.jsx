@@ -139,7 +139,7 @@ const SignUpForm = ({ standalone = true }) => {
 
   useEffect(() => {
     console.log(activationToken);
-    if (reqStatus === "failed") {
+    if (reqStatus === "failed" && activationToken !== "") {
       toast.error(error);
     }
     if (activationToken !== "") {

@@ -27,7 +27,9 @@ const TicketsEventCard = ({ userName, tickets, index, variant = "basic" }) => {
   //const user = useSelector((state) => state.auth.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   let makeTicketWilling = {};
+
   tickets.map((ticket) => {
     makeTicketWilling[ticket.ticket_category.id] = {
       name: ticket.ticket_category.name,
@@ -35,8 +37,9 @@ const TicketsEventCard = ({ userName, tickets, index, variant = "basic" }) => {
       quantity: 0,
     };
   });
-
   const [ticketsWilling, setTicketWilling] = useState(makeTicketWilling);
+  const [nbTicket, setNbTicket] = useState(0);
+
   const askTologin = () => {
     if (!userName) {
       toast.warning("Connectez vous ou creer un compte afin de pousuivre");
@@ -47,16 +50,23 @@ const TicketsEventCard = ({ userName, tickets, index, variant = "basic" }) => {
   const modifyQuantity = (how, category) => {
     /* const old = ticketsWilling[category];
     console.log(old); */
+    //console.log(ticketsWilling);
+    console.log(ticketsWilling);
     let newValue = {};
     newValue[category] = ticketsWilling[category];
 
     if (how === "plus") {
       newValue[category].quantity = ticketsWilling[category].quantity + 1;
+      setNbTicket(nbTicket + 1);
     } else {
-      newValue[category].quantity =
+      if (ticketsWilling[category].quantity > 0) {
+        newValue[category].quantity = ticketsWilling[category].quantity - 1;
+        setNbTicket(nbTicket - 1);
+      }
+      /* newValue[category].quantity =
         ticketsWilling[category].quantity > 0
           ? ticketsWilling[category].quantity - 1
-          : 0;
+          : 0; */
     }
 
     setTicketWilling({
@@ -69,7 +79,7 @@ const TicketsEventCard = ({ userName, tickets, index, variant = "basic" }) => {
 
   const goPaymentPage = () => {
     let ableToMove = false;
-    console.log(!userName);
+    //console.log(!userName);
 
     tickets.map((ticket) => {
       if (ticketsWilling[ticket.ticket_category.id].quantity > 0) {
@@ -120,6 +130,7 @@ const TicketsEventCard = ({ userName, tickets, index, variant = "basic" }) => {
               willingQuantity={ticketsWilling}
               operation={modifyQuantity}
               key={index}
+              nbTicket={nbTicket}
             />
           ))}
 

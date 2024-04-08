@@ -73,9 +73,6 @@ const LoginForm = () => {
           password: credentials.password,
         })
       ).unwrap();
-      Object.keys(ticketsDesired).length > 1
-        ? navigate("/payment")
-        : navigate("/");
     } catch (error) {
       console.log(" Error", error);
     }
@@ -84,6 +81,11 @@ const LoginForm = () => {
     //console.log(loginStatus);
     if (loginStatus === "failed") {
       toast.error(error);
+    }
+    if (loginStatus === "succeeded") {
+      Object.keys(ticketsDesired).length > 1
+        ? navigate("/payment")
+        : navigate("/");
     }
   }, [dispatch, loginStatus]);
   const handleResetPassword = (e) => {

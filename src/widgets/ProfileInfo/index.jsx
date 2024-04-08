@@ -8,7 +8,7 @@ const ProfileInfo = () => {
   const data = [
     { "Nom & Prenoms": "Lottie Poole" },
     { Numero: "+123 45 567 88" },
-    { "E-mail": "ligasoccer@template.com" },
+    { "E-mail": "soccer@template.com" },
     /* {'Location': 'Munich, Germany'} */
   ];
 

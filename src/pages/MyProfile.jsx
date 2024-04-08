@@ -1,8 +1,6 @@
 // components
 import PageHeader from "@layout/PageHeader";
 import AppGrid from "@layout/AppGrid";
-import ProfileAvatar from "@widgets/ProfileAvatar";
-import ProfileInfo from "@widgets/ProfileInfo";
 import AccountSettings from "@widgets/AccountSettings";
 import ChangePassword from "@widgets/ChangePassword";
 import MyTicket from "@widgets/MyTicket";

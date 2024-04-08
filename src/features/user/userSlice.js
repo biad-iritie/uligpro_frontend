@@ -75,9 +75,12 @@ const User = createSlice({
     },
     logout: (state) => {
       //state.status = "idle";
+      //console.log("logout");
+      state.status = "idle";
+      state.user = {};
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
-      state.user = {};
+
       //state.status = "idle";
       state.error = null;
     },
@@ -88,7 +91,7 @@ const User = createSlice({
         state.status = "loading";
       })
       .addCase(addLoggedUser.fulfilled, (state, action) => {
-        //console.log(action);
+        console.log("addLoggedUser");
         // Add any fetched posts to the array
         if (action.payload.user) {
           state.user = action.payload.user;
@@ -138,7 +141,7 @@ const User = createSlice({
           state.status = "succeeded";
         } else {
           state.status = "failed";
-          state.error = action.payload.error.message;
+          state.error = action.payload.error?.message;
         }
       })
 
@@ -149,6 +152,7 @@ const User = createSlice({
       .addCase(getActivationToken.fulfilled, (state, action) => {
         //console.log(action);
         // Add any fetched posts to the array
+        state.status = "succeeded";
         if (action.payload.activationToken) {
           state.activationToken = action.payload.activationToken;
           // Saving data to session storage
@@ -156,7 +160,6 @@ const User = createSlice({
             "activationToken",
             JSON.stringify(action.payload.activationToken)
           ); */
-          state.status = "succeeded";
         } else {
           state.status = "failed";
           state.error = action.payload.error.message;

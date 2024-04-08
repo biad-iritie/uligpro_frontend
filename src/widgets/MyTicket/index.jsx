@@ -1,4 +1,4 @@
-import QRCode from "react-qr-code";
+import { QRCode } from "react-qr-code";
 // styling
 import styles from "./styles.module.scss";
 
@@ -17,17 +17,21 @@ import {
   Text,
   Image,
   PDFDownloadLink,
+  PDFViewer,
 } from "@react-pdf/renderer";
 
 // hooks
 import React, { useState, useEffect } from "react";
 
 // utils
-import { messagesByDateHour } from "./../../utils/helpers";
+import { messagesByDateHour, displayFullDate } from "./../../utils/helpers";
 // constants
 import { gql, useLazyQuery } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserTickets } from "./../../features/event/eventSlide";
+import {
+  getUserTickets,
+  setStatusToIdle,
+} from "./../../features/event/eventSlide";
 
 const GET_TICKETS = gql`
   query GetUserTickets {
@@ -37,6 +41,16 @@ const GET_TICKETS = gql`
         event {
           name
           date
+          matches {
+            team1 {
+              name
+              logo
+            }
+            team2 {
+              name
+              logo
+            }
+          }
         }
         ticket_category {
           name
@@ -52,14 +66,18 @@ const GET_TICKETS = gql`
 const MyTicket = () => {
   const { theme } = useThemeProvider();
   const { anchorEl, open, handleClick, handleClose } = useSubmenu();
+  const dispatch = useDispatch();
+  //dispatch(setStatusToIdle());
   //const [selected, setSelected] = useState(FINALS_OPTIONS[0].value);
   const [selected, setSelected] = useState();
+  const [fetched, setFetched] = useState(false);
   const [getUserTicketsQuery] = useLazyQuery(GET_TICKETS);
   //const queryTicket = useQuery(GET_TICKETS)
-  const status = useSelector((state) => state.events.status);
+  const ticketSelected = useSelector((state) => state.events.ticketSelected);
+
+  const status = useSelector((state) => state.events.status.ticket);
 
   const reduxGetUserTicket = useSelector((state) => state.events.tickets);
-  const dispatch = useDispatch();
 
   const Ticket = () => {
     //console.log(selected);
@@ -67,9 +85,16 @@ const MyTicket = () => {
       page: {
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center",
         backgroundColor: "white",
         padding: 50,
+      },
+      header: {
+        alignItems: "center",
+      },
+      body: {
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
       },
       title: {
         fontSize: 24,
@@ -81,21 +106,37 @@ const MyTicket = () => {
         marginBottom: 10,
       },
       qrCode: {
-        alignSelf: "flex-end",
+        height: "200px",
+        width: "200px",
+        alignSelf: "flex-center",
+      },
+      notice: {
+        fontSize: 10,
+        marginTop: 10,
       },
     });
     return (
       <Document>
         <Page size="A4" style={styles.page}>
-          <Text style={styles.title}>E-Ticket ULIGPRO</Text>
-          <Text style={styles.info}> {selected.event.name}</Text>
-          <Text style={styles.info}>
-            Categorie : {selected.ticket_category.name}
-          </Text>
+          <View style={styles.header}>
+            <Text style={styles.title}>E-Ticket ULIGPRO</Text>
+
+            <Text style={styles.info}> {selected.event.name}</Text>
+            <Text style={styles.info}>
+              Categorie : {selected.ticket_category.name}
+            </Text>
+            <Text style={styles.info}>
+              Date: {displayFullDate(selected.event.date)}
+            </Text>
+          </View>
+
           {/* <Text style={styles.info}>Venue: {selected.event.venue.name}</Text> */}
-          <Text style={styles.info}>
-            Date: {messagesByDateHour(selected.event.date)}
-          </Text>
+
+          {/* {selected.event.matches.map((match) => {
+            console.log(match.team1.name);
+            <Text>{`${match.team1.name} VS ${match.team2.name}`}</Text>;
+          })} */}
+
           {/* <Image
             src="soccer_ball.png"
             style={{ width: 50, height: 50, marginBottom: 20 }}
@@ -104,8 +145,16 @@ const MyTicket = () => {
             <Image
               src={`https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
                 selected.code
-              )}&size=25x50`}
+              )}&size=250x500`}
             />
+          </View>
+          <View>
+            <Text style={styles.notice}>
+              Nous vous rappellons que, seul le premier ticket scanné sera
+              accepté à entrer. Si un billet a été photocopié, il ne pourra pas
+              entrer dans la salle . Aucune exception ne sera faite, même le
+              ticket est a vôtre nom.
+            </Text>
           </View>
         </Page>
       </Document>
@@ -136,17 +185,17 @@ const MyTicket = () => {
       );
     } catch (error) {}
   };
-
+  //fetchTickets();
   useEffect(() => {
-    if (
-      status === "idle" ||
-      (reduxGetUserTicket.length === 0 && status === "succeeded")
-    ) {
+    //|| (reduxGetUserTicket.length === 0 && status === "succeeded")
+
+    if (status === "idle") {
+      console.log(status);
       fetchTickets();
     }
     reduxGetUserTicket.length > 0 && setSelected(reduxGetUserTicket[0]);
     //console.log(selected);
-  }, [dispatch, status, reduxGetUserTicket]);
+  }, [dispatch, reduxGetUserTicket, status]);
 
   return (
     <Spring className="card">

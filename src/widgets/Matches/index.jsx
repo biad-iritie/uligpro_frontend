@@ -24,7 +24,7 @@ import classNames from "classnames";
 import matches from "@db/matches";
 import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
-import { getEvents } from "./../../features/event/eventSlide";
+import { getEvents, setStatusToIdle } from "./../../features/event/eventSlide";
 
 // constants
 import { FINALS_OPTIONS } from "@constants/selection_options";
@@ -125,14 +125,17 @@ const Matches = () => {
   const [selectedDay, setSelectedDay] = useState(
     parseInt(dayjs().format("DD"))
   );
+  const dispatch = useDispatch();
+  //dispatch(setStatusToIdle);
+
   const error = useSelector((state) => state.events.error);
-  const eventStatus = useSelector((state) => state.events.status);
+  const eventStatus = useSelector((state) => state.events.status.event);
   const events = useSelector((state) => state.events.events);
   const eventSelected = useSelector((state) => state.events.eventSelected);
   const listEventsName = useSelector((state) => state.events.listEventsName);
   const userName = useSelector((state) => state.auth.user.name);
   const [getEventsQuery] = useLazyQuery(GET_EVENT);
-  const [selected, setSelected] = useState(FINALS_OPTIONS[0].value);
+  const [selected, setSelected] = useState();
   //const [events, setEvents] = useState([]);
   const matches = useQuery(GET_EVENT);
   //const [selected, setSelected] = useState();
@@ -148,7 +151,6 @@ const Matches = () => {
   }); */
 
   //console.log(EVENTS_NAMES);
-  const dispatch = useDispatch();
 
   const fetchEvents = async () => {
     try {
@@ -158,17 +160,14 @@ const Matches = () => {
         })
       );
     } catch (error) {
-      console.log(error);
+      //console.log(error);
       toast.error("Desolé error au niveau du serveur");
     }
   };
 
   useEffect(() => {
-    console.log(events);
-    if (
-      eventStatus === "idle" ||
-      (events.length === 0 && eventStatus === "succeeded")
-    ) {
+    //console.log(eventStatus);
+    if (eventStatus === "idle") {
       fetchEvents();
     }
 
@@ -203,7 +202,8 @@ const Matches = () => {
         useSelector((state) => state.events.eventSelected)
       );
     } */
-  }, [eventStatus, dispatch]);
+    events.length > 0 && setSelected(events[0]);
+  }, [eventStatus, dispatch, events]);
 
   let content;
 
@@ -235,11 +235,11 @@ const Matches = () => {
           active={selected}
           setActive={setSelected}
         /> */}
-        {eventStatus === "succeeded" && listEventsName.length > 0 ? (
+        {eventStatus === "succeeded" && selected !== undefined ? (
           <>
             <SelectionList
-              options={listEventsName}
-              active={eventSelected.id}
+              options={events}
+              active={selected.id}
               setActive={setSelected}
             />
 
@@ -250,10 +250,10 @@ const Matches = () => {
             /> */}
             {/* <h3>{eventNames[0].label}</h3> */}
             <div className="d-flex justify-content-between align-items-center">
-              <h3>{eventSelected.name}</h3>
+              <h3>{selected.name}</h3>
             </div>
             <div className="d-flex justify-content-between align-items-center">
-              <h3>{`Terrain:  ${eventSelected.venue.name} 
+              <h3>{`Terrain:  ${selected.venue.name} 
               `}</h3>
               {/* Date: ${new Date(
                 eventSelected.date
@@ -265,7 +265,7 @@ const Matches = () => {
                   <div
                     className={`${styles.scroll_track} ${styles[direction]} track d-flex flex-column g-20`}
                   >
-                    {eventSelected.matches.map((match, index) => (
+                    {selected.matches.map((match, index) => (
                       <MyMatchCard match={match} index={index} key={index} />
                     ))}
                   </div>
@@ -274,7 +274,7 @@ const Matches = () => {
               <div className={`${styles.card} ${styles[direction]}`}>
                 <TicketsEventCard
                   userName={userName}
-                  tickets={eventSelected.ticket_categoryOnEvent}
+                  tickets={selected.ticket_categoryOnEvent}
                   variant="extended"
                 />
               </div>
@@ -282,7 +282,7 @@ const Matches = () => {
           </>
         ) : (
           <div>
-            <h3>Pas de matchs</h3>
+            <h3>Pas de matchs programmés</h3>
           </div>
         )}
       </div>

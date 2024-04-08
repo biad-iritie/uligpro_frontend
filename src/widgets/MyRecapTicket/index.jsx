@@ -45,7 +45,7 @@ const MyRecapTicket = () => {
       });
       setTotal(sum_totals);
       setTickets(mappingTicket);
-      console.log(tickets.length);
+      //console.log(tickets.length);
     }
   }, [ticketsDesired]);
   return (

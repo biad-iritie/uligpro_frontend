@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { displayMonthDay } from "./../../utils/helpers";
 const initialState = {
-  status: "idle",
+  status: { event: "idle", buyTicket: "idle", ticket: "idle" },
   error: null,
   events: [],
   eventSelected: {},
+  ticketSelected: {},
   listEventsName: [],
   ticketsDesired: {},
   message: "",
@@ -75,7 +76,11 @@ const Event = createSlice({
     }, */
     getEventsName: (state) => state.listEventsName,
     setTicketsDesired: (state, action) => {
+      console.log(action.payload);
       state.ticketsDesired = action.payload;
+    },
+    setSelectedEvent: (state, action) => {
+      state.eventSelected = action.payload;
     },
     getTicketsDesired: (state) => state.ticketsDesired,
     setStatusToIdle: (state) => {
@@ -95,16 +100,16 @@ const Event = createSlice({
   extraReducers(builder) {
     builder
       .addCase(getEvents.pending, (state, action) => {
-        state.status = "loading";
+        state.status.event = "loading";
+        state.ticketsDesired = {};
       })
       .addCase(getEvents.fulfilled, (state, action) => {
         //console.log(action.payload.data.getComingEvents.events);
         // Add any fetched posts to the array
-
-        if (action.payload.data.getComingEvents.events[0].id) {
-          state.events = state.events.concat(
-            action.payload.data.getComingEvents.events
-          );
+        //console.log(action.payload.data.getComingEvents.events.length);
+        state.status.event = "succeeded";
+        if (action.payload.data.getComingEvents.events.length > 0) {
+          state.events = action.payload.data.getComingEvents.events;
           //console.log(state.events);
           //Get name of event
           let result = [];
@@ -117,30 +122,31 @@ const Event = createSlice({
           });
           state.listEventsName = result;
 
-          //select the first journey
+          //select the first element
           state.eventSelected = state.events[0];
-          state.status = "succeeded";
-        } else {
+        } /* else {
           state.status = "failed";
           state.error = action.payload.error.message;
-        }
+        } */
       })
       .addCase(getEvents.rejected, (state, action) => {
         //console.log(action.error.message);
-        state.status = "failed";
+        state.status.event = "failed";
         state.error = action.error.message;
       })
 
       //BUY TICKETS
       .addCase(buyTickets.pending, (state, action) => {
-        state.status = "loading";
+        state.status.buyTicket = "loading";
       })
       .addCase(buyTickets.fulfilled, (state, action) => {
-        console.log(action);
+        //console.log(action);
         // Add any fetched posts to the array
 
-        state.status = "succeeded";
+        state.status.buyTicket = "succeeded";
+        state.status.ticket = "idle";
         state.message = action.payload.data.buyTickets.message;
+        state.ticketsDesired = {};
       })
       .addCase(buyTickets.rejected, (state, action) => {
         console.log(action.error.message);
@@ -150,24 +156,29 @@ const Event = createSlice({
 
       // FETCH USER TICKETS
       .addCase(getUserTickets.pending, (state, action) => {
-        state.status = "loading";
+        state.status.ticket = "loading";
       })
       .addCase(getUserTickets.fulfilled, (state, action) => {
-        state.tickets = action.payload.data.getUserTickets.tickets;
-        state.status = "succeeded";
+        state.status.ticket = "succeeded";
+        if (action.payload.data.getUserTickets.tickets.length > 0) {
+          //console.log("getUserTickets");
+          state.tickets = action.payload.data.getUserTickets.tickets;
+
+          state.ticketSelected = state.tickets[0];
+        }
       })
       .addCase(getUserTickets.rejected, (state, action) => {
         //console.log(action.error.message);
-        state.status = "failed";
+        state.status.ticket = "failed";
         state.error = action.error.message;
       })
 
       //SCAN TICKETS
       .addCase(scanTicket.pending, (state, action) => {
-        state.status = "loading";
+        state.status.ticket = "loading";
       })
       .addCase(scanTicket.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.status.ticket = "succeeded";
         if (action.payload.data.getTicketScanned.status) {
           state.message = "Ticket scanné";
           state.error = null;
@@ -178,7 +189,7 @@ const Event = createSlice({
       })
       .addCase(scanTicket.rejected, (state, action) => {
         //console.log(action.error.message);
-        state.status = "failed";
+        state.status.ticket = "failed";
         state.error = action.error.message;
       });
   },
@@ -191,6 +202,7 @@ export const {
   getTicketsDesired,
   setStatusToIdle,
   cleanState,
+  setSelectedEvent,
 } = Event.actions;
 export default Event.reducer;
 

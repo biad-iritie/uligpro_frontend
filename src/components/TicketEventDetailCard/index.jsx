@@ -4,7 +4,12 @@ import Price from "@ui/Price";
 import IconButton from "@ui/IconButton";
 import PropTypes from "prop-types";
 
-const TicketsEventDetailCard = ({ ticket, willingQuantity, operation }) => {
+const TicketsEventDetailCard = ({
+  ticket,
+  willingQuantity,
+  operation,
+  nbTicket,
+}) => {
   const iconStyles = {
     width: "32px",
     height: "32px",
@@ -56,6 +61,7 @@ const TicketsEventDetailCard = ({ ticket, willingQuantity, operation }) => {
         onClick={() => {
           operation("plus", ticket.ticket_category.id);
         }}
+        disabled={nbTicket < 5 ? false : true}
       />
     </div>
   );

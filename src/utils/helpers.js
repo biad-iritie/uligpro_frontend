@@ -130,6 +130,9 @@ export const messagesByDateHour = (date) => {
 export const displayMonthDay = (date) => {
   return dayjs(date).format("ddd D MMM");
 };
+export const displayFullDate = (date) => {
+  return dayjs(date).format("ddd DD MMM YYYY H:mm");
+};
 /**
  * render polar angle axis
  * @param payload

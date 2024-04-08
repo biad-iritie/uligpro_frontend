@@ -55,11 +55,11 @@ const MyMatchCard = ({ match, index, variant = "basic" }) => {
           <div className="d-flex justify-content-between g-30">
             <div style={{ minWidth: 0 }}>
               <h3>{match.team1.name}</h3>
-              <p className="text-12 text-overflow">{match.team1.university}</p>
+              {/* <p className="text-12 text-overflow">{match.team1.university}</p> */}
             </div>
             <div className="text-right" style={{ minWidth: 0 }}>
               <h3>{match.team2.name}</h3>
-              <p className="text-12 text-overflow">{match.team2.university}</p>
+              {/* <p className="text-12 text-overflow">{match.team2.university}</p> */}
             </div>
           </div>
         )}
