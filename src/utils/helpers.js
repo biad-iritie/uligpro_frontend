@@ -5,7 +5,6 @@ import { Text } from "recharts";
 import dayjs from "dayjs";
 
 // constants
-import CLUBS from "@constants/clubs";
 
 var updateLocale = require("dayjs/plugin/updateLocale");
 dayjs.extend(updateLocale);
@@ -106,7 +105,7 @@ export const preventDefault = () => {
  * @param id
  * @returns {{country: string, color: string, city: string, name: string, logo: *, id: string, shortName: string} | {country: string, color: string, city: string, name: string, logo: *, id: string, shortName: string} | {country: string, color: string, city: string, name: string, logo: *, id: string, shortName: string} | {country: string, color: string, city: string, name: string, logo: *, id: string, shortName: string} | {country: string, color: string, city: string, name: string, logo: *, id: string, shortName: string}}
  */
-export const getClubInfo = (id) => CLUBS.find((club) => club.id === id);
+//export const getClubInfo = (id) => CLUBS.find((club) => club.id === id);
 
 // get array of month days (date and weekday)
 export const getMonthDays = (
