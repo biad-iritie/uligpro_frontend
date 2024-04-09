@@ -87,7 +87,7 @@ const Event = createSlice({
       state.status = "idle";
     },
     cleanState: (state) => {
-      state.status = "idle";
+      state.status = { event: "idle", buyTicket: "idle", ticket: "idle" };
       state.error = null;
       state.events = [];
       state.eventSelected = {};

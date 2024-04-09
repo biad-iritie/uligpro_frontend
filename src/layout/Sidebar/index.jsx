@@ -41,6 +41,7 @@ const Sidebar = () => {
   };
 
   const deconnexion = async () => {
+    setIsLogged(false);
     await dispatch(cleanState());
     await dispatch(logout());
     navigate("/");
@@ -50,8 +51,9 @@ const Sidebar = () => {
   // collapse opened accordion on route change when the drawer is temporary
   useEffect(() => {
     width < 1280 && setExpanded(undefined);
+    console.log();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    if (user.name !== undefined) {
+    if (Object.keys(user).length > 0) {
       setIsLogged(true);
     } else {
       setIsLogged(false);
@@ -101,19 +103,23 @@ const Sidebar = () => {
               </Link>
             </NavLink>
           </SingleLink>
+          {user.role.name !== "REGULAR" && (
+            <SingleLink
+              className={
+                pathname === "/scanticket" ? "pinned active" : "pinned"
+              }
+              as="div"
+            >
+              <NavLink to="/scanticket">
+                <Link
+                  className={`${pathname === "/scanticket" ? "active" : ""} h4`}
+                >
+                  <i className="icon icon-user" /> Scan
+                </Link>
+              </NavLink>
+            </SingleLink>
+          )}
 
-          <SingleLink
-            className={pathname === "/scanticket" ? "pinned active" : "pinned"}
-            as="div"
-          >
-            <NavLink to="/scanticket">
-              <Link
-                className={`${pathname === "/scanticket" ? "active" : ""} h4`}
-              >
-                <i className="icon icon-user" /> Scan
-              </Link>
-            </NavLink>
-          </SingleLink>
           <SingleLink as="div">
             <NavLink
               to="/"
