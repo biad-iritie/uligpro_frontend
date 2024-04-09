@@ -21,13 +21,11 @@ import { getMonthDays } from "@utils/helpers";
 import classNames from "classnames";
 
 // data placeholder
-import matches from "@db/matches";
 import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
-import { getEvents, setStatusToIdle } from "./../../features/event/eventSlide";
+import { getEvents } from "./../../features/event/eventSlide";
 
 // constants
-import { FINALS_OPTIONS } from "@constants/selection_options";
 //import { selectAllEvents } from "./../../features/event/eventSlide";
 const GET_EVENT = gql`
   query GetEvent {

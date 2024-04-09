@@ -83,7 +83,8 @@ const LoginForm = () => {
       toast.error(error);
     }
     if (loginStatus === "succeeded") {
-      Object.keys(ticketsDesired).length > 1
+      //console.log(Object.keys(ticketsDesired).length > 1);
+      Object.keys(ticketsDesired).length > 0
         ? navigate("/payment")
         : navigate("/");
     }

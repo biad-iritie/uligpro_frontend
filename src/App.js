@@ -46,7 +46,6 @@ import LoadingScreen from "@components/LoadingScreen";
 import Sidebar from "@layout/Sidebar";
 import BottomNav from "@layout/BottomNav";
 import Navbar from "@layout/Navbar";
-import ShoppingCart from "@widgets/ShoppingCart";
 import ScrollToTop from "@components/ScrollToTop";
 
 //import { getUserCredentials } from "./features/user/userSlice";
@@ -54,24 +53,12 @@ import { getLoggedUser } from "./features/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { gql, useLazyQuery } from "@apollo/client";
 // pages
-const ClubSummary = lazy(() => import("@pages/ClubSummary"));
-const GameSummary = lazy(() => import("@pages/GameSummary"));
-const Championships = lazy(() => import("@pages/Championships"));
-const LeagueOverview = lazy(() => import("@pages/LeagueOverview"));
-const FansCommunity = lazy(() => import("@pages/FansCommunity"));
-const Statistics = lazy(() => import("@pages/Statistics"));
+
 const PageNotFound = lazy(() => import("@pages/PageNotFound"));
-const MatchSummary = lazy(() => import("@pages/MatchSummary"));
-const MatchOverview = lazy(() => import("@pages/MatchOverview"));
-const PlayerProfile = lazy(() => import("@pages/PlayerProfile"));
-const Schedule = lazy(() => import("@pages/Schedule"));
-const Tickets = lazy(() => import("@pages/Tickets"));
-const FootballStore = lazy(() => import("@pages/FootballStore"));
-const BrandStore = lazy(() => import("@pages/BrandStore"));
-const Product = lazy(() => import("@pages/Product"));
+
 const Login = lazy(() => import("@pages/Login"));
 const SignUp = lazy(() => import("@pages/SignUp"));
-const Settings = lazy(() => import("@pages/Settings"));
+//const Settings = lazy(() => import("@pages/Settings"));
 const Home1 = lazy(() => import("@pages/Home1"));
 const MyBuyingTickets = lazy(() => import("@pages/MyBuyingTickets"));
 const MyProfile = lazy(() => import("@pages/MyProfile"));
@@ -182,49 +169,13 @@ const App = () => {
                         <Route path="/myprofile" element={<MyProfile />} />
                         <Route path="/scanticket" element={<ScanTicket />} />
 
-                        <Route path="/club-summary" element={<ClubSummary />} />
-                        <Route path="/game-summary" element={<GameSummary />} />
-                        <Route
-                          path="/championships"
-                          element={<Championships />}
-                        />
-                        <Route
-                          path="/league-overview"
-                          element={<LeagueOverview />}
-                        />
-                        <Route
-                          path="/fans-community"
-                          element={<FansCommunity />}
-                        />
-                        <Route path="/statistics" element={<Statistics />} />
-                        <Route
-                          path="/match-summary"
-                          element={<MatchSummary />}
-                        />
-                        <Route
-                          path="/match-overview"
-                          element={<MatchOverview />}
-                        />
-                        <Route
-                          path="/player-profile"
-                          element={<PlayerProfile />}
-                        />
-                        <Route path="/schedule" element={<Schedule />} />
-                        <Route path="/tickets" element={<Tickets />} />
-                        <Route
-                          path="/football-store"
-                          element={<FootballStore />}
-                        />
-                        <Route path="/brand-store" element={<BrandStore />} />
-                        <Route path="/product" element={<Product />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/sign-up" element={<SignUp />} />
-                        <Route path="/settings" element={<Settings />} />
+                        {/* <Route path="/settings" element={<Settings />} /> */}
                       </Routes>
                     </Suspense>
                   </div>
                 </div>
-                <ShoppingCart isPopup />
               </div>
             </StyleSheetManager>
           </ThemeProvider>

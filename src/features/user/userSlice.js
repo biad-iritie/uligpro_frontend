@@ -143,6 +143,7 @@ const User = createSlice({
           state.status = "failed";
           state.error = action.payload.error?.message;
         }
+        state.status = "idle";
       })
 
       // GET ACTIVATION TOKEN

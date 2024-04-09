@@ -4,7 +4,6 @@ import styles from "./styles.module.scss";
 // components
 import Spring from "@components/Spring";
 //import InfoTabsNav from "@components/InfoTabsNav";
-import Lineups from "@components/Lineups";
 import Score from "@ui/Score";
 
 // hooks
@@ -64,11 +63,7 @@ const MyMatchCard = ({ match, index, variant = "basic" }) => {
           </div>
         )}
       </div>
-      {variant === "extended" && (
-        <div className="border-top">
-          <Lineups wrapperClass={styles.field} isCompact />
-        </div>
-      )}
+
       {/* <InfoTabsNav variant="alt" /> */}
     </Spring>
   );
