@@ -1,11 +1,11 @@
 // styling
-import styled from 'styled-components/macro';
+import styled from "styled-components/macro";
 
 // components
-import Slider from '@mui/material/Slider';
+import Slider from "@mui/material/Slider";
 
 // utils
-import {memo} from 'react';
+import { memo } from "react";
 
 const StyledSlider = styled(Slider)`
   width: 76px !important;
@@ -18,7 +18,8 @@ const StyledSlider = styled(Slider)`
     border-radius: 50%;
     box-shadow: none !important;
 
-    &:before, &:after {
+    &:before,
+    &:after {
       display: none;
     }
   }
@@ -35,17 +36,17 @@ const StyledSlider = styled(Slider)`
   }
 `;
 
-const RangeSlider = ({value, onChange, step, min, max, ...props}) => {
-    return (
-        <StyledSlider
-            value={value}
-            onChange={onChange}
-            step={step}
-            min={min}
-            max={max}
-            {...props}
-        />
-    );
-}
+const RangeSlider = ({ value, onChange, step, min, max, ...props }) => {
+  return (
+    <StyledSlider
+      value={value}
+      onChange={onChange}
+      step={step}
+      min={min}
+      max={max}
+      {...props}
+    />
+  );
+};
 
 export default memo(RangeSlider);

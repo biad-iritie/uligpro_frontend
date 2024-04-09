@@ -3,10 +3,8 @@ import styles from "./styles.module.scss";
 
 // components
 import { Helmet } from "react-helmet";
-import RangeSlider from "@ui/RangeSlider";
 import SidebarTrigger from "@ui/SidebarTrigger";
 import User from "./User";
-import Search from "./Search";
 import TruncatedText from "@components/TruncatedText";
 import { NavLink } from "react-router-dom";
 

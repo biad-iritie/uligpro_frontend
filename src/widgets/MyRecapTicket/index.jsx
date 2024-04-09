@@ -3,24 +3,13 @@ import styles from "./styles.module.scss";
 
 // components
 import Spring from "@components/Spring";
-import { NavLink } from "react-router-dom";
-import ScrollContainer from "@components/ScrollContainer";
-import Popup from "@components/Popup";
+
 import TruncatedText from "@components/TruncatedText";
-import IconButton from "@ui/IconButton";
-import CompareButton from "@ui/CompareButton";
-import Like from "@ui/Like";
 
 // hooks
 import useMeasure from "react-use-measure";
 
 // assets
-import img1 from "@assets/cart/1.webp";
-import img2 from "@assets/cart/2.webp";
-import img3 from "@assets/cart/3.webp";
-import img4 from "@assets/cart/4.webp";
-import img5 from "@assets/cart/5.webp";
-import img6 from "@assets/cart/6.webp";
 
 import { getTicketsDesired } from "./../../features/event/eventSlide";
 import { useSelector } from "react-redux";
