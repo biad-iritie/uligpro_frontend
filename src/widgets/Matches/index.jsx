@@ -24,6 +24,7 @@ import classNames from "classnames";
 import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
 import { getEvents } from "./../../features/event/eventSlide";
+import { now } from "moment";
 
 // constants
 //import { selectAllEvents } from "./../../features/event/eventSlide";
@@ -47,6 +48,7 @@ const GET_EVENT = gql`
           ticket_sold
         }
         matches {
+          createdAt
           time
           team1 {
             name
@@ -120,17 +122,17 @@ const Navigator = ({ active, setActive }) => {
 
 const Matches = () => {
   const { direction } = useThemeProvider();
-  const [selectedDay, setSelectedDay] = useState(
+  /* const [selectedDay, setSelectedDay] = useState(
     parseInt(dayjs().format("DD"))
-  );
+  ); */
   const dispatch = useDispatch();
   //dispatch(setStatusToIdle);
 
   const error = useSelector((state) => state.events.error);
   const eventStatus = useSelector((state) => state.events.status.event);
   const events = useSelector((state) => state.events.events);
-  const eventSelected = useSelector((state) => state.events.eventSelected);
-  const listEventsName = useSelector((state) => state.events.listEventsName);
+  //const eventSelected = useSelector((state) => state.events.eventSelected);
+  //const listEventsName = useSelector((state) => state.events.listEventsName);
   const userName = useSelector((state) => state.auth.user.name);
   const [getEventsQuery] = useLazyQuery(GET_EVENT);
   const [selected, setSelected] = useState();
@@ -200,7 +202,17 @@ const Matches = () => {
         useSelector((state) => state.events.eventSelected)
       );
     } */
-    events.length > 0 && setSelected(events[0]);
+    if (events.length > 0) {
+      events.map((event, index) => {
+        if (Date.now(event.date) >= now()) {
+          console.log(index);
+          setSelected(events[index]);
+          return;
+        }
+        setSelected(events[index]);
+      });
+    }
+    //events.length > 0 && setSelected(events[0]);
   }, [eventStatus, dispatch, events]);
 
   let content;

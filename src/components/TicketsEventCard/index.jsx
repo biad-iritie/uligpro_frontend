@@ -115,12 +115,12 @@ const TicketsEventCard = ({ userName, tickets, index, variant = "basic" }) => {
             <div className="d-flex flex-column g-10">
               <span className="label label--store h6">Tickets</span>
               <div className="d-flex align-items-center justify-content-between">
-                <h3 style={{ maxWidth: 240 }}>Tickets disponible</h3>
+                <h3 style={{ maxWidth: 240 }}>Pas de ticket disponible</h3>
               </div>
             </div>
           </div>
 
-          <p className="heading-font">
+          {/*  <p className="heading-font">
             <span className="text-600">Categories</span>
           </p>
 
@@ -142,7 +142,7 @@ const TicketsEventCard = ({ userName, tickets, index, variant = "basic" }) => {
             }}
           >
             Proceder au paiement
-          </button>
+          </button> */}
         </div>
       </div>
     </Spring>
