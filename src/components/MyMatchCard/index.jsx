@@ -42,8 +42,8 @@ const MyMatchCard = ({ match, index, variant = "basic" }) => {
             src={match.team1.logo}
             alt={match.team1.name}
           />
-          <span className="styles_vs__dnnaD h3">vs</span>
-          {/* <Score team1={match.goal1} team2={match.goal2} variant="alt" /> */}
+          {/* <span className="styles_vs__dnnaD h3">vs</span> */}
+          <Score team1={match.goal1} team2={match.goal2} variant="alt" />
           <img
             className="club-logo"
             src={match.team2.logo}

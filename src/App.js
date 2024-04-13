@@ -40,7 +40,7 @@ import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 
 // components
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import LoadingScreen from "@components/LoadingScreen";
 import Sidebar from "@layout/Sidebar";
@@ -92,6 +92,7 @@ const App = () => {
   const isAuthRoute = useAuthRoute();
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
   const [loggedUser] = useLazyQuery(LOGGED_USER);
 
@@ -110,6 +111,11 @@ const App = () => {
   useEffect(() => {
     if (Object.keys(user).length === 0) {
       getCredentials();
+    }
+    if (Object.keys(user).length > 0) {
+      if (user.role.name === "SCANNER") {
+        navigate("/scanticket");
+      }
     }
     //getCredentials();
   }, [user, dispatch]);
