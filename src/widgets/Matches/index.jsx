@@ -203,14 +203,18 @@ const Matches = () => {
       );
     } */
     if (events.length > 0) {
-      events.map((event, index) => {
+      let indexSelected;
+      let shouldBreak = false;
+      events.forEach((event, index) => {
+        if (shouldBreak) return;
         if (Date.now(event.date) >= now()) {
           console.log(index);
-          setSelected(events[index]);
+          indexSelected = index;
+          shouldBreak = true;
           return;
         }
-        setSelected(events[index]);
       });
+      setSelected(events[indexSelected]);
     }
     //events.length > 0 && setSelected(events[0]);
   }, [eventStatus, dispatch, events]);
