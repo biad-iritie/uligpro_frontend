@@ -26,7 +26,7 @@ const authLink = setContext((_, { headers }) => {
   accessToken = accessToken ? accessToken.replace(/"/g, "") : "";
   let refreshToken = localStorage.getItem("refreshToken");
   refreshToken = refreshToken ? refreshToken.replace(/"/g, "") : "";
-  console.log(refreshToken);
+  //console.log(refreshToken);
   // return the headers to the context so httpLink can read them
   if (accessToken !== "" && refreshToken !== "") {
     return {

@@ -3,18 +3,22 @@ import styles from "./styles.module.scss";
 
 // components
 import Spring from "@components/Spring";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 const ProfileInfo = () => {
-  const data = [
-    { "Nom & Prenoms": "Lottie Poole" },
-    { Numero: "+123 45 567 88" },
-    { "E-mail": "soccer@template.com" },
-    /* {'Location': 'Munich, Germany'} */
-  ];
-
+  const user = useSelector((state) => state.auth.user);
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    setData([
+      { "Nom & Prenoms": user.name },
+      { Numero: user.tel },
+      { "E-mail": user.email },
+    ]);
+  }, [user]);
   return (
     <Spring className="card d-flex flex-column g-16 card-padded">
-      <h3>Profile info</h3>
+      <h3>Profile information</h3>
       <ul className="d-flex flex-column justify-content-between flex-1 g-14">
         {data.map((item, index) => {
           return (

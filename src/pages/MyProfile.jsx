@@ -10,7 +10,7 @@ import { setStatusToIdle } from "./../features/event/eventSlide";
 
 const widgets = {
   /* avatar: <ProfileAvatar />, */
-  /* info: <ProfileInfo />, */
+  info: <ProfileInfo />,
   ticket: <MyTicket />,
   settings: <AccountSettings />,
   password: <ChangePassword />,

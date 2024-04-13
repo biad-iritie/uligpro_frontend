@@ -97,7 +97,7 @@ const App = () => {
 
   const getCredentials = async () => {
     try {
-      console.log(loggedUser);
+      //console.log(loggedUser);
       await dispatch(
         getLoggedUser({
           loggedUserFunc: loggedUser,
