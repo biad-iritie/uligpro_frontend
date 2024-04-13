@@ -55,6 +55,9 @@ const ACTIVATE_USER = gql`
         name
         email
         tel
+        role {
+          name
+        }
       }
       accessToken
       refreshToken
@@ -110,7 +113,8 @@ const SignUpForm = ({ standalone = true }) => {
         })
       ).unwrap();
     } catch (error) {
-      console.log(error);
+      toast.error(error.message);
+      //console.log(error);
     }
     //console.log(data);
     //
@@ -133,15 +137,15 @@ const SignUpForm = ({ standalone = true }) => {
         ? navigate("/payment")
         : navigate("/");
     } catch (error) {
-      console.log(error);
+      toast.error(error.message);
+      //console.log(error);
     }
   };
 
   useEffect(() => {
-    console.log(activationToken);
-    if (reqStatus === "failed" && activationToken !== "") {
+    /* if (reqStatus === "failed" && activationToken !== "") {
       toast.error(error);
-    }
+    } */
     if (activationToken !== "") {
       setOpen(true);
     }

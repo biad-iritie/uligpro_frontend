@@ -16,11 +16,11 @@ import classNames from "classnames";
 
 import { addLoggedUser } from "./../features/user/userSlice";
 
-import { gql, useMutation } from "@apollo/client";
+import { gql, useLazyQuery } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
 
 const LOGIN = gql`
-  mutation Login($email: String!, $password: String!) {
+  query Login($email: String!, $password: String!) {
     login(userInput: { email: $email, password: $password }) {
       user {
         name
@@ -55,7 +55,7 @@ const LoginForm = () => {
       //rememberMe: false,
     },
   });
-  const [login, { data, loading }] = useMutation(LOGIN);
+  const [login, { data, loading }] = useLazyQuery(LOGIN);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const loginStatus = useSelector((state) => state.auth.status);
@@ -137,9 +137,9 @@ const LoginForm = () => {
                                                        innerRef={ref}/>
                                     )}
                         /> */}
-            <NavLink aria-label="Inscription" to="/sign-up">
+            {/* <NavLink aria-label="Inscription" to="/sign-up">
               <label htmlFor="rememberMe">Inscrivez-vous</label>
-            </NavLink>
+            </NavLink> */}
           </div>
         </div>
         {loginStatus === "loading" ? (
@@ -151,12 +151,17 @@ const LoginForm = () => {
             <button className="btn btn--sm" type="submit">
               Connexion
             </button>
-            <button
+            {/* <button
               className="text-button text-button--sm"
               onClick={handleResetPassword}
             >
               Oublié mot de passe
-            </button>
+            </button> */}
+            <NavLink aria-label="Inscription" to="/sign-up">
+              <button className="text-button text-button--sm">
+                <label htmlFor="rememberMe">Inscrivez-vous</label>
+              </button>
+            </NavLink>
           </div>
         )}
 

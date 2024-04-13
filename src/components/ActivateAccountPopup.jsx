@@ -59,8 +59,8 @@ const ActivateAccountPopup = ({ open, onClose, onActivate }) => {
             )}
           </form>
           <p className="text-12">
-            If you don't receive an email within a few minutes, please check
-            your spam folder.
+            Si vous ne recevez pas d'e-mail dans les minutes qui suivent,
+            veuillez vérifier votre dossier de courrier indésirable.
           </p>
         </div>
       </div>

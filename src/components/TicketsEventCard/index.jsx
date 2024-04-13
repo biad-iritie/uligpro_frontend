@@ -135,6 +135,7 @@ const TicketsEventCard = ({ userName, tickets, index, variant = "basic" }) => {
           ))}
 
           <button
+            disabled
             className="btn w-100"
             onClick={() => {
               goPaymentPage();

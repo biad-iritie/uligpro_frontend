@@ -177,12 +177,12 @@ const User = createSlice({
         state.status = "loading";
       })
       .addCase(activateUserAccount.fulfilled, (state, action) => {
-        //console.log(action);
+        console.log(action.payload);
         // Add any fetched posts to the array
         if (action.payload.user) {
           state.user = action.payload.user;
-          state.accessToken = action.payload.accessToken;
-          state.refreshToken = action.payload.refreshToken;
+          /* state.accessToken = action.payload.accessToken;
+          state.refreshToken = action.payload.refreshToken; */
 
           // Saving data to session storage
           localStorage.setItem(

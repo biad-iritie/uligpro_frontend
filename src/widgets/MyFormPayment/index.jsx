@@ -18,6 +18,7 @@ import Fade from "@mui/material/Fade";
 import { useState } from "react";
 import { useWindowSize } from "react-use";
 import { gql } from "@apollo/client";
+import { useSelector } from "react-redux";
 
 const BUY_TICKET = gql`
   mutation BuyTickets(
@@ -31,7 +32,7 @@ const BUY_TICKET = gql`
 `;
 
 const MyFormPayment = () => {
-  const [activeTab, setActiveTab] = useState("wave");
+  const [activeTab, setActiveTab] = useState("mobile_money");
   const { width } = useWindowSize();
   //  const [open, setOpen] = useState(true);
 
@@ -48,7 +49,7 @@ const MyFormPayment = () => {
               onClick={() => setActiveTab("mobile_money")}
               active={activeTab === "mobile_money"}
             />
-            <TabButton
+            {/* <TabButton
               title={width >= 375 ? "Wave" : "Wave"}
               onClick={() => setActiveTab("wave")}
               active={activeTab === "wave"}
@@ -57,16 +58,16 @@ const MyFormPayment = () => {
               title={width >= 375 ? "Visa" : "Visa"}
               onClick={() => setActiveTab("visa")}
               active={activeTab === "visa"}
-            />
+            /> */}
           </TabsList>
           <TabPanel value="mobile_money">
             <Fade in={activeTab === "mobile_money"} timeout={400}>
               <div>
-                <MyFormMobileMoney />
+                <MyFormMobileMoney reqBuyTicket={BUY_TICKET} />
               </div>
             </Fade>
           </TabPanel>
-          <TabPanel value="wave">
+          {/* <TabPanel value="wave">
             <Fade in={activeTab === "wave"} timeout={400}>
               <div>
                 <MyFormWave reqBuyTicket={BUY_TICKET} />
@@ -79,7 +80,7 @@ const MyFormPayment = () => {
                 <MyFormVisa />
               </div>
             </Fade>
-          </TabPanel>
+          </TabPanel> */}
         </Tabs>
       </div>
       {/* <ConfirmationPopup
