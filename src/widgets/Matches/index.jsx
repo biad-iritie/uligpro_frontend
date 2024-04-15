@@ -202,12 +202,17 @@ const Matches = () => {
         useSelector((state) => state.events.eventSelected)
       );
     } */
+    const today = new Date();
+
     if (events.length > 0) {
       let indexSelected;
       let shouldBreak = false;
       events.forEach((event, index) => {
+        let eventDate = new Date(event.date);
+        /* console.log(eventDate.getTime());
+        console.log(today.getTime()); */
         if (shouldBreak) return;
-        if (Date.now(event.date) >= now()) {
+        if (eventDate > today) {
           console.log(index);
           indexSelected = index;
           shouldBreak = true;
