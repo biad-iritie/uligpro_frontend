@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 const widgets = {
   recap: <MyRecapTicket />,
-  payment: <MyFormPayment />,
+  //payment: <MyFormPayment />,
 };
 const MyBuyingTickets = () => {
   const ticketsDesired = useSelector((state) => state.events.ticketsDesired);

@@ -3,7 +3,7 @@
   "version": "1.0.2",
   "private": true,
   "author": "merkulove <hello@merkulov.design> (https://1.envato.market/tf-merkulove)",
-  "proxy": "https://api.hub2.io",
+  "proxy":"https://api.uligpro.com/graphql",
   "contributors": [
     {
       "name": "Lilit L.",

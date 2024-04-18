@@ -22,6 +22,7 @@ const TicketsEventDetailCard = ({
     lineHeight: 1,
     fontSize: "1rem",
   };
+
   return (
     <div
       className={`${styles.footer} d-flex align-items-center justify-content-between border-top`}

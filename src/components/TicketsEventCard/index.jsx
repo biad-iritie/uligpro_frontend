@@ -16,7 +16,7 @@ import { useWindowSize } from "react-use";
 import PropTypes from "prop-types";
 //import { getClubInfo } from "@utils/helpers";
 //import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { setTicketsDesired } from "./../../features/event/eventSlide";
 import { useDispatch } from "react-redux";
@@ -30,7 +30,7 @@ const TicketsEventCard = ({ userName, tickets, index, variant = "basic" }) => {
 
   let makeTicketWilling = {};
 
-  tickets.map((ticket) => {
+  tickets.map(async (ticket) => {
     makeTicketWilling[ticket.ticket_category.id] = {
       name: ticket.ticket_category.name,
       price: ticket.price,
@@ -51,7 +51,7 @@ const TicketsEventCard = ({ userName, tickets, index, variant = "basic" }) => {
     /* const old = ticketsWilling[category];
     console.log(old); */
     //console.log(ticketsWilling);
-    console.log(ticketsWilling);
+    //console.log(ticketsWilling);
     let newValue = {};
     newValue[category] = ticketsWilling[category];
 
@@ -99,10 +99,7 @@ const TicketsEventCard = ({ userName, tickets, index, variant = "basic" }) => {
       toast.warning("Selectionnez vos tickets !");
     }
   };
-  /* useEffect(() => {
-    console.log();
-  }, [ticketWilling]); */
-  //console.log(makeTicketWilling);
+
   return (
     <Spring
       className={`${styles.container} ${styles[theme]} h-100`}
@@ -111,38 +108,38 @@ const TicketsEventCard = ({ userName, tickets, index, variant = "basic" }) => {
     >
       <div style={{ margin: "20px" }} className="d-flex flex-column">
         <div className="d-flex flex-column g-30 flex-1">
-          <div className="d-flex flex-column g-24">
+          {/* <div className="d-flex flex-column g-24">
             <div className="d-flex flex-column g-10">
               <span className="label label--store h6">Tickets</span>
               <div className="d-flex align-items-center justify-content-between">
                 <h3 style={{ maxWidth: 240 }}>Pas de ticket disponible</h3>
               </div>
             </div>
-          </div>
+          </div> */}
 
-          {/*  <p className="heading-font">
+          <p className="heading-font">
             <span className="text-600">Categories</span>
           </p>
 
-          {tickets.map((ticket, index) => (
-            <TicketsEventDetailCard
-              ticket={ticket}
-              willingQuantity={ticketsWilling}
-              operation={modifyQuantity}
-              key={index}
-              nbTicket={nbTicket}
-            />
-          ))}
+          {Object.keys(ticketsWilling).length > 0 &&
+            tickets.map((ticket, index) => (
+              <TicketsEventDetailCard
+                ticket={ticket}
+                willingQuantity={ticketsWilling}
+                operation={modifyQuantity}
+                key={index}
+                nbTicket={nbTicket}
+              />
+            ))}
 
           <button
-            disabled
             className="btn w-100"
             onClick={() => {
               goPaymentPage();
             }}
           >
             Proceder au paiement
-          </button> */}
+          </button>
         </div>
       </div>
     </Spring>

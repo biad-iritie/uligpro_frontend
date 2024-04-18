@@ -3,25 +3,82 @@ import styles from "./styles.module.scss";
 
 // components
 import Spring from "@components/Spring";
-
+import { toast } from "react-toastify";
 import TruncatedText from "@components/TruncatedText";
-
+import { CircularProgress } from "@mui/material";
 // hooks
 import useMeasure from "react-use-measure";
 
 // assets
 
-import { getTicketsDesired } from "./../../features/event/eventSlide";
-import { useSelector } from "react-redux";
+import {
+  getTicketsDesired,
+  resetPaymentUrl,
+} from "./../../features/event/eventSlide";
+import { useDispatch, useSelector } from "react-redux";
+import { gql, useMutation } from "@apollo/client";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { buyTickets } from "./../../features/event/eventSlide";
+
+const BUY_TICKET = gql`
+  mutation BuyTickets($tickets: [buyTicketsEventInput!]!) {
+    buyTickets(tickets: $tickets) {
+      code
+      payment_url
+      payment_token
+      error {
+        code
+        message
+      }
+    }
+  }
+`;
+
 const MyRecapTicket = () => {
   //const [headerRef, { height: headerHeight }] = useMeasure();
   const [footerRef, { height: footerHeight }] = useMeasure();
   const [nameRef, { width }] = useMeasure();
-
+  const navigate = useNavigate();
   const ticketsDesired = useSelector((state) => state.events.ticketsDesired);
+  const eventSelected = useSelector((state) => state.events.eventSelected);
   const [tickets, setTickets] = useState([]);
   const [main_total, setTotal] = useState(0);
+  const reqError = useSelector((state) => state.events.error);
+  const status = useSelector((state) => state.events.status.buyTicket);
+  const paymentUrl = useSelector((state) => state.events.paymentUrl);
+  const [req_buyTickets, { data, loading }] = useMutation(BUY_TICKET);
+  const dispatch = useDispatch();
+  const message = useSelector((state) => state.events.message);
+
+  const proceedPaiement = async () => {
+    let fixedTickets = [];
+    Object.entries(ticketsDesired).forEach(([key, value]) => {
+      fixedTickets.push({
+        eventId: eventSelected.id,
+        ticket_categoryId: key,
+        quantity: value.quantity,
+      });
+    });
+
+    try {
+      await dispatch(
+        buyTickets({
+          buyTicketsFunc: req_buyTickets,
+          tickets: fixedTickets,
+          //transaction: { debitNumber: data.tel, way: "WAVE" },
+        })
+      ).unwrap();
+
+      //toast.success(message);
+      //toast.success("Allez dans votre profil pour telecharger vos tickets");
+
+      //navigate("/", { replace: true });
+    } catch (error) {
+      console.log(" Error", error);
+      toast.error(error.message);
+    }
+  };
 
   useEffect(() => {
     //console.log("Effect");
@@ -36,7 +93,17 @@ const MyRecapTicket = () => {
       setTickets(mappingTicket);
       //console.log(tickets.length);
     }
-  }, [ticketsDesired]);
+    console.log(paymentUrl);
+    console.log(status);
+    if (paymentUrl !== "" && status === "succeeded") {
+      console.log("redirect");
+      window.open(paymentUrl, "_blank", "rel=noopener noreferrer");
+      dispatch(resetPaymentUrl);
+    }
+    /* if (tickets.length === 0) {
+      navigate("/");
+    } */
+  }, [ticketsDesired, status, paymentUrl]);
   return (
     <Spring className={`${styles.card} card card-padded`}>
       <h3 className={styles.title}>Recapitulatif</h3>
@@ -137,6 +204,25 @@ const MyRecapTicket = () => {
         <p className="d-flex justify-content-between h3">
           Total: <span>{`${main_total} FCFA`}</span>
         </p>
+      </div>
+      <div className={styles.footer}>
+        {status === "loading" ? (
+          <div className="d-flex justify-content-between align-items-center">
+            <CircularProgress color="success" style={{ margin: "auto" }} />
+          </div>
+        ) : (
+          <>
+            <button
+              disabled={tickets.length === 0 ? true : false}
+              className="btn w-100"
+              onClick={() => {
+                proceedPaiement();
+              }}
+            >
+              Proceder au paiement
+            </button>
+          </>
+        )}
       </div>
     </Spring>
   );

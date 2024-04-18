@@ -105,18 +105,18 @@ const SelectionList = ({ active, setActive, options, innerRef }) => {
   const [swiper, setSwiper] = useState(null);
   const { direction } = useThemeProvider();
   const dispatch = useDispatch();
-  //console.log(options);
-  //console.log(active);
+  /* console.log(options);
+  console.log(active); */
   const handlePrev = () => {
-    swiper.slidePrev();
     setActive(options[swiper.realIndex]);
     dispatch(setSelectedEvent(options[swiper.realIndex]));
+    swiper.slidePrev();
   };
 
   const handleNext = () => {
-    swiper.slideNext();
     setActive(options[swiper.realIndex]);
     dispatch(setSelectedEvent(options[swiper.realIndex]));
+    swiper.slideNext();
   };
 
   useEffect(() => {

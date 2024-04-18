@@ -10,6 +10,9 @@ const initialState = {
   ticketsDesired: {},
   message: "",
   tickets: [],
+  paymentUrl: "",
+  responseCodeCP: "",
+  paymentId: "",
 };
 
 export const getEvents = createAsyncThunk("events/getAll", async (data) => {
@@ -34,7 +37,7 @@ export const buyTickets = createAsyncThunk(
     const response = await data.buyTicketsFunc({
       variables: {
         tickets: data.tickets,
-        transaction: data.transaction,
+        //transaction: data.transaction,
       },
     });
     //console.log(response);
@@ -76,7 +79,7 @@ const Event = createSlice({
     }, */
     getEventsName: (state) => state.listEventsName,
     setTicketsDesired: (state, action) => {
-      console.log(action.payload);
+      //console.log(action.payload);
       state.ticketsDesired = action.payload;
     },
     setSelectedEvent: (state, action) => {
@@ -85,6 +88,10 @@ const Event = createSlice({
     getTicketsDesired: (state) => state.ticketsDesired,
     setStatusToIdle: (state) => {
       state.status = "idle";
+    },
+    resetPaymentUrl: (state) => {
+      state.paymentUrl = "";
+      state.status.buyTicket = "idle";
     },
     cleanState: (state) => {
       state.status = { event: "idle", buyTicket: "idle", ticket: "idle" };
@@ -145,12 +152,15 @@ const Event = createSlice({
 
         state.status.buyTicket = "succeeded";
         state.status.ticket = "idle";
-        state.message = action.payload.data.buyTickets.message;
+        //state.message = action.payload.data.buyTickets.data.message;
         state.ticketsDesired = {};
+        state.paymentId = action.payload.data.buyTickets.paymentId;
+        state.paymentUrl = action.payload.data.buyTickets.payment_url;
+        state.responseCodeCP = action.payload.data.buyTickets.code;
       })
       .addCase(buyTickets.rejected, (state, action) => {
         console.log(action.error.message);
-        state.status = "failed";
+        state.status.buyTicket = "failed";
         state.error = action.error.message;
       })
 
@@ -203,6 +213,7 @@ export const {
   setStatusToIdle,
   cleanState,
   setSelectedEvent,
+  resetPaymentUrl,
 } = Event.actions;
 export default Event.reducer;
 

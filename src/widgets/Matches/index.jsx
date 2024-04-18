@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 // hooks
 import { useThemeProvider } from "@contexts/themeContext";
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 // utils
 import dayjs from "dayjs";
 import { getMonthDays } from "@utils/helpers";
@@ -24,8 +25,8 @@ import classNames from "classnames";
 import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
 import { getEvents } from "./../../features/event/eventSlide";
-import { now } from "moment";
 
+import { setSelectedEvent } from "../../features/event/eventSlide";
 // constants
 //import { selectAllEvents } from "./../../features/event/eventSlide";
 const GET_EVENT = gql`
@@ -67,7 +68,7 @@ const GET_EVENT = gql`
     }
   }
 `;
-const Navigator = ({ active, setActive }) => {
+/* const Navigator = ({ active, setActive }) => {
   const { theme, direction } = useThemeProvider();
   const [swiper, setSwiper] = useState(null);
 
@@ -118,7 +119,7 @@ const Navigator = ({ active, setActive }) => {
       </Swiper>
     </div>
   );
-};
+}; */
 
 const Matches = () => {
   const { direction } = useThemeProvider();
@@ -136,6 +137,7 @@ const Matches = () => {
   const userName = useSelector((state) => state.auth.user.name);
   const [getEventsQuery] = useLazyQuery(GET_EVENT);
   const [selected, setSelected] = useState();
+
   //const [events, setEvents] = useState([]);
   const matches = useQuery(GET_EVENT);
   //const [selected, setSelected] = useState();
@@ -152,6 +154,32 @@ const Matches = () => {
 
   //console.log(EVENTS_NAMES);
 
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const value = queryParams.get("id");
+  console.log("Check url");
+  console.log(value);
+  const checkTransaction = async (transaction_id) => {
+    const response = await fetch(
+      "https://api-checkout.cinetpay.com/v2/payment/check",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: {
+          apikey: process.env.REACT_APP_API_KEY_CINETPAY,
+          site_id: process.env.REACT_APP_SITE_ID,
+          transaction_id: transaction_id,
+        },
+      }
+    );
+    if (response.ok) {
+      const result = response.json();
+      console.log(result);
+    }
+  };
+
   const fetchEvents = async () => {
     try {
       await dispatch(
@@ -166,46 +194,16 @@ const Matches = () => {
   };
 
   useEffect(() => {
+    value !== "" && value !== null && checkTransaction(value);
+  }, [value]);
+  useEffect(() => {
     //console.log(eventStatus);
     if (eventStatus === "idle") {
       fetchEvents();
     }
-
-    /*  if (eventStatus === "succeeded") {
-      console.log(eventSelected);
-      console.log(selected);
-      let EVENTS_NAMES = [];
-      console.log(events);
-      events.map((event, index) => {
-        EVENTS_NAMES.push({ label: event.name, value: event.id });
-      });
-      setEventNames(EVENTS_NAMES);
-      setSelected(EVENTS_NAMES[0].value);
-    } */
-    /* if (events.length > 0) {
-      let EVENTS_NAMES = [];
-      console.log(events);
-      events.map((event, index) => {
-        EVENTS_NAMES.push({ label: event.name, value: event.id });
-      });
-      setEventNames(EVENTS_NAMES);
-      setSelected(EVENTS_NAMES[0].value);
-      /* events.map((event, index) => {
-        eventNames.push({ label: event.name, value: event.id });
-      }); 
-    }*/
-
-    //console.log(eventStatus);
-    /* if (eventSelected !== "") {
-      console.log(eventSelected);
-      setDetailsSelectedEvent(
-        useSelector((state) => state.events.eventSelected)
-      );
-    } */
     const today = new Date();
-
+    let indexSelected = 0;
     if (events.length > 0) {
-      let indexSelected;
       let shouldBreak = false;
       events.forEach((event, index) => {
         let eventDate = new Date(event.date);
@@ -213,18 +211,21 @@ const Matches = () => {
         console.log(today.getTime()); */
         if (shouldBreak) return;
         if (eventDate > today) {
-          console.log(index);
+          //console.log(index);
           indexSelected = index;
           shouldBreak = true;
           return;
         }
       });
+      dispatch(setSelectedEvent(events[indexSelected]));
       setSelected(events[indexSelected]);
+      //console.log(indexSelected);
     }
     //events.length > 0 && setSelected(events[0]);
+    //console.log(selected);
   }, [eventStatus, dispatch, events]);
 
-  let content;
+  //let content;
 
   return (
     <Spring className="card d-flex flex-column">

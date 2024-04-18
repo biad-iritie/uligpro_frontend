@@ -15,7 +15,7 @@ import MyFormVisa from "@widgets/MyFormPayment/MyFormVisa";
 import Fade from "@mui/material/Fade";
 
 // hooks
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useWindowSize } from "react-use";
 import { gql } from "@apollo/client";
 import { useSelector } from "react-redux";
@@ -41,15 +41,18 @@ const MyFormPayment = () => {
   return (
     <Spring className="card d-flex flex-column card-padded">
       <h3>Methode de Paiement</h3>
-      <div className="d-flex flex-column justify-content-between flex-1">
-        <Tabs value={activeTab}>
+      <div
+        className="d-flex flex-column justify-content-between flex-1"
+        id="cinetpay"
+      >
+        {/*<Tabs value={activeTab}>
           <TabsList className={`${styles.tabs_list} tab-nav col-2`}>
             <TabButton
               title={width >= 375 ? "Mobile money" : "Mobile"}
               onClick={() => setActiveTab("mobile_money")}
               active={activeTab === "mobile_money"}
             />
-            {/* <TabButton
+             <TabButton
               title={width >= 375 ? "Wave" : "Wave"}
               onClick={() => setActiveTab("wave")}
               active={activeTab === "wave"}
@@ -58,7 +61,7 @@ const MyFormPayment = () => {
               title={width >= 375 ? "Visa" : "Visa"}
               onClick={() => setActiveTab("visa")}
               active={activeTab === "visa"}
-            /> */}
+            /> 
           </TabsList>
           <TabPanel value="mobile_money">
             <Fade in={activeTab === "mobile_money"} timeout={400}>
@@ -67,7 +70,7 @@ const MyFormPayment = () => {
               </div>
             </Fade>
           </TabPanel>
-          {/* <TabPanel value="wave">
+          <TabPanel value="wave">
             <Fade in={activeTab === "wave"} timeout={400}>
               <div>
                 <MyFormWave reqBuyTicket={BUY_TICKET} />
@@ -80,8 +83,8 @@ const MyFormPayment = () => {
                 <MyFormVisa />
               </div>
             </Fade>
-          </TabPanel> */}
-        </Tabs>
+          </TabPanel> 
+        </Tabs>*/}
       </div>
       {/* <ConfirmationPopup
         open={open}
