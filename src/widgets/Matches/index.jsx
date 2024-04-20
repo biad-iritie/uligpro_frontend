@@ -22,13 +22,23 @@ import { getMonthDays } from "@utils/helpers";
 import classNames from "classnames";
 
 // data placeholder
-import { gql, useLazyQuery, useQuery } from "@apollo/client";
+import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
-import { getEvents } from "./../../features/event/eventSlide";
+import {
+  getEvents,
+  actionAfterPayment,
+} from "./../../features/event/eventSlide";
 
 import { setSelectedEvent } from "../../features/event/eventSlide";
 // constants
 //import { selectAllEvents } from "./../../features/event/eventSlide";
+const CHECK_PAYMENT = gql`
+  mutation ActionAfterPayment($idTransaction: String!) {
+    actionAfterPayment(idTransaction: $idTransaction) {
+      message
+    }
+  }
+`;
 const GET_EVENT = gql`
   query GetEvent {
     getComingEvents {
@@ -36,6 +46,7 @@ const GET_EVENT = gql`
         id
         date
         name
+        onSell
         venue {
           name
         }
@@ -128,21 +139,16 @@ const Matches = () => {
   ); */
   const dispatch = useDispatch();
   //dispatch(setStatusToIdle);
-
+  const [checkPayment] = useMutation(CHECK_PAYMENT);
   const error = useSelector((state) => state.events.error);
   const eventStatus = useSelector((state) => state.events.status.event);
+  const message = useSelector((state) => state.events.message);
   const events = useSelector((state) => state.events.events);
-  //const eventSelected = useSelector((state) => state.events.eventSelected);
-  //const listEventsName = useSelector((state) => state.events.listEventsName);
   const userName = useSelector((state) => state.auth.user.name);
   const [getEventsQuery] = useLazyQuery(GET_EVENT);
   const [selected, setSelected] = useState();
 
-  //const [events, setEvents] = useState([]);
   const matches = useQuery(GET_EVENT);
-  //const [selected, setSelected] = useState();
-  //const [eventNames, setEventNames] = useState([]);
-  //let eventNames = [];
 
   //let DisplayEvents;
   /*   let EVENTS_NAMES = [];
@@ -157,26 +163,19 @@ const Matches = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const value = queryParams.get("id");
-  console.log("Check url");
-  console.log(value);
+  /* console.log("Check url");
+  console.log(value); */
   const checkTransaction = async (transaction_id) => {
-    const response = await fetch(
-      "https://api-checkout.cinetpay.com/v2/payment/check",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
-          apikey: process.env.REACT_APP_API_KEY_CINETPAY,
-          site_id: process.env.REACT_APP_SITE_ID,
-          transaction_id: transaction_id,
-        },
-      }
-    );
-    if (response.ok) {
-      const result = response.json();
-      console.log(result);
+    try {
+      await dispatch(
+        actionAfterPayment({
+          actionAfterPaymentFunc: checkPayment,
+          idTransaction: transaction_id,
+        })
+      ).unwrap();
+    } catch (error) {
+      //console.log(error);
+      toast.error(error.message);
     }
   };
 
@@ -194,8 +193,14 @@ const Matches = () => {
   };
 
   useEffect(() => {
-    value !== "" && value !== null && checkTransaction(value);
-  }, [value]);
+    if (value !== "" && value !== null) {
+      checkTransaction(value);
+    }
+
+    message === "SUCCESS" &&
+      toast.success("Recuperez vos tickets dans votre profil");
+    message === "FAILLED" && toast.error("Achat de ticket(s) non effectué");
+  }, [value, message]);
   useEffect(() => {
     //console.log(eventStatus);
     if (eventStatus === "idle") {
@@ -210,12 +215,13 @@ const Matches = () => {
         /* console.log(eventDate.getTime());
         console.log(today.getTime()); */
         if (shouldBreak) return;
-        if (eventDate > today) {
+        if (eventDate >= today) {
           //console.log(index);
           indexSelected = index;
           shouldBreak = true;
           return;
         }
+        indexSelected = index;
       });
       dispatch(setSelectedEvent(events[indexSelected]));
       setSelected(events[indexSelected]);
@@ -293,6 +299,7 @@ const Matches = () => {
               </div>
               <div className={`${styles.card} ${styles[direction]}`}>
                 <TicketsEventCard
+                  onSell={selected.onSell}
                   userName={userName}
                   tickets={selected.ticket_categoryOnEvent}
                   variant="extended"

@@ -21,7 +21,13 @@ import { useEffect, useState } from "react";
 import { setTicketsDesired } from "./../../features/event/eventSlide";
 import { useDispatch } from "react-redux";
 
-const TicketsEventCard = ({ userName, tickets, index, variant = "basic" }) => {
+const TicketsEventCard = ({
+  onSell,
+  userName,
+  tickets,
+  index,
+  variant = "basic",
+}) => {
   const { width } = useWindowSize();
   const { theme } = useThemeProvider();
   //const user = useSelector((state) => state.auth.user);
@@ -133,6 +139,7 @@ const TicketsEventCard = ({ userName, tickets, index, variant = "basic" }) => {
             ))}
 
           <button
+            disabled={!onSell}
             className="btn w-100"
             onClick={() => {
               goPaymentPage();

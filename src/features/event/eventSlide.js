@@ -58,6 +58,19 @@ export const scanTicket = createAsyncThunk(
   }
 );
 
+export const actionAfterPayment = createAsyncThunk(
+  "events/actionAfterPayment",
+  async (data) => {
+    const response = await data.actionAfterPaymentFunc({
+      variables: {
+        idTransaction: data.idTransaction,
+      },
+    });
+    //console.log(response);
+    return response;
+  }
+);
+
 const Event = createSlice({
   name: "event",
   initialState,
@@ -159,7 +172,7 @@ const Event = createSlice({
         state.responseCodeCP = action.payload.data.buyTickets.code;
       })
       .addCase(buyTickets.rejected, (state, action) => {
-        console.log(action.error.message);
+        //console.log(action.error.message);
         state.status.buyTicket = "failed";
         state.error = action.error.message;
       })
@@ -198,6 +211,20 @@ const Event = createSlice({
         }
       })
       .addCase(scanTicket.rejected, (state, action) => {
+        //console.log(action.error.message);
+        state.status.ticket = "failed";
+        state.error = action.error.message;
+      })
+
+      //CHECKING TRansaction statut
+      .addCase(actionAfterPayment.pending, (state, action) => {
+        //state.status.ticket = "loading";
+      })
+      .addCase(actionAfterPayment.fulfilled, (state, action) => {
+        state.status.ticket = "succeeded";
+        state.message = action.payload.data.actionAfterPayment.message;
+      })
+      .addCase(actionAfterPayment.rejected, (state, action) => {
         //console.log(action.error.message);
         state.status.ticket = "failed";
         state.error = action.error.message;

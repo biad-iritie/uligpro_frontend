@@ -190,7 +190,7 @@ const MyTicket = () => {
     //|| (reduxGetUserTicket.length === 0 && status === "succeeded")
 
     if (status === "idle") {
-      console.log(status);
+      //console.log(status);
       fetchTickets();
     }
     reduxGetUserTicket.length > 0 && setSelected(reduxGetUserTicket[0]);

@@ -93,16 +93,16 @@ const MyRecapTicket = () => {
       setTickets(mappingTicket);
       //console.log(tickets.length);
     }
-    console.log(paymentUrl);
-    console.log(status);
+    /* console.log(paymentUrl);
+    console.log(status); */
     if (paymentUrl !== "" && status === "succeeded") {
       console.log("redirect");
       window.open(paymentUrl, "_blank", "rel=noopener noreferrer");
-      dispatch(resetPaymentUrl);
+      dispatch(resetPaymentUrl());
     }
-    /* if (tickets.length === 0) {
+    if (Object.keys(ticketsDesired).length === 0) {
       navigate("/");
-    } */
+    }
   }, [ticketsDesired, status, paymentUrl]);
   return (
     <Spring className={`${styles.card} card card-padded`}>
