@@ -91,44 +91,128 @@ const MyTicket = () => {
       header: {
         alignItems: "center",
       },
-      body: {
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-      },
       title: {
         fontSize: 24,
         fontWeight: "bold",
-        marginBottom: 20,
+        backgroundColor: "#03590f",
+        padding: (10, 20, 10, 20),
+        color: "white",
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 30,
+        borderBottomLeftRadius: 30,
+        borderBottomRightRadius: 5,
+      },
+      body: {
+        justifyContent: "center",
+        marginTop: "20px",
+        alignItems: "center",
+        display: "flex",
+        flexDirection: "row",
+        color: "white",
+      },
+      qrZone: {
+        //position:"absolute",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "40%",
+        height: "200px",
+        backgroundColor: "#03590f",
+        marginRight: "10px",
+        //zIndex: 8,
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 30,
+        borderBottomLeftRadius: 30,
+        borderBottomRightRadius: 5,
+      },
+      qrCode: {
+        //position:"relative",
+        width: "100px",
+        height: "100px",
+        //zIndex: -1,
+        //width: "200px",
+        //alignSelf: "flex-center",
+      },
+      scannezMoi: {
+        backgroundColor: "#fe6000",
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 30,
+        borderBottomLeftRadius: 30,
+        borderBottomRightRadius: 5,
+        padding: "10px",
+        fontSize: "10px",
+        color: "white",
+        marginTop: "10px",
+      },
+      detailZone: {
+        width: "50%",
+        backgroundColor: "#03590f",
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 30,
+        borderBottomLeftRadius: 30,
+        borderBottomRightRadius: 5,
+        padding: "10px",
+      },
+      eventName: {
+        borderTopLeftRadius: 2,
+        borderTopRightRadius: 30,
+        borderBottomLeftRadius: 30,
+        borderBottomRightRadius: 2,
+        backgroundColor: "white",
+        color: "#03590f",
+        width: "100px",
+        margin: "auto",
       },
       info: {
         fontSize: 15,
         marginBottom: 10,
       },
-      qrCode: {
-        height: "200px",
-        width: "200px",
-        alignSelf: "flex-center",
-      },
       notice: {
         fontSize: 10,
-        marginTop: 10,
+        fontWeight: "bold",
+        marginTop: 5,
       },
     });
     return (
       <Document>
         <Page size="A4" style={styles.page}>
           <View style={styles.header}>
-            <Text style={styles.title}>E-Ticket ULIGPRO</Text>
+            <Text style={styles.title}>E-TICKET</Text>
 
-            <Text style={styles.info}> {selected.event.name}</Text>
-            <Text style={styles.info}>
-              Categorie : {selected.ticket_category.name}
-            </Text>
-            <Text style={styles.info}>
-              Date: {displayFullDate(selected.event.date)}
+            <Text style={styles.notice}>
+              Nous vous rappellons que, seul le premier ticket scanné sera
+              accepté à entrer. Si un billet a été photocopié, il ne pourra pas
+              entrer dans la salle . Aucune exception ne sera faite, même le
+              ticket est a vôtre nom.
             </Text>
           </View>
+          <div style={styles.body}>
+            <div style={styles.qrZone}>
+              <View>
+                <Image
+                  style={styles.qrCode}
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(
+                    selected.code
+                  )}`}
+                />
+
+                <Text style={styles.scannezMoi}>SCANNEZ-MOI</Text>
+              </View>
+            </div>
+            <div style={styles.detailZone}>
+              <View>
+                <View>
+                  <Text style={styles.eventName}> {selected.event.name}</Text>
+                </View>
+
+                <Text style={styles.info}>
+                  Categorie : {selected.ticket_category.name}
+                </Text>
+                <Text style={styles.info}>
+                  Date: {displayFullDate(selected.event.date)}
+                </Text>
+              </View>
+            </div>
+          </div>
 
           {/* <Text style={styles.info}>Venue: {selected.event.venue.name}</Text> */}
 
@@ -141,21 +225,6 @@ const MyTicket = () => {
             src="soccer_ball.png"
             style={{ width: 50, height: 50, marginBottom: 20 }}
           /> */}
-          <View style={styles.qrCode}>
-            <Image
-              src={`https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
-                selected.code
-              )}&size=250x500`}
-            />
-          </View>
-          <View>
-            <Text style={styles.notice}>
-              Nous vous rappellons que, seul le premier ticket scanné sera
-              accepté à entrer. Si un billet a été photocopié, il ne pourra pas
-              entrer dans la salle . Aucune exception ne sera faite, même le
-              ticket est a vôtre nom.
-            </Text>
-          </View>
         </Page>
       </Document>
     );
@@ -209,9 +278,9 @@ const MyTicket = () => {
       reduxGetUserTicket.length > 0 &&
       selected !== undefined ? (
         <>
-          {/* <PDFViewer style={{ width: "100%", height: "100vh" }}>
+          <PDFViewer style={{ width: "100%", height: "100vh" }}>
             <Ticket />
-          </PDFViewer> */}
+          </PDFViewer>
           <SelectionListTickets
             options={reduxGetUserTicket}
             active={selected}

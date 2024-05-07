@@ -76,11 +76,10 @@ const User = createSlice({
     logout: (state) => {
       //state.status = "idle";
       //console.log("logout");
-      state.status = "idle";
-      state.user = {};
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
-
+      state.status = "idle";
+      state.user = {};
       //state.status = "idle";
       state.error = null;
     },
@@ -129,7 +128,7 @@ const User = createSlice({
           //state.accessToken = action.payload.accessToken;
           /* state.refreshToken = action.payload.refreshToken; */
 
-          // Saving data to session storage
+          /* // Saving data to session storage
           localStorage.setItem(
             "accessToken",
             JSON.stringify(action.payload.accessToken)
@@ -137,7 +136,7 @@ const User = createSlice({
           localStorage.setItem(
             "refreshToken",
             JSON.stringify(action.payload.refreshToken)
-          );
+          ); */
           state.status = "succeeded";
         } else {
           state.status = "failed";
@@ -167,7 +166,7 @@ const User = createSlice({
         }
       })
       .addCase(getActivationToken.rejected, (state, action) => {
-        console.log(action.error.message);
+        //console.log(action.error.message);
         state.status = "failed";
         state.error = action.error.message;
       })
@@ -177,7 +176,7 @@ const User = createSlice({
         state.status = "loading";
       })
       .addCase(activateUserAccount.fulfilled, (state, action) => {
-        console.log(action.payload);
+        //console.log(action.payload);
         // Add any fetched posts to the array
         if (action.payload.user) {
           state.user = action.payload.user;

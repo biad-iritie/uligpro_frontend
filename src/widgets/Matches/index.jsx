@@ -160,12 +160,15 @@ const Matches = () => {
 
   //console.log(EVENTS_NAMES);
 
-  const location = useLocation();
+  /* const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const value = queryParams.get("id");
+  const value = queryParams.get("id"); */
+  let paymentId = localStorage.getItem("paymentId");
+
   /* console.log("Check url");
   console.log(value); */
   const checkTransaction = async (transaction_id) => {
+    transaction_id = transaction_id ? transaction_id.replace(/"/g, "") : "";
     try {
       await dispatch(
         actionAfterPayment({
@@ -193,14 +196,14 @@ const Matches = () => {
   };
 
   useEffect(() => {
-    if (value !== "" && value !== null) {
-      checkTransaction(value);
+    if (paymentId !== "" && paymentId !== null) {
+      checkTransaction(paymentId);
     }
 
     message === "SUCCESS" &&
       toast.success("Recuperez vos tickets dans votre profil");
     message === "FAILLED" && toast.error("Achat de ticket(s) non effectué");
-  }, [value, message]);
+  }, [paymentId, message]);
   useEffect(() => {
     //console.log(eventStatus);
     if (eventStatus === "idle") {

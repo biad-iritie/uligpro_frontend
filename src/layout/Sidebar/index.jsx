@@ -10,7 +10,7 @@ import {
 
 // components
 import Logo from "@components/Logo";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate, redirect } from "react-router-dom";
 
 // hooks
 import { useSidebar } from "@contexts/sidebarContext";
@@ -44,7 +44,7 @@ const Sidebar = () => {
     setIsLogged(false);
     await dispatch(cleanState());
     await dispatch(logout());
-    navigate("/");
+    redirect("/");
     //console.log("Deconnexion");
   };
 

@@ -167,6 +167,10 @@ const Event = createSlice({
         state.status.ticket = "idle";
         //state.message = action.payload.data.buyTickets.data.message;
         state.ticketsDesired = {};
+        localStorage.setItem(
+          "paymentId",
+          JSON.stringify(action.payload.data.buyTickets.paymentId)
+        );
         state.paymentId = action.payload.data.buyTickets.paymentId;
         state.paymentUrl = action.payload.data.buyTickets.payment_url;
         state.responseCodeCP = action.payload.data.buyTickets.code;
@@ -223,11 +227,13 @@ const Event = createSlice({
       .addCase(actionAfterPayment.fulfilled, (state, action) => {
         state.status.ticket = "succeeded";
         state.message = action.payload.data.actionAfterPayment.message;
+        localStorage.removeItem("paymentId");
       })
       .addCase(actionAfterPayment.rejected, (state, action) => {
         //console.log(action.error.message);
         state.status.ticket = "failed";
         state.error = action.error.message;
+        localStorage.removeItem("paymentId");
       });
   },
 });

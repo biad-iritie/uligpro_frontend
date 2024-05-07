@@ -96,7 +96,7 @@ const MyRecapTicket = () => {
     /* console.log(paymentUrl);
     console.log(status); */
     if (paymentUrl !== "" && status === "succeeded") {
-      console.log("redirect");
+      //fixed console.log("redirect");
       window.open(paymentUrl, "_blank", "rel=noopener noreferrer");
       dispatch(resetPaymentUrl());
     }

@@ -7,14 +7,7 @@ import MenuItem from "@mui/material/MenuItem";
 
 // hooks
 import { useThemeProvider } from "@contexts/themeContext";
-import {
-  Page,
-  Text,
-  View,
-  Document,
-  StyleSheet,
-  PDFDownloadLink,
-} from "@react-pdf/renderer";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 // utils
 import PropTypes from "prop-types";
 

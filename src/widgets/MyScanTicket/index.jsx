@@ -134,7 +134,7 @@ const MyScanTicket = () => {
       alert(
         "Camera is blocked or not accessible. Please allow camera in your browser permissions and Reload."
       );
-    if (status === "failled") {
+    if (status === "failed") {
       toast.error(error);
     }
     if (status === "succeeded" && scanned) {
