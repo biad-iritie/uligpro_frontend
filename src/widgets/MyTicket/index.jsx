@@ -23,6 +23,9 @@ import {
 // hooks
 import React, { useState, useEffect } from "react";
 
+// assets
+import header_ticket from "@assets/tickets/header.png";
+import footer_ticket from "@assets/tickets/footer.png";
 // utils
 import { messagesByDateHour, displayFullDate } from "./../../utils/helpers";
 // constants
@@ -54,6 +57,9 @@ const GET_TICKETS = gql`
         }
         ticket_category {
           name
+          ticket_categoryOnEvent {
+            price
+          }
         }
       }
       error {
@@ -86,7 +92,7 @@ const MyTicket = () => {
         flexDirection: "column",
         alignItems: "center",
         backgroundColor: "white",
-        padding: 50,
+        padding: 25,
       },
       header: {
         alignItems: "center",
@@ -145,6 +151,7 @@ const MyTicket = () => {
       },
       detailZone: {
         width: "50%",
+        height: "200px",
         backgroundColor: "#03590f",
         borderTopLeftRadius: 5,
         borderTopRightRadius: 30,
@@ -161,6 +168,7 @@ const MyTicket = () => {
         color: "#03590f",
         width: "100px",
         margin: "auto",
+        marginBottom: "20px",
       },
       info: {
         fontSize: 15,
@@ -176,6 +184,7 @@ const MyTicket = () => {
       <Document>
         <Page size="A4" style={styles.page}>
           <View style={styles.header}>
+            <Image src={header_ticket} />
             <Text style={styles.title}>E-TICKET</Text>
 
             <Text style={styles.notice}>
@@ -200,20 +209,27 @@ const MyTicket = () => {
             </div>
             <div style={styles.detailZone}>
               <View>
-                <View>
-                  <Text style={styles.eventName}> {selected.event.name}</Text>
+                <View style={styles.eventName}>
+                  <Text> {selected.event.name}</Text>
                 </View>
+                <View>
+                  <Text style={styles.info}>
+                    Date : {displayFullDate(selected.event.date)}
+                  </Text>
 
-                <Text style={styles.info}>
-                  Categorie : {selected.ticket_category.name}
-                </Text>
-                <Text style={styles.info}>
-                  Date: {displayFullDate(selected.event.date)}
-                </Text>
+                  <Text style={styles.info}>
+                    Categorie : {selected.ticket_category.name}
+                  </Text>
+                  <Text style={styles.info}>
+                    Tarif TTC :
+                    {`${selected.ticket_category.ticket_categoryOnEvent[0].price} XOF`}
+                  </Text>
+                  <Text style={styles.info}>Infoline : (+225) 0777350142</Text>
+                </View>
               </View>
             </div>
           </div>
-
+          <Image src={footer_ticket} />
           {/* <Text style={styles.info}>Venue: {selected.event.venue.name}</Text> */}
 
           {/* {selected.event.matches.map((match) => {

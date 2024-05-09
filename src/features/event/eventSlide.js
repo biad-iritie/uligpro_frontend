@@ -21,6 +21,7 @@ export const getEvents = createAsyncThunk("events/getAll", async (data) => {
   //console.log(response);
   return response;
 });
+
 export const getUserTickets = createAsyncThunk(
   "events/getUserTickets",
   async (data) => {
@@ -169,9 +170,9 @@ const Event = createSlice({
         state.ticketsDesired = {};
         localStorage.setItem(
           "paymentId",
-          JSON.stringify(action.payload.data.buyTickets.paymentId)
+          JSON.stringify(action.payload.data.buyTickets.payment_id)
         );
-        state.paymentId = action.payload.data.buyTickets.paymentId;
+        state.paymentId = action.payload.data.buyTickets.payment_id;
         state.paymentUrl = action.payload.data.buyTickets.payment_url;
         state.responseCodeCP = action.payload.data.buyTickets.code;
       })
@@ -227,7 +228,9 @@ const Event = createSlice({
       .addCase(actionAfterPayment.fulfilled, (state, action) => {
         state.status.ticket = "succeeded";
         state.message = action.payload.data.actionAfterPayment.message;
-        localStorage.removeItem("paymentId");
+        ["SUCCESS", "FAILLED"].includes(
+          action.payload.data.actionAfterPayment.message
+        ) && localStorage.removeItem("paymentId");
       })
       .addCase(actionAfterPayment.rejected, (state, action) => {
         //console.log(action.error.message);

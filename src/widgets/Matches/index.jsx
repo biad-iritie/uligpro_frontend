@@ -15,7 +15,6 @@ import { toast } from "react-toastify";
 // hooks
 import { useThemeProvider } from "@contexts/themeContext";
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 // utils
 import dayjs from "dayjs";
 import { getMonthDays } from "@utils/helpers";
@@ -197,12 +196,15 @@ const Matches = () => {
 
   useEffect(() => {
     if (paymentId !== "" && paymentId !== null) {
+      /* const url = window.location.href;
+      url === "https://uligpro.com" &&  */
       checkTransaction(paymentId);
     }
 
     message === "SUCCESS" &&
       toast.success("Recuperez vos tickets dans votre profil");
     message === "FAILLED" && toast.error("Achat de ticket(s) non effectué");
+    message === "PENDING" && toast.warning("Finalisez votre paiement");
   }, [paymentId, message]);
   useEffect(() => {
     //console.log(eventStatus);

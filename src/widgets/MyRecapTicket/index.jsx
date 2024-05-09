@@ -27,6 +27,7 @@ const BUY_TICKET = gql`
       code
       payment_url
       payment_token
+      payment_id
       error {
         code
         message

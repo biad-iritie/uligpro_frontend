@@ -106,11 +106,13 @@ const App = () => {
       ).unwrap();
     } catch (error) {
       console.log(error);
+      navigate("/");
     }
   };
   useEffect(() => {
     if (Object.keys(user).length === 0) {
       getCredentials();
+      navigate("/");
     }
     if (Object.keys(user).length > 0) {
       if (user.role.name === "SCANNER") {
