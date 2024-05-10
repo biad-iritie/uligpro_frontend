@@ -33,7 +33,7 @@ import { gql, useLazyQuery } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getUserTickets,
-  setStatusToIdle,
+  //setStatusToIdle,
 } from "./../../features/event/eventSlide";
 
 const GET_TICKETS = gql`
@@ -294,9 +294,9 @@ const MyTicket = () => {
       reduxGetUserTicket.length > 0 &&
       selected !== undefined ? (
         <>
-          <PDFViewer style={{ width: "100%", height: "100vh" }}>
+          {/* <PDFViewer style={{ width: "100%", height: "100vh" }}>
             <Ticket />
-          </PDFViewer>
+          </PDFViewer> */}
           <SelectionListTickets
             options={reduxGetUserTicket}
             active={selected}

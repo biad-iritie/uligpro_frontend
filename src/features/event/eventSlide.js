@@ -107,6 +107,10 @@ const Event = createSlice({
       state.paymentUrl = "";
       state.status.buyTicket = "idle";
     },
+    resetMessage: (state) => {
+      console.log("resetMessage");
+      state.message = "";
+    },
     cleanState: (state) => {
       state.status = { event: "idle", buyTicket: "idle", ticket: "idle" };
       state.error = null;
@@ -236,7 +240,7 @@ const Event = createSlice({
         //console.log(action.error.message);
         state.status.ticket = "failed";
         state.error = action.error.message;
-        localStorage.removeItem("paymentId");
+        //localStorage.removeItem("paymentId");
       });
   },
 });
@@ -250,6 +254,7 @@ export const {
   cleanState,
   setSelectedEvent,
   resetPaymentUrl,
+  resetMessage,
 } = Event.actions;
 export default Event.reducer;
 

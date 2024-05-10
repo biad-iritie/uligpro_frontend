@@ -16,9 +16,6 @@ import { toast } from "react-toastify";
 import { useThemeProvider } from "@contexts/themeContext";
 import React, { useState, useEffect } from "react";
 // utils
-import dayjs from "dayjs";
-import { getMonthDays } from "@utils/helpers";
-import classNames from "classnames";
 
 // data placeholder
 import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
@@ -26,6 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getEvents,
   actionAfterPayment,
+  resetMessage,
 } from "./../../features/event/eventSlide";
 
 import { setSelectedEvent } from "../../features/event/eventSlide";
@@ -205,6 +203,7 @@ const Matches = () => {
       toast.success("Recuperez vos tickets dans votre profil");
     message === "FAILLED" && toast.error("Achat de ticket(s) non effectué");
     message === "PENDING" && toast.warning("Finalisez votre paiement");
+    dispatch(resetMessage());
   }, [paymentId, message]);
   useEffect(() => {
     //console.log(eventStatus);
