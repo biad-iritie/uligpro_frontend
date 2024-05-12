@@ -63,6 +63,7 @@ const Home1 = lazy(() => import("@pages/Home1"));
 const MyBuyingTickets = lazy(() => import("@pages/MyBuyingTickets"));
 const MyProfile = lazy(() => import("@pages/MyProfile"));
 const ScanTicket = lazy(() => import("@pages/ScanTicket"));
+const PaymentDone = lazy(() => import("@pages/PaymentDone"));
 
 const LOGGED_USER = gql`
   query GetLoggedInUser {
@@ -110,10 +111,10 @@ const App = () => {
     }
   };
   useEffect(() => {
-    if (Object.keys(user).length === 0) {
+    /* if (Object.keys(user).length === 0) {
       getCredentials();
       navigate("/");
-    }
+    } */
     if (Object.keys(user).length > 0) {
       if (user.role.name === "SCANNER") {
         navigate("/scanticket");
@@ -172,13 +173,26 @@ const App = () => {
                     <Suspense fallback={<LoadingScreen />}>
                       <Routes>
                         <Route path="*" element={<PageNotFound />} />
-                        <Route path="/" element={<Home1 />} />
+                        <Route
+                          path="/"
+                          loader={({ params }) => {
+                            console.log("Route");
+                            console.log(params["id"]);
+                            alert(params["id"]); // "en"
+                          }}
+                          element={<Home1 />}
+                        />
                         <Route path="/payment" element={<MyBuyingTickets />} />
                         <Route path="/myprofile" element={<MyProfile />} />
                         <Route path="/scanticket" element={<ScanTicket />} />
 
                         <Route path="/login" element={<Login />} />
                         <Route path="/sign-up" element={<SignUp />} />
+                        <Route
+                          path="/payment-done/:id"
+                          element={<PaymentDone />}
+                        />
+
                         {/* <Route path="/settings" element={<Settings />} /> */}
                       </Routes>
                     </Suspense>

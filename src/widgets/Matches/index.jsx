@@ -5,7 +5,7 @@ import styles from "./styles.module.scss";
 import Spring from "@components/Spring";
 import { LinearProgress } from "@mui/material";
 import SelectionList from "@ui/SelectionList";
-//import { NavLink } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import MyMatchCard from "@components/MyMatchCard";
 import TicketsEventCard from "@components/TicketsEventCard";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -157,11 +157,14 @@ const Matches = () => {
 
   //console.log(EVENTS_NAMES);
 
-  /* const location = useLocation();
+  const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const value = queryParams.get("id"); */
-  let paymentId = localStorage.getItem("paymentId");
-
+  const transaction_id = queryParams.get("id");
+  let paymentId =
+    transaction_id === null
+      ? localStorage.getItem("paymentId")
+      : transaction_id;
+  console.log(paymentId);
   /* console.log("Check url");
   console.log(value); */
   const checkTransaction = async (transaction_id) => {
@@ -194,8 +197,6 @@ const Matches = () => {
 
   useEffect(() => {
     if (paymentId !== "" && paymentId !== null) {
-      /* const url = window.location.href;
-      url === "https://uligpro.com" &&  */
       checkTransaction(paymentId);
     }
 
@@ -204,7 +205,7 @@ const Matches = () => {
     message === "FAILLED" && toast.error("Achat de ticket(s) non effectué");
     message === "PENDING" && toast.warning("Finalisez votre paiement");
     dispatch(resetMessage());
-  }, [paymentId, message]);
+  }, [message]);
   useEffect(() => {
     //console.log(eventStatus);
     if (eventStatus === "idle") {
