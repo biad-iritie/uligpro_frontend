@@ -37,11 +37,13 @@ const TicketsEventCard = ({
   let makeTicketWilling = {};
 
   tickets.map(async (ticket) => {
-    makeTicketWilling[ticket.ticket_category.id] = {
-      name: ticket.ticket_category.name,
-      price: ticket.price,
-      quantity: 0,
-    };
+    if (ticket.ticket_sold < ticket.capacity) {
+      makeTicketWilling[ticket.ticket_category.id] = {
+        name: ticket.ticket_category.name,
+        price: ticket.price,
+        quantity: 0,
+      };
+    }
   });
   const [ticketsWilling, setTicketWilling] = useState(makeTicketWilling);
   const [nbTicket, setNbTicket] = useState(0);
@@ -139,7 +141,9 @@ const TicketsEventCard = ({
             ))}
 
           <button
-            disabled={!onSell}
+            disabled={
+              onSell && Object.keys(ticketsWilling).length > 0 ? false : true
+            }
             className="btn w-100"
             onClick={() => {
               goPaymentPage();

@@ -164,7 +164,7 @@ const Matches = () => {
     transaction_id === null
       ? localStorage.getItem("paymentId")
       : transaction_id;
-  console.log(paymentId);
+  //console.log(paymentId);
   /* console.log("Check url");
   console.log(value); */
   const checkTransaction = async (transaction_id) => {
