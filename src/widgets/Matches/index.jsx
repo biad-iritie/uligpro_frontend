@@ -157,13 +157,13 @@ const Matches = () => {
 
   //console.log(EVENTS_NAMES);
 
-  const location = useLocation();
+  /* const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const transaction_id = queryParams.get("id");
   let paymentId =
     transaction_id === null
       ? localStorage.getItem("paymentId")
-      : transaction_id;
+      : transaction_id; */
   //console.log(paymentId);
   /* console.log("Check url");
   console.log(value); */
@@ -196,16 +196,15 @@ const Matches = () => {
   };
 
   useEffect(() => {
-    if (paymentId !== "" && paymentId !== null) {
+    /* if (paymentId !== "" && paymentId !== null) {
       checkTransaction(paymentId);
-    }
-
-    message === "SUCCESS" &&
+    } */
+    /* message === "SUCCESS" &&
       toast.success("Recuperez vos tickets dans votre profil");
     message === "FAILLED" && toast.error("Achat de ticket(s) non effectué");
-    message === "PENDING" && toast.warning("Finalisez votre paiement");
-    dispatch(resetMessage());
-  }, [message]);
+    message === "PENDING" && toast.warning("Finalisez votre paiement"); */
+    //dispatch(resetMessage());
+  }, []);
   useEffect(() => {
     //console.log(eventStatus);
     if (eventStatus === "idle") {
