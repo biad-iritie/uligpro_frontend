@@ -103,6 +103,7 @@ const layouts = {
       { i: "password", x: 1, y: 6, w: 1, h: 2 }, */
     ],
   },
+
   club_summary: {
     xl: [
       { i: "team_stats", x: 0, y: 0, w: 1, h: 1 },

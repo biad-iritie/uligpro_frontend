@@ -61,6 +61,7 @@ const SignUp = lazy(() => import("@pages/SignUp"));
 //const Settings = lazy(() => import("@pages/Settings"));
 const Home1 = lazy(() => import("@pages/Home1"));
 const MyBuyingTickets = lazy(() => import("@pages/MyBuyingTickets"));
+const Scanning = lazy(() => import("@pages/Scanning"));
 const MyProfile = lazy(() => import("@pages/MyProfile"));
 const ScanTicket = lazy(() => import("@pages/ScanTicket"));
 const PaymentDone = lazy(() => import("@pages/PaymentDone"));
@@ -185,6 +186,7 @@ const App = () => {
                         <Route path="/payment" element={<MyBuyingTickets />} />
                         <Route path="/myprofile" element={<MyProfile />} />
                         <Route path="/scanticket" element={<ScanTicket />} />
+                        <Route path="/scanning/:id" element={<Scanning />} />
 
                         <Route path="/login" element={<Login />} />
                         <Route path="/sign-up" element={<SignUp />} />
