@@ -65,6 +65,7 @@ const Scanning = lazy(() => import("@pages/Scanning"));
 const MyProfile = lazy(() => import("@pages/MyProfile"));
 const ScanTicket = lazy(() => import("@pages/ScanTicket"));
 const PaymentDone = lazy(() => import("@pages/PaymentDone"));
+const Verify = lazy(() => import("@pages/Verify"));
 
 const LOGGED_USER = gql`
   query GetLoggedInUser {
@@ -112,10 +113,10 @@ const App = () => {
     }
   };
   useEffect(() => {
-    /* if (Object.keys(user).length === 0) {
+    if (Object.keys(user).length === 0) {
       getCredentials();
-      navigate("/");
-    } */
+      //navigate("/");
+    }
     if (Object.keys(user).length > 0) {
       if (user.role.name === "SCANNER") {
         navigate("/scanticket");
@@ -186,7 +187,16 @@ const App = () => {
                         <Route path="/payment" element={<MyBuyingTickets />} />
                         <Route path="/myprofile" element={<MyProfile />} />
                         <Route path="/scanticket" element={<ScanTicket />} />
-                        <Route path="/scanning/:id" element={<Scanning />} />
+                        <Route path="/scanning/:code" element={<Scanning />} />
+                        <Route
+                          path="/verify"
+                          element={<Verify />}
+                          loader={() => {
+                            (Object.keys(user).length === 0 ||
+                              user?.role.name !== "SCANNER") &&
+                              navigate("/login");
+                          }}
+                        />
 
                         <Route path="/login" element={<Login />} />
                         <Route path="/sign-up" element={<SignUp />} />

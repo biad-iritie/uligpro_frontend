@@ -221,7 +221,7 @@ const Event = createSlice({
       })
       .addCase(scanTicket.rejected, (state, action) => {
         //console.log(action.error.message);
-        state.status.ticket = "failed";
+        state.status.ticket = "failled";
         state.error = action.error.message;
       })
 

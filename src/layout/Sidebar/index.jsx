@@ -1,12 +1,5 @@
 // styled components
-import {
-  Link,
-  SingleLink,
-  StyledAccordion,
-  StyledAccordionDetails,
-  StyledAccordionSummary,
-  StyledDrawer,
-} from "./styles";
+import { Link, SingleLink, StyledDrawer } from "./styles";
 
 // components
 import Logo from "@components/Logo";
@@ -104,20 +97,36 @@ const Sidebar = () => {
             </NavLink>
           </SingleLink>
           {user.role.name !== "REGULAR" && (
-            <SingleLink
-              className={
-                pathname === "/scanticket" ? "pinned active" : "pinned"
-              }
-              as="div"
-            >
-              <NavLink to="/scanticket">
-                <Link
-                  className={`${pathname === "/scanticket" ? "active" : ""} h4`}
-                >
-                  <i className="icon icon-user" /> Scan
-                </Link>
-              </NavLink>
-            </SingleLink>
+            <>
+              <SingleLink
+                className={
+                  pathname === "/scanticket" ? "pinned active" : "pinned"
+                }
+                as="div"
+              >
+                <NavLink to="/scanticket">
+                  <Link
+                    className={`${
+                      pathname === "/scanticket" ? "active" : ""
+                    } h4`}
+                  >
+                    <i className="icon icon-camera" /> Scan
+                  </Link>
+                </NavLink>
+              </SingleLink>
+              <SingleLink
+                className={pathname === "/verify" ? "pinned active" : "pinned"}
+                as="div"
+              >
+                <NavLink to="/verify">
+                  <Link
+                    className={`${pathname === "/verify" ? "active" : ""} h4`}
+                  >
+                    <i className="icon icon-check" /> Verifier Paiement
+                  </Link>
+                </NavLink>
+              </SingleLink>
+            </>
           )}
 
           <SingleLink as="div">

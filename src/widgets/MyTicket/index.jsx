@@ -199,8 +199,11 @@ const MyTicket = () => {
               <View>
                 <Image
                   style={styles.qrCode}
+                  /* src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(
+                    "https://uligpro.com/scanning/"+selected.code
+                  )}`} */
                   src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(
-                    selected.code
+                    "http://localhost:3000/scanning/" + selected.code
                   )}`}
                 />
 

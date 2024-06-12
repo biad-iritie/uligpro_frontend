@@ -5,25 +5,32 @@ import styles from "./styles.module.scss";
 import Spring from "@components/Spring";
 import { NavLink } from "react-router-dom";
 import Lottie from "lottie-react";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 // hooks
 import { useThemeProvider } from "@contexts/themeContext";
 import { gql, useMutation } from "@apollo/client";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
 // utils
 import { actionAfterPayment } from "../../features/event/eventSlide";
+
+import { scanTicket } from "./../../features/event/eventSlide";
 
 // assets
 import successScan from "@assets/successScan.json";
 import failledScan from "@assets/failledScan.json";
 import { useEffect } from "react";
 
-const CHECK_PAYMENT = gql`
-  mutation ActionAfterPayment($idTransaction: String!) {
-    actionAfterPayment(idTransaction: $idTransaction) {
-      message
+const SCAN_TICKET = gql`
+  mutation GetTicketScanned($code: String!) {
+    getTicketScanned(code: $code) {
+      status
+      error {
+        code
+        message
+      }
     }
   }
 `;
@@ -31,24 +38,20 @@ const CHECK_PAYMENT = gql`
 const CheckingTicket = () => {
   const { theme } = useThemeProvider();
   const dispatch = useDispatch();
-  const [checkPayment] = useMutation(CHECK_PAYMENT);
+  const [reqScanTicket, { data, loading }] = useMutation(SCAN_TICKET);
 
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const transaction_id = queryParams.get("id");
-  let paymentId =
-    transaction_id === null
-      ? localStorage.getItem("paymentId")
-      : transaction_id;
-  console.log(paymentId);
+  const status = useSelector((state) => state.events.status.ticket);
+  const error = useSelector((state) => state.events.error);
+  const message = useSelector((state) => state.events.message);
 
-  const checkTransaction = async (transaction_id) => {
-    transaction_id = transaction_id ? transaction_id.replace(/"/g, "") : "";
+  let { code } = useParams();
+
+  const checkTicket = async (code) => {
     try {
       await dispatch(
-        actionAfterPayment({
-          actionAfterPaymentFunc: checkPayment,
-          idTransaction: transaction_id,
+        scanTicket({
+          scanTicketsFunc: reqScanTicket,
+          code: code,
         })
       ).unwrap();
     } catch (error) {
@@ -57,32 +60,50 @@ const CheckingTicket = () => {
     }
   };
   useEffect(() => {
-    if (paymentId !== "" && paymentId !== null) {
+    if (code !== "" && code !== null) {
       //console.log(paymentId);
-      checkTransaction(paymentId);
+      checkTicket(code);
     }
-  }, [paymentId]);
+  }, [code]);
   return (
     <Spring
       className={`${styles.container} card d-flex align-items-center flex-1`}
     >
-      <div className={styles.media}>
-        <Spring className="d-flex align-items-center justify-content-center flex-2 w-500 h-500">
-          <Lottie animationData={successScan} />
-          {/* <Lottie animationData={failledScan} /> */}
-        </Spring>
+      <div>
+        {status === "failled" && "Ce code n'existe pas ou CONNECTEZ-VOUS"}
+        {status === "loading" && "LOADING"}
       </div>
-      <div className={styles.main}>
-        <h2 className={styles.main_title}>
-          <span>Ticket déjà scanné</span>
-        </h2>
-        <p className={styles.main_text}>
-          SVP allez dans votre profil afin de le(s) télécharger.
-        </p>
-        <NavLink className="btn" to="/">
-          Fermer
-        </NavLink>
-      </div>
+      {status === "succeeded" && (
+        <>
+          <div className={styles.media}>
+            <Spring className="d-flex align-items-center justify-content-center flex-2 w-500 h-500">
+              <Lottie
+                animationData={error === null ? successScan : failledScan}
+              />
+              {/* <Lottie animationData={failledScan} /> */}
+            </Spring>
+          </div>
+          <div className={styles.main}>
+            <h2 className={styles.main_title}>
+              {error === null ? (
+                <span>{message}</span>
+              ) : (
+                <span>Ticket déjà scanné</span>
+              )}
+            </h2>
+            {error !== null && <p className={styles.main_text}>{error}</p>}
+            <NavLink
+              className="btn"
+              style={{ marginTop: "15px" }}
+              onClick={() => {
+                window.close();
+              }}
+            >
+              Fermer
+            </NavLink>
+          </div>
+        </>
+      )}
     </Spring>
   );
 };

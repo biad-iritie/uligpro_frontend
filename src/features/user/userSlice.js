@@ -79,6 +79,7 @@ const User = createSlice({
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
       state.status = "idle";
+      //console.log(state.user);
       state.user = {};
       //state.status = "idle";
       state.error = null;
