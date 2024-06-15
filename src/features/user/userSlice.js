@@ -4,8 +4,6 @@ const initialState = {
   status: "idle",
   error: null,
   user: {},
-  accessToken: "",
-  activationToken: "",
 };
 
 export const addLoggedUser = createAsyncThunk(
@@ -74,15 +72,11 @@ const User = createSlice({
       state.activationToken = localStorage.getItem("activationToken");
     },
     logout: (state) => {
-      //state.status = "idle";
-      //console.log("logout");
+      state.status = "idle";
+      state.error = null;
+      state.user = {};
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
-      state.status = "idle";
-      //console.log(state.user);
-      state.user = {};
-      //state.status = "idle";
-      state.error = null;
     },
   },
   extraReducers(builder) {
@@ -91,7 +85,7 @@ const User = createSlice({
         state.status = "loading";
       })
       .addCase(addLoggedUser.fulfilled, (state, action) => {
-        console.log("addLoggedUser");
+        //console.log("addLoggedUser");
         // Add any fetched posts to the array
         if (action.payload.user) {
           state.user = action.payload.user;

@@ -117,11 +117,11 @@ const App = () => {
       getCredentials();
       //navigate("/");
     }
-    if (Object.keys(user).length > 0) {
+    /* if (Object.keys(user).length > 0) {
       if (user.role.name === "SCANNER") {
         navigate("/scanticket");
       }
-    }
+    } */
     //getCredentials();
   }, [user, dispatch]);
   //console.log(process.env.REACT_APP_SERVER);

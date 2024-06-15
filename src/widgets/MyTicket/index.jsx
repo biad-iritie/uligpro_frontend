@@ -199,12 +199,12 @@ const MyTicket = () => {
               <View>
                 <Image
                   style={styles.qrCode}
-                  /* src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(
-                    "https://uligpro.com/scanning/"+selected.code
-                  )}`} */
                   src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(
-                    "http://localhost:3000/scanning/" + selected.code
+                    "https://uligpro.com/scanning/" + selected.code
                   )}`}
+                  /* src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(
+                    "http://localhost:3000/scanning/" + selected.code
+                  )}`} */
                 />
 
                 <Text style={styles.scannezMoi}>SCANNEZ-MOI</Text>
@@ -339,7 +339,9 @@ const MyTicket = () => {
             <div className="d-flex flex-column g-12 card-padded">
               {/* <span className="h6 label">{selected.code}</span> */}
               <div style={{ margin: "0 auto" }}>
-                <QRCode value={selected.code} />
+                <QRCode
+                  value={"https://uligpro.com/scanning/" + selected.code}
+                />
               </div>
             </div>
             <button className="btn w-100">

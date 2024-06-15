@@ -108,7 +108,7 @@ const Event = createSlice({
       state.status.buyTicket = "idle";
     },
     resetMessage: (state) => {
-      console.log("resetMessage");
+      //console.log("resetMessage");
       state.message = "";
     },
     cleanState: (state) => {
