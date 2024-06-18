@@ -227,7 +227,8 @@ const Event = createSlice({
 
       //CHECKING TRansaction statut
       .addCase(actionAfterPayment.pending, (state, action) => {
-        //state.status.ticket = "loading";
+        state.status.ticket = "loading";
+        state.status.message = "";
       })
       .addCase(actionAfterPayment.fulfilled, (state, action) => {
         state.status.ticket = "succeeded";
@@ -240,6 +241,7 @@ const Event = createSlice({
         //console.log(action.error.message);
         state.status.ticket = "failed";
         state.error = action.error.message;
+        state.message = "";
         //localStorage.removeItem("paymentId");
       });
   },

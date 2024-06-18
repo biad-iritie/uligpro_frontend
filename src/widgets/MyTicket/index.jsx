@@ -276,14 +276,11 @@ const MyTicket = () => {
   //fetchTickets();
   useEffect(() => {
     //|| (reduxGetUserTicket.length === 0 && status === "succeeded")
-
-    if (status === "idle") {
-      //console.log(status);
-      fetchTickets();
-    }
-    reduxGetUserTicket.length > 0 && setSelected(reduxGetUserTicket[0]);
+    fetchTickets();
     //console.log(selected);
-  }, [dispatch, reduxGetUserTicket, status]);
+    console.log("reduxGetUserTicket");
+    reduxGetUserTicket.length > 0 && setSelected(reduxGetUserTicket[0]);
+  }, [reduxGetUserTicket]);
 
   return (
     <Spring className="card">
@@ -293,9 +290,7 @@ const MyTicket = () => {
         </>
       )}
 
-      {status === "succeeded" &&
-      reduxGetUserTicket.length > 0 &&
-      selected !== undefined ? (
+      {status === "succeeded" && selected !== undefined ? (
         <>
           {/* <PDFViewer style={{ width: "100%", height: "100vh" }}>
             <Ticket />

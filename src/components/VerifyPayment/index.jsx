@@ -43,7 +43,7 @@ const VerifyPayment = () => {
   const error = useSelector((state) => state.events.error);
   const message = useSelector((state) => state.events.message);
   const [isFilling, setIsFilling] = useState(true);
-  let { code } = useParams();
+  //let { code } = useParams();
   const {
     register,
     reset,
@@ -57,7 +57,7 @@ const VerifyPayment = () => {
     },
   });
   const onSubmit = async (data, e) => {
-    console.log(data.id_transaction);
+    //console.log(data.id_transaction);
     e.preventDefault();
     try {
       setIsFilling(false);
@@ -98,7 +98,12 @@ const VerifyPayment = () => {
                 <Spring className="d-flex align-items-center justify-content-center flex-1 w-100 h-100">
                   <Lottie
                     animationData={
-                      message === "SUCCESS" ? successScan : failledScan
+                      (status === "succeeded" &&
+                        message === "SUCCESS" &&
+                        successScan) ||
+                      (status === "succeeded" &&
+                        message === "FAILLED" &&
+                        failledScan)
                     }
                   />
                 </Spring>
@@ -106,9 +111,10 @@ const VerifyPayment = () => {
               <div className={styles.main}>
                 <h2 className={styles.main_title}>
                   <span>
-                    {message === "SUCCESS"
-                      ? "Paiement effectué avec succès"
-                      : "Paiement n'a pas été effectué"}{" "}
+                    {message === "SUCCESS" && "Paiement effectué avec succès"}
+                    {message === "FAILLED" && "Paiement n'a pas été effectué"}
+                    {status === "failed" &&
+                      "Le numero de paiment n'existe pas "}
                   </span>
                 </h2>
               </div>
