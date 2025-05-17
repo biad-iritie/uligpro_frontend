@@ -2,7 +2,7 @@
   "name": "uligpro",
   "version": "1.0.2",
   "private": true,
-  "proxy":"https://api.uligpro.com/graphql",
+  "proxy":"http://localhost:4000/graphql",
   "dependencies": {
     "@apollo/client": "^3.9.9",
     "@dnd-kit/core": "^6.0.8",

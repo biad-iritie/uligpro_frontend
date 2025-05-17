@@ -1,121 +1,175 @@
-## Getting started
+# UligPro Frontend
 
-#### Developed with:
+A modern, feature-rich web application built with React for managing and visualizing data with a beautiful user interface.
 
-- [React](https://reactjs.org/) - 18.2.0
-- [Node.js](https://nodejs.org/en/) - 18.12.1
+## 🚀 Features
 
-First, install the dependencies using `npm install --legacy-peer-deps` or `yarn install`.
+- 📊 Interactive dashboards and data visualization
+- 📅 Calendar and scheduling system
+- 📱 Responsive design with RTL support
+- 🔄 Real-time data updates
+- 📄 PDF generation and export
+- 📱 QR code generation and scanning
+- 🎨 Modern UI with Material Design
+- 🌐 Internationalization support
+- 📈 Analytics integration
+- 🔒 Secure authentication
+- 📱 Mobile-first approach
 
-Then, run the development server:
+## 🛠 Tech Stack
 
+### Core Technologies
+- **React** (v18.2.0) - Frontend framework
+- **Node.js** (v18.12.1+) - Runtime environment
+- **GraphQL** - API communication
+- **Apollo Client** - GraphQL client
+- **Redux Toolkit** - State management
+- **React Router** - Navigation
+
+### UI & Styling
+- **Material-UI** - Component library
+- **Styled Components** - CSS-in-JS
+- **SASS** - CSS preprocessor
+- **Emotion** - CSS-in-JS
+- **React Spring** - Animations
+
+### Data & Forms
+- **React Hook Form** - Form handling
+- **React Big Calendar** - Calendar functionality
+- **Recharts** - Data visualization
+- **React Grid Layout** - Layout management
+- **@dnd-kit** - Drag and drop
+
+### Additional Features
+- **React PDF** - PDF generation
+- **QR Scanner** - QR code functionality
+- **React Toastify** - Notifications
+- **React GA4** - Analytics
+- **Swiper** - Carousel/Slider
+
+## 🏗 Project Structure
+
+```
+src/
+├── app/          # Core application logic
+├── components/   # Reusable components
+├── pages/        # Page components
+├── features/     # Feature-specific code
+├── hooks/        # Custom React hooks
+├── utils/        # Utility functions
+├── contexts/     # React context providers
+├── styles/       # Global styles
+├── assets/       # Static assets
+├── widgets/      # Reusable widgets
+├── constants/    # Application constants
+├── ui/           # UI components
+├── layout/       # Layout components
+├── fonts/        # Custom fonts
+└── styles/       # Global styles
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (v18.12.1 or higher)
+- npm or yarn package manager
+
+### Installation
+
+1. Clone the repository:
 ```bash
+git clone [repository-url]
+cd uligpro-frontend
+```
+
+2. Install dependencies:
+```bash
+npm install --legacy-peer-deps
+# or
+yarn install
+```
+
+3. Create a `.env.local` file in the root directory:
+```bash
+REACT_APP_PUBLIC_GA=YOUR_GA_TRACKING_ID  # Optional: For Google Analytics
+```
+
+4. Start the development server:
+```bash
+npm start
+# or
 yarn start
-# OR
-npm run start
 ```
 
-Then, open [http://localhost:3000](http://localhost:3000) with your browser to see the result (if it doesn't open automatically).
+The application will be available at [http://localhost:3000](http://localhost:3000)
 
-You can start editing pages or components. The page auto-updates as you edit and save a file.
+## 📝 Available Scripts
 
-To avoid any issues, please make sure you have the latest stable version of [Node.js](https://nodejs.org/en/) installed.
+- `npm start` - Runs the app in development mode
+- `npm run build` - Builds the app for production
+- `npm run gzip` - Builds and compresses the app for production
+- `npm run eject` - Ejects from Create React App (one-way operation)
 
-If you need to have multiple versions of Node.js installed, you can use [nvm](https://github.com/nvm-sh/nvm).
+## 🔧 Configuration
 
-### List of available scripts:
+### Custom Icons
+To modify the icon font:
+1. Import `src/fonts/icomoon/selection.json` into [IcoMoon](https://icomoon.io/app)
+2. Make your changes
+3. Export and replace the existing files
 
-<!-- Liga Dashboard Template is based on [Create-React-App](https://create-react-app.dev) template. -->
-
-### `start`
-
-Runs the app in the development mode.
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.
-
-### `gzip`
-
-Builds the app for production to the `build` folder and compresses it with gzip and brotli.\
-If your server is configured to serve pre-compressed files, you can use this command to reduce the transfer size up to 70%.
-
-### `eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them.
-
-### How to customize icon font
-
-You can import *selection.json* located in `src/fonts/icomoon` back to the [IcoMoon app](https://icomoon.io/app) using the *Import Icons* button (or via Main Menu → Manage Projects) to retrieve icon selection.
-
-### How to use Google Analytics
-
-To use Google Analytics, you need to create a new project in [Google Analytics](https://analytics.google.com/analytics/web/) and get the tracking ID.
-
-Then, create a new file called *.env.local* in the root directory of your project and add the following line to it:
-
+### Environment Variables
+Create a `.env.local` file for environment-specific variables:
 ```bash
-REACT_APP_PUBLIC_GA=YOUR_TRACKING_ID
+REACT_APP_PUBLIC_GA=YOUR_GA_TRACKING_ID
 ```
 
-------
+## 🧪 Development Guidelines
 
-## File structure
+- Follow the established project structure
+- Use TypeScript for new components
+- Implement proper error handling
+- Write meaningful commit messages
+- Follow the component naming conventions
+- Use the provided UI components from the component library
+- Implement proper loading states
+- Handle edge cases and error states
 
-    .
-    ├── public                  # static files
-    │   ├── favicon.ico
-    │   ├── index.html          # main HTML file
-    │   ├── robots.txt
-    ├── src                     # source files
-    │   ├── app                 # redux store
-    │   ├── assets              # static assets
-    │   ├── components          # reusable components shared across the app
-    │   ├── constants           
-    │   ├── contexts            # context providers
-    │   ├── db                  # fake database
-    │   ├── features            # redux features (slices)
-    │   ├── fonts               
-    │   ├── hooks               # custom hooks
-    │   ├── layout              # main layout components (header, sidebar, etc.)
-    │   ├── pages               
-    │   ├── styles              # global styles
-    │   ├── ui                  # reusable UI components
-    │   ├── utils               # helper functions
-    │   ├── widgets             # reusable widgets
-    │   ├── App.js              # main app component
-    │   ├── index.js            # app entry point
-    │   ├── layouts.js          # layout object for react-grid-layout
-    │   ├── style.scss          # global app styles
-    ├── .htaccess                       # htaccess file for Apache server
-    ├── babel-plugin-macros.config.js   # babel macros config (for styled-components)
-    ├── craco.config.js                 # custom CRA config
-    ├── jsconfig.json                   # jsconfig for IDE
-    ├── package.json            
+## 📦 Build & Deployment
 
-## Third-party libraries
+### Production Build
+```bash
+npm run build
+# or
+yarn build
+```
 
-- [React-spring](https://www.react-spring.io/) - animation library
-- [Recharts](http://recharts.org/en-US/) - charts
-- [React-select](https://react-select.com/home)
-- [Swiper](https://swiperjs.com/react) - slider
-- [React-toastify](https://fkhadra.github.io/react-toastify/introduction) - toast notifications
-- [MUI](https://mui.com/) - material ui components
-- [styled-components](https://styled-components.com/) - css-in-js
-- [dnd-kit](https://dndkit.com/) - drag and drop
-- [React Redux](https://react-redux.js.org/) - state management
-- [React Router](https://reactrouter.com/) - routing
-- [React Grid Layout](https://react-grid-layout.github.io/react-grid-layout/examples/0-showcase.html) - layout
-- [React Hook Form](https://react-hook-form.com/) - form validation
-- [React Big Calendar](http://jquense.github.io/react-big-calendar/examples/index.html) - scheduler
+### Optimized Production Build (with compression)
+```bash
+npm run gzip
+# or
+yarn gzip
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is proprietary software. All rights reserved.
+
+## 👥 Team
+
+- Frontend Development Team
+- UI/UX Designers
+- Product Managers
+
+## 📞 Support
+
+For support, please contact the development team or raise an issue in the repository.
