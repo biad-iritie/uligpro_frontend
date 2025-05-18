@@ -200,7 +200,9 @@ const MyTicket = () => {
                 <Image
                   style={styles.qrCode}
                   src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(
-                    "https://uligpro.com/scanning/" + selected.code
+                    process.env.NODE_ENV === "development"
+                      ? "http://localhost:3000/scanning/" + selected.code
+                      : "https://uligpro.com/scanning/" + selected.code
                   )}`}
                   /* src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(
                     "http://localhost:3000/scanning/" + selected.code
@@ -335,7 +337,11 @@ const MyTicket = () => {
               {/* <span className="h6 label">{selected.code}</span> */}
               <div style={{ margin: "0 auto" }}>
                 <QRCode
-                  value={"https://uligpro.com/scanning/" + selected.code}
+                  value={
+                    process.env.NODE_ENV === "development"
+                      ? "http://localhost:3000/scanning/" + selected.code
+                      : "https://uligpro.com/scanning/" + selected.code
+                  }
                 />
               </div>
             </div>

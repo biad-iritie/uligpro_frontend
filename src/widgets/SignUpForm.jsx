@@ -146,7 +146,8 @@ const SignUpForm = ({ standalone = true }) => {
     /* if (reqStatus === "failed" && activationToken !== "") {
       toast.error(error);
     } */
-    if (activationToken !== "") {
+    console.log(activationToken);
+    if (activationToken !== undefined) {
       setOpen(true);
     }
   }, [reqStatus, activationToken]);

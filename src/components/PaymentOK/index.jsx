@@ -39,7 +39,7 @@ const PaymentOK = () => {
     transaction_id === null
       ? localStorage.getItem("paymentId")
       : transaction_id;
-  console.log(paymentId);
+  // console.log(paymentId);
 
   const checkTransaction = async (transaction_id) => {
     transaction_id = transaction_id ? transaction_id.replace(/"/g, "") : "";

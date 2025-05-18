@@ -12,7 +12,7 @@ import { useWindowSize } from "react-use";
 
 // utils
 import PropTypes from "prop-types";
-import { getClubInfo } from "@utils/helpers";
+import { getTeamLogo, getTeamName } from "@assets/teams";
 
 const MyMatchCard = ({ match, index, variant = "basic" }) => {
   const { width } = useWindowSize();
@@ -20,6 +20,12 @@ const MyMatchCard = ({ match, index, variant = "basic" }) => {
   /* const team1 = getClubInfo(match.team1.id);
   const team2 = getClubInfo(match.team2.id); */
   //console.log(match);
+
+  const team1Logo = getTeamLogo(match.team1.logo);
+  const team2Logo = getTeamLogo(match.team2.logo);
+  const team1Name = getTeamName(match.team1.logo);
+  const team2Name = getTeamName(match.team2.logo);
+
   return (
     <Spring
       className={`${styles.container} ${styles[theme]} h-50`}
@@ -37,27 +43,47 @@ const MyMatchCard = ({ match, index, variant = "basic" }) => {
         }}
       >
         <div className="d-flex align-items-center justify-content-between p-relative">
-          <img
-            className="club-logo"
-            src={match.team1.logo}
-            alt={match.team1.name}
-          />
+          <picture>
+            <source srcSet={team1Logo} type="image/webp" />
+            <img
+              className="club-logo"
+              src={team1Logo}
+              alt={team1Name}
+              loading="lazy"
+              width="60"
+              height="60"
+              style={{
+                aspectRatio: "1/1",
+                objectFit: "contain",
+              }}
+            />
+          </picture>
           {/* <span className="styles_vs__dnnaD h3">vs</span> */}
           <Score team1={match.goal1} team2={match.goal2} variant="alt" />
-          <img
-            className="club-logo"
-            src={match.team2.logo}
-            alt={match.team2.name}
-          />
+          <picture>
+            <source srcSet={team2Logo} type="image/webp" />
+            <img
+              className="club-logo"
+              src={team2Logo}
+              alt={team2Name}
+              loading="lazy"
+              width="60"
+              height="60"
+              style={{
+                aspectRatio: "1/1",
+                objectFit: "contain",
+              }}
+            />
+          </picture>
         </div>
         {width >= 414 && (
           <div className="d-flex justify-content-between g-30">
             <div style={{ minWidth: 0 }}>
-              <h3>{match.team1.name}</h3>
+              <h3>{team1Name}</h3>
               {/* <p className="text-12 text-overflow">{match.team1.university}</p> */}
             </div>
             <div className="text-right" style={{ minWidth: 0 }}>
-              <h3>{match.team2.name}</h3>
+              <h3>{team2Name}</h3>
               {/* <p className="text-12 text-overflow">{match.team2.university}</p> */}
             </div>
           </div>
@@ -70,7 +96,17 @@ const MyMatchCard = ({ match, index, variant = "basic" }) => {
 };
 
 MyMatchCard.propTypes = {
-  match: PropTypes.object.isRequired,
+  match: PropTypes.shape({
+    team1: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      goal1: PropTypes.number,
+    }).isRequired,
+    team2: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      goal2: PropTypes.number,
+    }).isRequired,
+    time: PropTypes.string.isRequired,
+  }).isRequired,
   index: PropTypes.number,
   variant: PropTypes.oneOf(["basic", "extended"]),
 };

@@ -20,6 +20,7 @@ import { gql, useMutation } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { buyTickets } from "./../../features/event/eventSlide";
+import { actionAfterPayment } from "./../../features/event/eventSlide";
 
 const BUY_TICKET = gql`
   mutation BuyTickets($tickets: [buyTicketsEventInput!]!) {
@@ -35,7 +36,13 @@ const BUY_TICKET = gql`
     }
   }
 `;
-
+const CHECK_PAYMENT = gql`
+  mutation ActionAfterPayment($idTransaction: String!) {
+    actionAfterPayment(idTransaction: $idTransaction) {
+      message
+    }
+  }
+`;
 const MyRecapTicket = () => {
   //const [headerRef, { height: headerHeight }] = useMeasure();
   const [footerRef, { height: footerHeight }] = useMeasure();
@@ -48,9 +55,11 @@ const MyRecapTicket = () => {
   const reqError = useSelector((state) => state.events.error);
   const status = useSelector((state) => state.events.status.buyTicket);
   const paymentUrl = useSelector((state) => state.events.paymentUrl);
+  const payment_id = useSelector((state) => state.events.payment_id);
   const [req_buyTickets, { data, loading }] = useMutation(BUY_TICKET);
   const dispatch = useDispatch();
   const message = useSelector((state) => state.events.message);
+  const [checkPayment] = useMutation(CHECK_PAYMENT);
 
   const proceedPaiement = async () => {
     let fixedTickets = [];
@@ -98,7 +107,21 @@ const MyRecapTicket = () => {
     console.log(status); */
     if (paymentUrl !== "" && status === "succeeded") {
       //fixed console.log("redirect");
+      console.log("paymentUrl:", paymentUrl);
       window.open(paymentUrl, "_blank", "rel=noopener noreferrer");
+      setTimeout(async () => {
+        try {
+          await dispatch(
+            actionAfterPayment({
+              actionAfterPaymentFunc: checkPayment,
+              idTransaction: payment_id,
+            })
+          ).unwrap();
+        } catch (error) {
+          toast.error(error.message);
+        }
+      }, 120000); // 2 minutes in milliseconds
+
       dispatch(resetPaymentUrl());
     }
     if (Object.keys(ticketsDesired).length === 0) {

@@ -24,7 +24,7 @@ const layouts = {
   },
   buying_ticket: {
     xl: [
-      { i: "recap", x: 3, y: 0, w: 1, h: 2 },
+      { i: "recap", x: 1, y: 0, w: 2, h: 2 },
       /* { i: "info", x: 0, y: 1, w: 1, h: 1 },
         { i: "description", x: 3, y: 0, w: 1, h: 2 }, */
       /*{ i: "payment", x: 1, y: 0, w: 2, h: 1.7 },
@@ -35,7 +35,7 @@ const layouts = {
         { i: "password", x: 2, y: 2, w: 1, h: 2 }, */
     ],
     lg: [
-      { i: "recap", x: 1, y: 2, w: 1, h: 2 },
+      { i: "recap", x: 0, y: 2, w: 3, h: 2 },
       /* { i: "info", x: 0, y: 1, w: 1, h: 1 },
       { i: "description", x: 0, y: 2, w: 1, h: 2 }, */
       /*{ i: "payment", x: 1, y: 0, w: 2, h: 1.7 },
@@ -46,7 +46,7 @@ const layouts = {
       { i: "password", x: 1, y: 4, w: 1, h: 2 }, */
     ],
     md: [
-      { i: "recap", x: 1, y: 0, w: 1, h: 2 },
+      { i: "recap", x: 0, y: 0, w: 2, h: 2 },
       /* { i: "info", x: 0, y: 1, w: 1, h: 1 },
       { i: "description", x: 1, y: 0, w: 1, h: 2 }, */
       /*{ i: "payment", x: 1, y: 0, w: 1, h: 1.7 },
