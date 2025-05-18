@@ -101,13 +101,8 @@ const MyRecapTicket = () => {
       });
       setTotal(sum_totals);
       setTickets(mappingTicket);
-      //console.log(tickets.length);
     }
-    /* console.log(paymentUrl);
-    console.log(status); */
     if (paymentUrl !== "" && status === "succeeded") {
-      //fixed console.log("redirect");
-      console.log("paymentUrl:", paymentUrl);
       window.open(paymentUrl, "_blank", "rel=noopener noreferrer");
       setTimeout(async () => {
         try {
