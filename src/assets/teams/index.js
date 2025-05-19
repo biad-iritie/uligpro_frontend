@@ -8,11 +8,11 @@ export const teamLogos = {
   //   name: 'Team Name'
   // }
   uigb: {
-    logo: "/teams/flags/uigb.webp",
+    logo: "/teams/flags/uigb.png",
     name: "UIGB",
   },
   bem: {
-    logo: "/teams/flags/bem.webp",
+    logo: "/teams/flags/bem.png",
     name: "BEM",
   },
   // Add more teams as needed
