@@ -33,7 +33,9 @@ const MyMatchCard = ({ match, index, variant = "basic" }) => {
       index={index}
     >
       <p className="h2 text-center" style={{ paddingTop: "10px" }}>
-        {match.time}
+        {match.time.split("T")[1].split(":")[0] +
+          ":" +
+          match.time.split("T")[1].split(":")[1]}
       </p>
       <div
         className="card-padded d-flex flex-column g-20"
