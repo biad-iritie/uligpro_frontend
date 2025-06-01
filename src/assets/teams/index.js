@@ -7,39 +7,39 @@ export const teamLogos = {
   //   logo: '/path/to/logo.webp',
   //   name: 'Team Name'
   // }
-  UIGB: {
+  uigb: {
     logo: "/teams/flags/uigb.png",
     name: "UIGB",
   },
-  BEM: {
+  bem: {
     logo: "/teams/flags/bem.png",
     name: "BEM",
   },
-  BIU: {
+  biu: {
     logo: "/teams/flags/biu.png",
     name: "BIU",
   },
-  HEC: {
+  hec: {
     logo: "/teams/flags/hec.png",
     name: "HEC",
   },
-  IUPA: {
+  iupa: {
     logo: "/teams/flags/iupa.png",
     name: "IUPA",
   },
-  UCAO: {
+  ucao: {
     logo: "/teams/flags/ucao.png",
     name: "UCAO",
   },
-  IUA: {
+  iua: {
     logo: "/teams/flags/iua.png",
     name: "IUA",
   },
-  GSM: {
+  gsm: {
     logo: "/teams/flags/gsm.png",
     name: "GSM",
   },
-  FUPA: {
+  fupa: {
     logo: "/teams/flags/fupa.png",
     name: "FUPA",
   },
