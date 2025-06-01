@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkuligpro=self.webpackChunkuligpro||[]).push([[935],{1316:(a,l,s)=>{s.r(l),s.d(l,{ModalManager:()=>e.P,default:()=>u.A,getModalUtilityClass:()=>r.M,modalClasses:()=>r.A});var e=s(7379),u=s(7389),r=s(1948)}}]);

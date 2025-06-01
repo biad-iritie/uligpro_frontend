@@ -64,13 +64,14 @@
     "recharts": "^2.4.3",
     "rtl-detect": "^1.0.4",
     "sass": "^1.57.1",
-    "serve": "^14.2.4",
+    "serve": "^14.2.1",
     "styled-components": "^5.3.6",
     "styled-theming": "^2.2.0",
     "stylis-plugin-rtl": "^2.1.1",
     "swiper": "^8.4.6",
     "use-gauge": "^0.5.0",
-    "use-mobile-detect-hook": "^1.0.5"
+    "use-mobile-detect-hook": "^1.0.5",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   },
   "scripts": {
     "start": "serve -s build",
