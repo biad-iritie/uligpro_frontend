@@ -32,16 +32,20 @@ const MyMatchCard = ({ match, index, variant = "basic" }) => {
       type="slideUp"
       index={index}
     >
-      <p className="h2 text-center" style={{ paddingTop: "10px" }}>
+      <p
+        className="h2 text-center"
+        style={{ paddingTop: "5px", marginBottom: "0" }}
+      >
         {match.time.split("T")[1].split(":")[0] +
           ":" +
           match.time.split("T")[1].split(":")[1]}
       </p>
       <div
-        className="card-padded d-flex flex-column g-20"
+        className="card-padded d-flex flex-column g-10"
         style={{
-          paddingTop: "5px !important",
-          paddingBottom: variant !== "extended" ? "var(--card-padding)" : 10,
+          paddingTop: "0 !important",
+          paddingBottom:
+            variant !== "extended" ? "calc(var(--card-padding) * 0.7)" : 5,
         }}
       >
         <div className="d-flex align-items-center justify-content-between p-relative">
@@ -79,12 +83,15 @@ const MyMatchCard = ({ match, index, variant = "basic" }) => {
           </picture>
         </div>
         {width >= 414 && (
-          <div className="d-flex justify-content-between g-30">
-            <div style={{ minWidth: 0 }}>
+          <div className="d-flex justify-content-between g-15">
+            <div style={{ minWidth: 0, marginLeft: "30px" }}>
               <h3>{team1Name}</h3>
               {/* <p className="text-12 text-overflow">{match.team1.university}</p> */}
             </div>
-            <div className="text-right" style={{ minWidth: 0 }}>
+            <div
+              className="text-right"
+              style={{ minWidth: 0, marginRight: "30px" }}
+            >
               <h3>{team2Name}</h3>
               {/* <p className="text-12 text-overflow">{match.team2.university}</p> */}
             </div>
