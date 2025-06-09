@@ -38,7 +38,6 @@ const ActivateAccountPopup = ({ open, onClose, onActivate }) => {
       <div className="d-flex flex-column g-20">
         <div className="d-flex flex-column g-10">
           <h2>Finaliser votre Inscription</h2>
-
           <p>Un code a été envoyé à votre email, renseigné le ici.</p>
         </div>
         <div className="d-flex flex-column g-16">

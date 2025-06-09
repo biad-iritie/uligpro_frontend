@@ -43,6 +43,26 @@ export const teamLogos = {
     logo: "/teams/flags/fupa.png",
     name: "FUPA",
   },
+  esma: {
+    logo: "/teams/flags/esma.png",
+    name: "ESMA",
+  },
+  ulagunes: {
+    logo: "/teams/flags/ulagune.png",
+    name: "U-LAGUNES",
+  },
+  cerap: {
+    logo: "/teams/flags/cerap.png",
+    name: "CERAP",
+  },
+  ispa: {
+    logo: "/teams/flags/ispa.png",
+    name: "ISPA",
+  },
+  uicf: {
+    logo: "/teams/flags/uicf.png",
+    name: "UICF",
+  },
 
   // Add more teams as needed
 };
