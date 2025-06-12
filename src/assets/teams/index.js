@@ -48,7 +48,7 @@ export const teamLogos = {
     name: "ESMA",
   },
   ulagunes: {
-    logo: "/teams/flags/ulagune.png",
+    logo: "/teams/flags/ulagunes.png",
     name: "U-LAGUNES",
   },
   cerap: {
@@ -62,6 +62,14 @@ export const teamLogos = {
   uicf: {
     logo: "/teams/flags/uicf.png",
     name: "UICF",
+  },
+  eaa: {
+    logo: "/teams/flags/eaa.png",
+    name: "EAA",
+  },
+  uipa: {
+    logo: "/teams/flags/uipa.png",
+    name: "UIPA",
   },
 
   // Add more teams as needed
